@@ -1,0 +1,332 @@
+@import "tailwindcss";
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Biblioteca Perpetuo — sistema visual
+
+   La página es una sala a oscuras con objetos iluminados. Todo el color vive
+   en las portadas de los cuadernillos; el resto es casi monocromo a propósito.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  --noche: #100e0d;
+  --noche-alta: #171513;
+  --niebla: #f2ece2;
+  --tenue: #938a7d;
+  --tenue-mas: #6a635a;
+  --brasa: #d1592f;
+  --linea: rgba(242, 236, 226, 0.12);
+  --linea-tenue: rgba(242, 236, 226, 0.06);
+}
+
+@theme inline {
+  --color-noche: var(--noche);
+  --color-noche-alta: var(--noche-alta);
+  --color-niebla: var(--niebla);
+  --color-tenue: var(--tenue);
+  --color-tenue-mas: var(--tenue-mas);
+  --color-brasa: var(--brasa);
+  --color-linea: var(--linea);
+  --color-linea-tenue: var(--linea-tenue);
+  --font-display: var(--font-fraunces), Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-poppins), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: var(--noche);
+  color-scheme: dark;
+}
+
+body {
+  background: var(--noche);
+  color: var(--niebla);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--brasa);
+  color: #fff;
+}
+
+:focus-visible {
+  outline: 2px solid var(--brasa);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+/* Micro-tipografía: las etiquetas en versalitas espaciadas que sostienen todo
+   el resto de la jerarquía. */
+.eyebrow {
+  font-size: 0.6875rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.display {
+  font-family: var(--font-display);
+  font-variation-settings: "SOFT" 0, "WONK" 0, "opsz" 40;
+  letter-spacing: -0.015em;
+  line-height: 1.04;
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   EL CUADERNILLO
+
+   Un prisma de seis caras en CSS 3D. Cada cara se centra en el centro del
+   libro con márgenes negativos y desde ahí sólo hace falta rotar y trasladar
+   media dimensión — sin trucos de transform-origin, que es donde esto
+   normalmente se rompe.
+
+     portada   →  translateZ( grosor/2 )
+     contra    →  translateZ(-grosor/2) rotateY(180deg)
+     lomo      →  translateX(-ancho/2)  rotateY(-90deg)
+     canto     →  translateX( ancho/2)  rotateY( 90deg)
+     cabeza    →  translateY(-alto/2)   rotateX( 90deg)
+     pie       →  translateY( alto/2)   rotateX(-90deg)
+   ─────────────────────────────────────────────────────────────────────────── */
+
+.escena {
+  perspective: 2000px;
+  perspective-origin: 50% 45%;
+}
+
+/* --giro-mult se registra para que el enderezado al pasar el ratón pueda
+   animarse: sin @property un custom property salta de golpe. */
+@property --giro-mult {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 1;
+}
+
+/* Capa de elevación. Separa el "levantar al pasar el ratón" (con transición)
+   de la rotación por scroll (sin transición, se actualiza por fotograma). Si
+   ambas vivieran en el mismo transform se pelearían y el scroll iría a rastras. */
+.alza {
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.libro {
+  position: relative;
+  width: var(--ancho);
+  height: var(--alto);
+  transform-style: preserve-3d;
+  /* --giro y --cabeceo los escribe el motor de scroll; los valores por defecto
+     son el estado en reposo y el que ve quien no ejecuta JS. */
+  transform: rotateX(var(--cabeceo, -4deg))
+    rotateY(calc(var(--giro, 24deg) * var(--giro-mult, 1)))
+    translateY(var(--flote, 0px));
+  transition: --giro-mult 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+.cara {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  overflow: hidden;
+  backface-visibility: hidden;
+}
+
+.cara--tapa {
+  width: var(--ancho);
+  height: var(--alto);
+  margin-left: calc(var(--ancho) / -2);
+  margin-top: calc(var(--alto) / -2);
+}
+
+.cara--lado {
+  width: var(--grosor);
+  height: var(--alto);
+  margin-left: calc(var(--grosor) / -2);
+  margin-top: calc(var(--alto) / -2);
+}
+
+.cara--tope {
+  width: var(--ancho);
+  height: var(--grosor);
+  margin-left: calc(var(--ancho) / -2);
+  margin-top: calc(var(--grosor) / -2);
+}
+
+.cara--portada {
+  transform: translateZ(calc(var(--grosor) / 2));
+}
+.cara--contra {
+  transform: translateZ(calc(var(--grosor) / -2)) rotateY(180deg);
+}
+.cara--lomo {
+  transform: translateX(calc(var(--ancho) / -2)) rotateY(-90deg);
+}
+.cara--canto {
+  transform: translateX(calc(var(--ancho) / 2)) rotateY(90deg);
+}
+.cara--cabeza {
+  transform: translateY(calc(var(--alto) / -2)) rotateX(90deg);
+}
+.cara--pie {
+  transform: translateY(calc(var(--alto) / 2)) rotateX(-90deg);
+}
+
+/* El brillo del papel estucado: una diagonal muy tenue sobre la portada. */
+.cara--portada::after,
+.cara--contra::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    115deg,
+    rgba(255, 255, 255, 0.16) 0%,
+    rgba(255, 255, 255, 0.03) 26%,
+    rgba(0, 0, 0, 0) 52%,
+    rgba(0, 0, 0, 0.16) 100%
+  );
+}
+
+/* El canto y los cortes: hojas apiladas, no un bloque de color.
+   Dos capas — un degradado que apaga el papel (estamos en una sala a oscuras;
+   un canto crema a plena luz se lee como un error) y encima el rayado fino de
+   las hojas. El ciclo es de 3px y no de 2: a 1px el rayado se alía contra la
+   rejilla de píxeles y aparece un código de barras. */
+.hojas {
+  background-color: var(--canto);
+  background-image:
+    linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0.5) 0%,
+      rgba(0, 0, 0, 0.18) 34%,
+      rgba(0, 0, 0, 0.24) 66%,
+      rgba(0, 0, 0, 0.52) 100%
+    ),
+    repeating-linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0.13) 0px,
+      rgba(0, 0, 0, 0.13) 1px,
+      rgba(0, 0, 0, 0) 1px,
+      rgba(0, 0, 0, 0) 3px
+    );
+}
+
+/* La cabeza y el pie miran al techo y al suelo de una sala sin luz: van
+   bastante más apagados que el canto, que sí recibe el foco de frente. */
+.hojas--horizontal {
+  background-color: var(--canto);
+  background-image:
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.62) 0%, rgba(0, 0, 0, 0.4) 100%),
+    repeating-linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.13) 0px,
+      rgba(0, 0, 0, 0.13) 1px,
+      rgba(0, 0, 0, 0) 1px,
+      rgba(0, 0, 0, 0) 3px
+    );
+}
+
+/* La sombra proyectada. No es 3D: es una elipse difuminada bajo el objeto que
+   se encoge cuando el libro "sube". Cuesta nada y vende la ilusión. */
+.sombra {
+  position: absolute;
+  left: 50%;
+  bottom: -6%;
+  width: 78%;
+  height: 42px;
+  transform: translateX(-50%) scale(var(--sombra-escala, 1));
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0, 0, 0, 0.62) 0%,
+    rgba(0, 0, 0, 0.28) 42%,
+    rgba(0, 0, 0, 0) 72%
+  );
+  filter: blur(10px);
+  pointer-events: none;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Al pasar el ratón el objeto se endereza y se levanta: la invitación a
+   abrirlo. */
+.estante-item:hover .alza,
+.estante-item:focus-within .alza {
+  transform: translateY(-12px) scale(1.03);
+}
+
+.estante-item:hover .libro,
+.estante-item:focus-within .libro {
+  --giro-mult: 0.34;
+}
+
+.estante-item:hover .sombra,
+.estante-item:focus-within .sombra {
+  transform: translateX(-50%) scale(calc(var(--sombra-escala, 1) * 0.86));
+  opacity: 0.75;
+}
+
+/* Sin animación por preferencia del sistema: se congela un ángulo bonito y se
+   quitan las transiciones. El objeto sigue siendo tridimensional, sólo que
+   quieto. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .alza,
+  .libro,
+  .sombra {
+    transition: none;
+  }
+  .estante-item:hover .alza,
+  .estante-item:focus-within .alza {
+    transform: none;
+  }
+  .estante-item:hover .libro,
+  .estante-item:focus-within .libro {
+    --giro-mult: 1;
+  }
+}
+
+/* El halo detrás de cada cuadernillo: el foco de la vitrina. */
+.halo {
+  position: absolute;
+  inset: -30% -18%;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    var(--halo-color, rgba(209, 89, 47, 0.16)) 0%,
+    rgba(0, 0, 0, 0) 66%
+  );
+  opacity: 0.85;
+}
+
+/* Aparición al entrar en pantalla. */
+.aparece {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.aparece[data-visible="true"] {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aparece {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* El grano de papel del fondo, para que el negro no sea plano. */
+.grano::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
