@@ -1,4 +1,4 @@
-# Biblioteca Perpetuo
+# La Bóveda de Perpetuo
 
 Una estantería con los artículos que guardamos en Perpetuo. Cada texto es un
 cuadernillo tridimensional que gira mientras se baja por la página; al abrirlo
@@ -27,7 +27,7 @@ estantería.
   seccion: "Crónica",                 // decide la paleta de la portada
   idioma: "es",
   resumen: "Una línea. Es lo que se lee junto al cuadernillo.",
-  porQue: "Uno o dos párrafos: por qué está en la biblioteca.",
+  porQue: "Uno o dos párrafos: por qué está en la bóveda.",
   cita: "…",                          // opcional, sólo si está verificada
   curador: "…",                       // opcional
 }

@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { articulos } from "@/lib/articles";
 
-const BASE = "https://biblioteca.perpetuo.global";
+const BASE = "https://boveda.perpetuo.global";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [

@@ -13,7 +13,7 @@ export default function Inicio() {
 
       {/* ── Entrada ───────────────────────────────────────────────────────── */}
       <section className="mx-auto max-w-6xl px-6 pt-20 pb-8 sm:px-10 sm:pt-32">
-        <p className="eyebrow text-tenue-mas">Biblioteca</p>
+        <p className="eyebrow text-tenue-mas">La Bóveda</p>
 
         <h1 className="display mt-8 max-w-4xl text-[clamp(2.6rem,7vw,5.5rem)] text-balance">
           Los textos que nos enseñaron a hacer una revista.

@@ -21,15 +21,15 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://biblioteca.perpetuo.global"),
+  metadataBase: new URL("https://boveda.perpetuo.global"),
   title: {
-    default: "Biblioteca Perpetuo",
-    template: "%s · Biblioteca Perpetuo",
+    default: "La Bóveda de Perpetuo",
+    template: "%s · La Bóveda de Perpetuo",
   },
   description:
     "Los artículos que guardamos en Perpetuo: crónicas, ensayos y perfiles que nos enseñaron a hacer una revista.",
   openGraph: {
-    title: "Biblioteca Perpetuo",
+    title: "La Bóveda de Perpetuo",
     description:
       "Los artículos que guardamos en Perpetuo: crónicas, ensayos y perfiles que nos enseñaron a hacer una revista.",
     locale: "es",
@@ -47,7 +47,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
               <span className="display text-lg text-niebla">Perpetuo</span>
               <span className="text-tenue-mas">/</span>
               <span className="eyebrow text-tenue transition-colors group-hover:text-niebla">
-                Biblioteca
+                La Bóveda
               </span>
             </Link>
             <nav className="flex items-center gap-6 text-[0.8125rem] text-tenue">

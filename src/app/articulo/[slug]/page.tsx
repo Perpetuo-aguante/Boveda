@@ -6,7 +6,7 @@ import { PALETAS } from "@/lib/covers";
 import { Cuadernillo } from "@/components/cuadernillo";
 import { MotorEstante } from "@/components/motor-estante";
 
-// Toda la biblioteca es estática: se prerenderiza una ficha por artículo.
+// Toda la bóveda es estática: se prerenderiza una ficha por artículo.
 export function generateStaticParams() {
   return articulos.map((a) => ({ slug: a.slug }));
 }
@@ -168,7 +168,7 @@ export default async function Ficha({ params }: { params: Promise<{ slug: string
       {/* Anterior / siguiente */}
       <nav
         className="mx-auto mt-28 grid max-w-6xl gap-px border-t border-linea px-6 sm:grid-cols-2 sm:px-10"
-        aria-label="Otros títulos de la biblioteca"
+        aria-label="Otros títulos de la bóveda"
       >
         {anterior ? (
           <Link href={`/articulo/${anterior.slug}`} className="group py-10 sm:pr-10">

@@ -1,5 +1,5 @@
 /**
- * LA BIBLIOTECA — el único archivo que hay que tocar para añadir un artículo.
+ * LA BÓVEDA — el único archivo que hay que tocar para añadir un artículo.
  *
  * Cada entrada de `articulos` se convierte en un "cuadernillo" en la estantería.
  * Para añadir uno: copia el bloque de abajo, cámbialo, y listo. El orden del
@@ -43,11 +43,11 @@ export type Articulo = {
   idioma: "es" | "en" | "pt" | "fr" | "it" | "de";
   /** Una línea. Es lo que se lee junto al cuadernillo en la estantería. */
   resumen: string;
-  /** Uno o dos párrafos: por qué está en la biblioteca. Se lee en la ficha. */
+  /** Uno o dos párrafos: por qué está en la bóveda. Se lee en la ficha. */
   porQue: string;
   /** Cita textual opcional. Sólo si la tienes verificada palabra por palabra. */
   cita?: string;
-  /** Quién lo trajo a la biblioteca. */
+  /** Quién lo trajo a la bóveda. */
   curador?: string;
 };
 
