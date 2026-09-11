@@ -1,51 +1,56 @@
 /**
- * LA BÓVEDA — el único archivo que hay que tocar para añadir un artículo.
+ * EL ARCHIVO — el índice de La Bóveda.
  *
- * Cada entrada de `articulos` se convierte en un "cuadernillo" en la estantería.
- * Para añadir uno: copia el bloque de abajo, cámbialo, y listo. El orden del
- * array es el orden en la estantería (los primeros arriba).
+ * Una entrada por texto. De aquí salen el puesto, el índice, las fichas, el
+ * sitemap y los enlaces anterior/siguiente. El orden del array manda.
  *
  * ────────────────────────────────────────────────────────────────────────────
- * AVISO SOBRE ESTE CONTENIDO SEMILLA
+ * QUÉ FALTA (estado actual)
  *
- * Los diez artículos de abajo son reales y están aquí sólo para que la página
- * se vea llena. NO son la selección de Perpetuo. Dos cosas que hay que revisar
- * antes de publicar:
+ * Los 26 textos son reales: título, fecha, sección y acceso salen de la
+ * exportación de Substack. Lo que está en blanco está en blanco a propósito,
+ * porque no se puede inventar:
  *
- *   1. Los campos `resumen` y `porQue` son borradores escritos por Claude, no
- *      por la redacción. Reescríbelos con la voz de la casa.
- *   2. Las URL no están verificadas: la sesión que construyó esto tenía la
- *      salida a internet bloqueada por el proxy. Corre `npm run enlaces` desde
- *      una máquina con red para comprobarlas.
+ *   autor    — no venía en la exportación.
+ *   resumen  — la línea que acompaña al cuadernillo en el puesto.
+ *   porQue   — por qué ese texto está en la bóveda.
+ *   imagen   — la foto de portada, en /public/portadas/<slug>.(jpg|webp).
+ *   url      — sólo se conocen tres; Substack recorta los slugs y el resto no
+ *              se puede adivinar sin abrir cada post.
  *
- * No hay citas textuales en la semilla a propósito: no queríamos poner entre
- * comillas nada que no pudiéramos verificar. Añádelas tú con `cita`.
+ * El cuerpo completo NO vive aquí: cada texto va en `contenido/<slug>.md`.
+ * Ver `contenido/README.md`. La ficha muestra el texto en cuanto aparece el
+ * archivo; mientras no exista, enseña lo que haya y ya.
+ *
+ * La sección sale del calendario editorial (lunes = Estelar, miércoles =
+ * Anteojos, viernes = El Creativo), igual que en Analytics. Los tres «3,2,1»
+ * caen en viernes y por eso son El Creativo.
  * ────────────────────────────────────────────────────────────────────────────
  */
+import { SECCIONES, type Seccion, type Acceso } from "./articulos-tipos";
 
-/** Las secciones definen la paleta de la portada. Ver `src/lib/covers.ts`. */
-import { SECCIONES, type Seccion } from "./articulos-tipos";
 export { SECCIONES };
-export type { Seccion };
+export type { Seccion, Acceso };
 
 export type Articulo = {
-  /** Identificador en la URL: /articulo/<slug>. Minúsculas, sin acentos. */
+  /** Identificador en la URL: /articulo/<slug>. */
   slug: string;
   titulo: string;
+  /** Vacío mientras no se sepa; la portada y la ficha lo omiten sin romperse. */
   autor: string;
-  /** Revista, periódico o libro donde salió. Va arriba en la portada. */
-  medio: string;
-  anio: number;
-  /** Enlace al original. Si no hay uno estable, déjalo vacío. */
-  url: string;
+  /** ISO corta, "2026-04-13". Vacía si no se conoce. */
+  fecha: string;
   seccion: Seccion;
-  /** Idioma del original — se muestra como etiqueta cuando no es español. */
-  idioma: "es" | "en" | "pt" | "fr" | "it" | "de";
-  /** Una línea. Es lo que se lee junto al cuadernillo en la estantería. */
+  acceso: Acceso;
+  /** Enlace al original en perpetuo.global. Vacío si no se conoce. */
+  url: string;
+  /** Ruta bajo /public, p. ej. "/portadas/casa-de-rescate.jpg". */
+  imagen: string;
+  /** Una línea. Es lo que se revela al pasar por encima del cuadernillo. */
   resumen: string;
   /** Uno o dos párrafos: por qué está en la bóveda. Se lee en la ficha. */
   porQue: string;
-  /** Cita textual opcional. Sólo si la tienes verificada palabra por palabra. */
+  /** Cita textual opcional, sólo si está verificada palabra por palabra. */
   cita?: string;
   /** Quién lo trajo a la bóveda. */
   curador?: string;
@@ -53,163 +58,345 @@ export type Articulo = {
 
 export const articulos: Articulo[] = [
   {
-    slug: "frank-sinatra-esta-resfriado",
-    titulo: "Frank Sinatra Has a Cold",
-    autor: "Gay Talese",
-    medio: "Esquire",
-    anio: 1966,
-    url: "https://www.esquire.com/news-politics/a638/frank-sinatra-has-a-cold-gay-talese/",
-    seccion: "Perfil",
-    idioma: "en",
-    resumen:
-      "El perfil que se escribió sin entrevistar al perfilado, y que por eso mismo lo retrata entero.",
-    porQue:
-      "Talese pasó tres meses siguiendo a Sinatra sin conseguir jamás sentarse con él. En vez de rendirse, escribió alrededor del hueco: los guardaespaldas, la mujer que cargaba las pelucas, el silencio de una sala cuando el jefe entra de mal humor. Es la prueba de que un perfil no se hace de declaraciones sino de observación, y de que el acceso negado también es información.",
-    curador: "",
-  },
-  {
-    slug: "el-rastro-en-los-huesos",
-    titulo: "El rastro en los huesos",
-    autor: "Leila Guerriero",
-    medio: "Gatopardo",
-    anio: 2010,
-    url: "https://gatopardo.com/reportajes/el-rastro-en-los-huesos/",
-    seccion: "Crónica",
-    idioma: "es",
-    resumen:
-      "Los antropólogos forenses que aprendieron a leer los huesos de los desaparecidos argentinos.",
-    porQue:
-      "Guerriero cuenta el trabajo del Equipo Argentino de Antropología Forense sin subir nunca la voz. El material es insoportable y la prosa está bajo control absoluto: ahí está la lección. La contención no es frialdad, es la única forma de que el lector aguante hasta el final y salga distinto.",
-    curador: "",
-  },
-  {
-    slug: "notas-sobre-lo-camp",
-    titulo: "Notes on “Camp”",
-    autor: "Susan Sontag",
-    medio: "Partisan Review",
-    anio: 1964,
-    url: "https://monoskop.org/images/5/59/Sontag_Susan_1964_Notes_on_Camp.pdf",
-    seccion: "Ensayo",
-    idioma: "en",
-    resumen:
-      "Cincuenta y ocho apuntes numerados que inventaron una manera de mirar y una manera de escribir.",
-    porQue:
-      "Sontag decidió que una sensibilidad demasiado escurridiza para un argumento continuo se podía cercar con notas sueltas, y de paso legitimó la fragmentación como forma del ensayo. Nos interesa tanto por lo que dice sobre el gusto como por lo que demuestra: que la estructura de un texto es una decisión crítica, no un accidente.",
-    curador: "",
-  },
-  {
-    slug: "consider-the-lobster",
-    titulo: "Consider the Lobster",
-    autor: "David Foster Wallace",
-    medio: "Gourmet",
-    anio: 2004,
-    url: "https://www.gourmet.com.s3-website-us-east-1.amazonaws.com/magazine/2000s/2004/08/consider_the_lobster.html",
-    seccion: "Crónica",
-    idioma: "en",
-    resumen:
-      "Una revista de gastronomía lo manda a cubrir un festival de langosta y él vuelve con un problema moral.",
-    porQue:
-      "Es el mejor ejemplo de lo que puede pasar cuando un escritor se toma en serio un encargo menor. Wallace acepta la crónica de color, va, mira, y descubre que no puede escribirla sin preguntarse si el animal siente. El texto vale por el pensamiento en vivo y por las notas al pie, que son la mitad del argumento.",
-    curador: "",
-  },
-  {
-    slug: "carta-abierta-a-la-junta-militar",
-    titulo: "Carta abierta de un escritor a la Junta Militar",
-    autor: "Rodolfo Walsh",
-    medio: "Agencia Clandestina de Noticias",
-    anio: 1977,
-    url: "https://www.elhistoriador.com.ar/carta-abierta-de-un-escritor-a-la-junta-militar-rodolfo-walsh/",
-    seccion: "Manifiesto",
-    idioma: "es",
-    resumen:
-      "Walsh la escribió, la echó al correo y lo desaparecieron al día siguiente.",
-    porQue:
-      "El primer aniversario del golpe, un hombre solo con una máquina de escribir contra un Estado, y con las cuentas hechas: cifras, nombres, métodos. Está aquí porque es la definición más corta que conocemos de para qué sirve escribir, y porque su autor pagó por ella el precio completo.",
-    curador: "",
-  },
-  {
-    slug: "la-soledad-de-america-latina",
-    titulo: "La soledad de América Latina",
-    autor: "Gabriel García Márquez",
-    medio: "Discurso de aceptación del Premio Nobel",
-    anio: 1982,
-    url: "https://www.nobelprize.org/prizes/literature/1982/marquez/lecture/",
-    seccion: "Discurso",
-    idioma: "es",
-    resumen:
-      "Ocho minutos en Estocolmo para explicar que la desmesura del continente no es una metáfora.",
-    porQue:
-      "El argumento central sigue vivo: que a América Latina se le pide que se explique con instrumentos que no la miden, y que su realidad desborda a quienes la interpretan desde fuera. Lo tenemos a mano cada vez que hay que decidir para quién se escribe.",
-    curador: "",
-  },
-  {
-    slug: "el-escritor-argentino-y-la-tradicion",
-    titulo: "El escritor argentino y la tradición",
-    autor: "Jorge Luis Borges",
-    medio: "Sur",
-    anio: 1953,
-    url: "https://www.cervantesvirtual.com/obra/el-escritor-argentino-y-la-tradicion/",
-    seccion: "Ensayo",
-    idioma: "es",
-    resumen:
-      "La respuesta definitiva a quien exige que un escritor latinoamericano suene a su país.",
-    porQue:
-      "Borges desmonta la obligación del color local con una calma casi insolente y reclama la cultura entera como herencia disponible. Para una revista en español que no quiere ser regional ni sucursal, este texto es prácticamente un documento fundacional.",
-    curador: "",
-  },
-  {
-    slug: "hablo-por-mi-diferencia",
-    titulo: "Manifiesto (Hablo por mi diferencia)",
-    autor: "Pedro Lemebel",
-    medio: "Leído en un acto político, Santiago",
-    anio: 1986,
+    slug: "anuncio-ganadores-del-concurso-de-ensayos",
+    titulo: "ANUNCIO: Ganadores del concurso de ensayos",
+    autor: "",
+    fecha: "2026-08-03",
+    seccion: "Estelar",
+    acceso: "abierto",
     url: "",
-    seccion: "Manifiesto",
-    idioma: "es",
-    resumen:
-      "Lemebel entra descalzo a una reunión de la izquierda chilena y les lee esto en la cara.",
-    porQue:
-      "Un texto escrito para ser dicho en voz alta, delante de gente incómoda, en un país en dictadura. Es una lección de cómo el ritmo de una frase puede ser un arma política y de que la crónica latinoamericana viene tanto de la poesía como del periodismo.",
-    curador: "",
+    imagen: "",
+    resumen: "",
+    porQue: "",
   },
   {
-    slug: "the-journalist-and-the-murderer",
-    titulo: "The Journalist and the Murderer",
-    autor: "Janet Malcolm",
-    medio: "The New Yorker",
-    anio: 1989,
-    url: "https://www.newyorker.com/magazine/1989/03/13/the-journalist-and-the-murderer-i",
-    seccion: "Reportaje",
-    idioma: "en",
-    resumen:
-      "El texto que obligó al oficio a mirarse la relación con sus fuentes.",
-    porQue:
-      "Malcolm parte de un juicio entre un periodista y su entrevistado para preguntar qué le debe quien escribe a quien le abrió la puerta. Nadie que trabaje con testimonio ajeno debería no haberlo leído; se discute desde el día que salió y esa discusión es justamente el punto.",
-    curador: "",
-  },
-  {
-    slug: "goodbye-to-all-that",
-    titulo: "Goodbye to All That",
-    autor: "Joan Didion",
-    medio: "Slouching Towards Bethlehem",
-    anio: 1968,
+    slug: "gestar-a-un-hijo-ajeno",
+    titulo: "Gestar a un hijo ajeno",
+    autor: "",
+    fecha: "2026-06-29",
+    seccion: "Estelar",
+    acceso: "suscriptores",
     url: "",
-    seccion: "Ensayo",
-    idioma: "en",
-    resumen:
-      "Irse de Nueva York a los veintiocho, y descubrir que la ciudad era una edad.",
-    porQue:
-      "Didion escribe sobre una mudanza y termina escribiendo sobre el final de la juventud sin anunciarlo nunca. La primera persona aquí no es confesión: es un instrumento de precisión. Lo guardamos como recordatorio de que lo autobiográfico sólo funciona cuando está al servicio de algo más grande que el autor.",
-    curador: "",
+    imagen: "",
+    resumen: "",
+    porQue: "",
+  },
+  {
+    slug: "para-contar-una-historia-de-aventuras",
+    titulo: "Para contar una historia de aventuras",
+    autor: "",
+    fecha: "2026-06-22",
+    seccion: "Estelar",
+    acceso: "suscriptores",
+    url: "",
+    imagen: "",
+    resumen: "",
+    porQue: "",
+  },
+  {
+    slug: "la-ternura-no-ha-fracasado",
+    titulo: "La ternura no ha fracasado",
+    autor: "",
+    fecha: "2026-06-01",
+    seccion: "Estelar",
+    acceso: "suscriptores",
+    url: "",
+    imagen: "",
+    resumen: "",
+    porQue: "",
+  },
+  {
+    slug: "mon-president",
+    titulo: "Mon Président",
+    autor: "",
+    fecha: "2026-05-25",
+    seccion: "Estelar",
+    acceso: "suscriptores",
+    url: "",
+    imagen: "",
+    resumen: "",
+    porQue: "",
+  },
+  {
+    slug: "noche-de-latex",
+    titulo: "Noche de látex",
+    autor: "",
+    fecha: "2026-05-18",
+    seccion: "Estelar",
+    acceso: "suscriptores",
+    url: "",
+    imagen: "",
+    resumen: "",
+    porQue: "",
+  },
+  {
+    slug: "casa-de-rescate",
+    titulo: "Casa de rescate",
+    autor: "",
+    fecha: "2026-05-04",
+    seccion: "Estelar",
+    acceso: "suscriptores",
+    url: "",
+    imagen: "",
+    resumen: "",
+    porQue: "",
+  },
+  {
+    slug: "dos-formas-de-narrar-la-violencia",
+    titulo: "Dos formas de narrar la violencia",
+    autor: "",
+    fecha: "2026-04-27",
+    seccion: "Estelar",
+    acceso: "suscriptores",
+    url: "https://www.perpetuo.global/p/dos-formas-de-narrar-la-violencia",
+    imagen: "",
+    resumen: "",
+    porQue: "",
+  },
+  {
+    slug: "yo-fui-el-guardaespaldas-de-camilo-torres",
+    titulo: "Yo fui el guardaespaldas de Camilo Torres",
+    autor: "",
+    fecha: "2026-04-13",
+    seccion: "Estelar",
+    acceso: "suscriptores",
+    url: "https://www.perpetuo.global/p/yo-fui-el-guardaespaldas-de-camilo",
+    imagen: "",
+    resumen: "",
+    porQue: "",
+  },
+  {
+    slug: "buscando-a-la-michoacana",
+    titulo: "Buscando a La Michoacana",
+    autor: "",
+    fecha: "2026-04-06",
+    seccion: "Estelar",
+    acceso: "suscriptores",
+    url: "",
+    imagen: "",
+    resumen: "",
+    porQue: "",
+  },
+  {
+    slug: "la-constante-insatisfaccion-de-no-aparecer-en-wikipedia",
+    titulo: "La constante insatisfacción de no aparecer en Wikipedia",
+    autor: "",
+    fecha: "2026-03-30",
+    seccion: "Estelar",
+    acceso: "suscriptores",
+    url: "",
+    imagen: "",
+    resumen: "",
+    porQue: "",
+  },
+  {
+    slug: "las-siete-vidas-de-el-mencho",
+    titulo: "Las siete vidas de El Mencho",
+    autor: "",
+    fecha: "2026-03-23",
+    seccion: "Estelar",
+    acceso: "suscriptores",
+    url: "",
+    imagen: "",
+    resumen: "",
+    porQue: "",
+  },
+  {
+    slug: "de-bielorrusia-con-amor",
+    titulo: "De Bielorrusia con amor",
+    autor: "",
+    fecha: "2026-03-16",
+    seccion: "Estelar",
+    acceso: "suscriptores",
+    url: "",
+    imagen: "",
+    resumen: "",
+    porQue: "",
+  },
+  {
+    slug: "el-mundo-nos-paso-de-largo",
+    titulo: "El mundo nos pasó de largo",
+    autor: "",
+    fecha: "2026-03-02",
+    seccion: "Estelar",
+    acceso: "suscriptores",
+    url: "",
+    imagen: "",
+    resumen: "",
+    porQue: "",
+  },
+  {
+    slug: "castillos-en-la-tierra",
+    titulo: "Castillos en la tierra",
+    autor: "",
+    fecha: "2026-02-23",
+    seccion: "Estelar",
+    acceso: "suscriptores",
+    url: "",
+    imagen: "",
+    resumen: "",
+    porQue: "",
+  },
+  {
+    slug: "3-2-1-febrero-20-2026",
+    titulo: "3,2,1 - Febrero 20, 2026",
+    autor: "",
+    fecha: "2026-02-20",
+    seccion: "El Creativo",
+    acceso: "abierto",
+    url: "",
+    imagen: "",
+    resumen: "",
+    porQue: "",
+  },
+  {
+    slug: "el-pais-de-los-secretos",
+    titulo: "El país de los secretos",
+    autor: "",
+    fecha: "2026-02-16",
+    seccion: "Estelar",
+    acceso: "abierto",
+    url: "",
+    imagen: "",
+    resumen: "",
+    porQue: "",
+  },
+  {
+    slug: "cuando-leer-mucho-no-significa-leer-mejor",
+    titulo: "Cuando leer mucho no significa leer mejor",
+    autor: "",
+    fecha: "2026-02-09",
+    seccion: "Estelar",
+    acceso: "suscriptores",
+    url: "",
+    imagen: "",
+    resumen: "",
+    porQue: "",
+  },
+  {
+    slug: "3-2-1-febrero-6-2026",
+    titulo: "3,2,1 - Febrero 6, 2026",
+    autor: "",
+    fecha: "2026-02-06",
+    seccion: "El Creativo",
+    acceso: "abierto",
+    url: "",
+    imagen: "",
+    resumen: "",
+    porQue: "",
+  },
+  {
+    slug: "ganadores-del-concurso-de-cuentos",
+    titulo: "Ganadores del concurso de cuentos",
+    autor: "",
+    fecha: "2026-02-02",
+    seccion: "Estelar",
+    acceso: "abierto",
+    url: "",
+    imagen: "",
+    resumen: "",
+    porQue: "",
+  },
+  {
+    slug: "relatos-de-la-frontera",
+    titulo: "Relatos de la frontera",
+    autor: "",
+    fecha: "2026-01-26",
+    seccion: "Estelar",
+    acceso: "abierto",
+    url: "",
+    imagen: "",
+    resumen: "",
+    porQue: "",
+  },
+  {
+    slug: "morrison-gorbachov-y-lo-que-se-nos-perdio-en-el-camino",
+    titulo: "Morrison, Gorbachov y lo que se nos perdió en el camino",
+    autor: "",
+    fecha: "2026-01-19",
+    seccion: "Estelar",
+    acceso: "abierto",
+    url: "",
+    imagen: "",
+    resumen: "",
+    porQue: "",
+  },
+  {
+    slug: "sobre-ser-ceo-a-los-16-anos",
+    titulo: "Sobre ser CEO a los 16 años",
+    autor: "",
+    fecha: "2026-01-12",
+    seccion: "Estelar",
+    acceso: "abierto",
+    url: "",
+    imagen: "",
+    resumen: "",
+    porQue: "",
+  },
+  {
+    slug: "3-2-1-enero-9-2026",
+    titulo: "3,2,1 - Enero 9, 2026",
+    autor: "",
+    fecha: "2026-01-09",
+    seccion: "El Creativo",
+    acceso: "abierto",
+    url: "",
+    imagen: "",
+    resumen: "",
+    porQue: "",
+  },
+  {
+    slug: "el-palacio-negro",
+    titulo: "El palacio negro",
+    autor: "",
+    fecha: "2026-01-05",
+    seccion: "Estelar",
+    acceso: "suscriptores",
+    url: "",
+    imagen: "",
+    resumen: "",
+    porQue: "",
+  },
+  {
+    slug: "noticias-de-otro-gran-secuestro",
+    titulo: "Noticias de otro gran secuestro",
+    autor: "",
+    fecha: "",
+    seccion: "Sin clasificar",
+    acceso: "abierto",
+    url: "https://www.perpetuo.global/p/noticias-de-otro-gran-secuestro",
+    imagen: "",
+    resumen: "",
+    porQue: "",
   },
 ];
 
-/** Índice por slug, para las fichas. */
 export function buscarArticulo(slug: string): Articulo | undefined {
   return articulos.find((a) => a.slug === slug);
 }
 
-/** Secciones realmente usadas, en orden de aparición. */
+/** El año, para las portadas y el índice. Cadena vacía si no hay fecha. */
+export function anioDe(a: Articulo): string {
+  return a.fecha ? a.fecha.slice(0, 4) : "";
+}
+
+const MESES = [
+  "enero", "febrero", "marzo", "abril", "mayo", "junio",
+  "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre",
+];
+
+/** "13 de abril de 2026". Se formatea a mano para no depender de la zona
+ *  horaria del servidor: `new Date("2026-04-13")` se interpreta en UTC y en
+ *  México puede retroceder un día. */
+export function fechaLarga(fecha: string): string {
+  if (!fecha) return "";
+  const [a, m, d] = fecha.split("-");
+  const mes = MESES[Number(m) - 1];
+  if (!mes) return fecha;
+  return `${Number(d)} de ${mes} de ${a}`;
+}
+
+/** Secciones realmente usadas, en el orden canónico. */
 export function seccionesEnUso(): Seccion[] {
   return SECCIONES.filter((s) => articulos.some((a) => a.seccion === s));
 }

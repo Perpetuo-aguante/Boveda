@@ -27,11 +27,11 @@ export const metadata: Metadata = {
     template: "%s · La Bóveda de Perpetuo",
   },
   description:
-    "Los artículos que guardamos en Perpetuo: crónicas, ensayos y perfiles que nos enseñaron a hacer una revista.",
+    "El archivo de Perpetuo: crónicas, ensayos y creativos, puestos como en un tianguis para leerlos completos.",
   openGraph: {
     title: "La Bóveda de Perpetuo",
     description:
-      "Los artículos que guardamos en Perpetuo: crónicas, ensayos y perfiles que nos enseñaron a hacer una revista.",
+      "El archivo de Perpetuo: crónicas, ensayos y creativos, puestos como en un tianguis para leerlos completos.",
     locale: "es",
     type: "website",
   },
@@ -69,8 +69,8 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <footer className="relative z-10 mt-32 border-t border-linea">
           <div className="mx-auto flex max-w-6xl flex-col gap-3 px-6 py-10 text-[0.8125rem] text-tenue-mas sm:flex-row sm:items-center sm:justify-between sm:px-10">
             <p>
-              Una estantería de <span className="text-tenue">Perpetuo</span>. Los textos
-              pertenecen a sus autores y a los medios donde se publicaron.
+              La bóveda de <span className="text-tenue">Perpetuo</span>. Todos los textos
+              son de sus autores; salieron primero en perpetuo.global.
             </p>
             <a
               href="https://www.perpetuo.global"

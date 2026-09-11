@@ -236,11 +236,11 @@ body {
   transform: translateX(-50%) scale(var(--sombra-escala, 1));
   background: radial-gradient(
     ellipse at center,
-    rgba(0, 0, 0, 0.62) 0%,
-    rgba(0, 0, 0, 0.28) 42%,
-    rgba(0, 0, 0, 0) 72%
+    rgba(0, 0, 0, 0.85) 0%,
+    rgba(0, 0, 0, 0.45) 38%,
+    rgba(0, 0, 0, 0) 70%
   );
-  filter: blur(10px);
+  filter: blur(9px);
   pointer-events: none;
   transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -329,4 +329,110 @@ body {
   pointer-events: none;
   opacity: 0.035;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   EL PUESTO
+
+   Los cuadernillos no se apilan de uno en uno: se extienden sobre una mesa,
+   como en un puesto de tianguis. Cada uno se apoya con una inclinación y un
+   asiento ligeramente distintos —repartidos por hash, no al azar, para que no
+   bailen entre compilaciones— porque una fila perfectamente alineada se lee
+   como una hoja de cálculo y no como algo puesto a mano.
+
+   Al pasar por encima, el cuadernillo se endereza, se levanta de la mesa y
+   revela su ficha corta. El título ya viene impreso en la portada, así que en
+   pantallas táctiles —donde no hay «pasar por encima»— no se pierde nada:
+   lo que el hover añade es el resumen, no la identidad.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+.puesto {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(clamp(132px, 19vw, 184px), 1fr));
+  column-gap: clamp(1.1rem, 2.4vw, 2.4rem);
+  row-gap: clamp(2.6rem, 4vw, 4.25rem);
+  align-items: end;
+}
+
+.puesto-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* El que se mira pasa por encima de sus vecinos, y su ficha con él. */
+.puesto-item:hover,
+.puesto-item:focus-within {
+  z-index: 20;
+}
+
+.puesto-item .alza {
+  transform: rotate(var(--inclina, 0deg)) translateY(var(--asienta, 0px));
+}
+
+.puesto-item:hover .alza,
+.puesto-item:focus-within .alza {
+  transform: rotate(0deg) translateY(calc(var(--asienta, 0px) - 18px)) scale(1.07);
+}
+
+/* El pie: siempre visible, también sin ratón. */
+.pie-puesto {
+  margin-top: 1.15rem;
+  text-align: center;
+  transition: opacity 0.3s ease;
+}
+
+.puesto-item:hover .pie-puesto,
+.puesto-item:focus-within .pie-puesto {
+  opacity: 0;
+}
+
+/* La ficha que se revela. Vive encima del pie, así que uno sustituye al otro
+   sin que la fila se mueva. */
+.revela {
+  position: absolute;
+  top: calc(100% - 2.6rem);
+  left: 50%;
+  width: max(190px, 115%);
+  transform: translate(-50%, 6px);
+  opacity: 0;
+  pointer-events: none;
+  text-align: center;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.puesto-item:hover .revela,
+.puesto-item:focus-within .revela {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+/* La luz del puesto: un foco cálido colgado sobre la mesa. Sustituye a los
+   halos por cuadernillo, que a veintiséis objetos salían carísimos. */
+.luz-puesto {
+  position: absolute;
+  inset: -8% -10% auto -10%;
+  height: 140%;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 60% 45% at 50% 0%,
+    rgba(209, 89, 47, 0.13) 0%,
+    rgba(209, 89, 47, 0.05) 40%,
+    rgba(0, 0, 0, 0) 72%
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .puesto-item .alza,
+  .pie-puesto,
+  .revela {
+    transition: none;
+  }
+  .puesto-item:hover .alza,
+  .puesto-item:focus-within .alza {
+    transform: rotate(var(--inclina, 0deg)) translateY(var(--asienta, 0px));
+  }
 }

@@ -1,6 +1,7 @@
 import type { CSSProperties } from "react";
-import type { Articulo } from "@/lib/articles";
-import { PALETAS, motivoDe } from "@/lib/covers";
+import Image from "next/image";
+import { anioDe, type Articulo } from "@/lib/articles";
+import { paletaDe, motivoDe } from "@/lib/covers";
 import { Motivo } from "./motivo";
 
 type Props = {
@@ -10,8 +11,10 @@ type Props = {
   ancho?: string;
   /** Ángulo de reposo; el motor de scroll lo sobrescribe si hay JS. */
   giro?: number;
-  /** Índice en la estantería — se imprime en el lomo, como un número de tomo. */
-  numero?: number;
+  /** Posición en el archivo: decide la paleta y el número impreso en el lomo. */
+  indice: number;
+  /** Prioriza la carga de la foto (sólo para los primeros de la página). */
+  prioridad?: boolean;
 };
 
 /** Los títulos largos bajan de cuerpo para no desbordar la portada. */
@@ -19,20 +22,13 @@ function cuerpoTitulo(titulo: string): string {
   if (titulo.length <= 22) return "2.35em";
   if (titulo.length <= 34) return "1.95em";
   if (titulo.length <= 48) return "1.62em";
-  return "1.38em";
+  return "1.34em";
 }
 
-const IDIOMAS: Record<Articulo["idioma"], string> = {
-  es: "Español",
-  en: "Inglés",
-  pt: "Portugués",
-  fr: "Francés",
-  it: "Italiano",
-  de: "Alemán",
-};
-
-export function Cuadernillo({ articulo, ancho = "260px", giro = 24, numero }: Props) {
-  const p = PALETAS[articulo.seccion];
+export function Cuadernillo({ articulo, ancho = "260px", giro = 24, indice, prioridad }: Props) {
+  const p = paletaDe(indice);
+  const anio = anioDe(articulo);
+  const conFoto = Boolean(articulo.imagen);
 
   // Todo se deriva del ancho en CSS, no en JS: así un clamp() en `ancho` escala
   // el objeto entero —caras, grosor y tipografía— sin un solo media query.
@@ -51,27 +47,50 @@ export function Cuadernillo({ articulo, ancho = "260px", giro = 24, numero }: Pr
     <div className="libro" style={vars} data-libro>
       {/* PORTADA */}
       <div className="cara cara--tapa cara--portada" style={tapa}>
-        <div className="flex h-full flex-col justify-between p-[1.6em]">
-          <div>
+        {conFoto ? (
+          <>
+            <Image
+              src={articulo.imagen}
+              alt=""
+              fill
+              sizes="(max-width: 640px) 60vw, 320px"
+              priority={prioridad}
+              style={{ objectFit: "cover" }}
+            />
+            {/* Velo para que el título se lea sobre cualquier foto. */}
             <div
-              className="eyebrow"
-              style={{ fontSize: "0.72em", color: p.tinta, opacity: 0.72 }}
-            >
-              {articulo.medio}
+              className="absolute inset-0"
+              style={{
+                background:
+                  "linear-gradient(to top, rgba(0,0,0,.86) 0%, rgba(0,0,0,.5) 38%, rgba(0,0,0,.12) 66%, rgba(0,0,0,.35) 100%)",
+              }}
+            />
+          </>
+        ) : null}
+
+        <div
+          className="relative flex h-full flex-col justify-between p-[1.6em]"
+          style={conFoto ? { color: "#f6f0e6" } : undefined}
+        >
+          <div>
+            <div className="eyebrow" style={{ fontSize: "0.72em", opacity: 0.75 }}>
+              Perpetuo
             </div>
             <div
               style={{
                 height: 1,
-                background: p.acento,
-                opacity: 0.55,
+                background: conFoto ? "rgba(255,255,255,.5)" : p.acento,
+                opacity: conFoto ? 1 : 0.55,
                 margin: "0.9em 0 0",
               }}
             />
           </div>
 
-          <div style={{ height: "4.4em", margin: "0 auto", width: "4.4em" }}>
-            <Motivo n={motivoDe(articulo.slug)} color={p.acento} />
-          </div>
+          {conFoto ? null : (
+            <div style={{ height: "4.4em", margin: "0 auto", width: "4.4em" }}>
+              <Motivo n={motivoDe(articulo.slug)} color={p.acento} />
+            </div>
+          )}
 
           <div>
             <h3
@@ -88,8 +107,8 @@ export function Cuadernillo({ articulo, ancho = "260px", giro = 24, numero }: Pr
             <div
               style={{
                 height: 1,
-                background: p.acento,
-                opacity: 0.4,
+                background: conFoto ? "rgba(255,255,255,.35)" : p.acento,
+                opacity: conFoto ? 1 : 0.4,
                 marginBottom: "0.7em",
               }}
             />
@@ -98,9 +117,7 @@ export function Cuadernillo({ articulo, ancho = "260px", giro = 24, numero }: Pr
               style={{ fontSize: "0.78em" }}
             >
               <span style={{ fontWeight: 500 }}>{articulo.autor}</span>
-              <span style={{ opacity: 0.62, fontVariantNumeric: "tabular-nums" }}>
-                {articulo.anio}
-              </span>
+              <span style={{ opacity: 0.62, fontVariantNumeric: "tabular-nums" }}>{anio}</span>
             </div>
           </div>
         </div>
@@ -109,26 +126,20 @@ export function Cuadernillo({ articulo, ancho = "260px", giro = 24, numero }: Pr
       {/* CONTRAPORTADA — el resumen, como en un libro de verdad */}
       <div className="cara cara--tapa cara--contra" style={tapa}>
         <div className="flex h-full flex-col justify-between p-[1.8em]">
-          <p
-            className="display"
-            style={{ fontSize: "1.05em", lineHeight: 1.34, opacity: 0.92 }}
-          >
+          <p className="display" style={{ fontSize: "1.05em", lineHeight: 1.34, opacity: 0.92 }}>
             {articulo.resumen}
           </p>
-          <div style={{ fontSize: "0.72em", opacity: 0.6 }} className="eyebrow">
-            {articulo.seccion} · {IDIOMAS[articulo.idioma]}
+          <div className="eyebrow" style={{ fontSize: "0.72em", opacity: 0.6 }}>
+            {articulo.seccion === "Sin clasificar" ? "Perpetuo" : articulo.seccion}
           </div>
         </div>
       </div>
 
       {/* LOMO */}
-      <div
-        className="cara cara--lado cara--lomo"
-        style={{ background: p.lomo, color: p.tinta }}
-      >
+      <div className="cara cara--lado cara--lomo" style={{ background: p.lomo, color: p.tinta }}>
         <div className="flex h-full flex-col items-center justify-between py-[1.1em]">
           <span style={{ fontSize: "0.62em", opacity: 0.7 }}>
-            {numero !== undefined ? String(numero).padStart(2, "0") : ""}
+            {String(indice + 1).padStart(2, "0")}
           </span>
           <span
             style={{
