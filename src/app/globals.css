@@ -8,14 +8,15 @@
    ═══════════════════════════════════════════════════════════════════════════ */
 
 :root {
-  --noche: #100e0d;
-  --noche-alta: #171513;
-  --niebla: #f2ece2;
+  --noche: #15161a;
+  --noche-alta: #1c1d21;
+  --niebla: #f7f1e6;
   --tenue: #938a7d;
   --tenue-mas: #6a635a;
-  --brasa: #d1592f;
-  --linea: rgba(242, 236, 226, 0.12);
-  --linea-tenue: rgba(242, 236, 226, 0.06);
+  --brasa: #e0552f;
+  --anil: #2a55ac;
+  --linea: rgba(247, 241, 230, 0.12);
+  --linea-tenue: rgba(247, 241, 230, 0.06);
 }
 
 @theme inline {
@@ -25,6 +26,7 @@
   --color-tenue: var(--tenue);
   --color-tenue-mas: var(--tenue-mas);
   --color-brasa: var(--brasa);
+  --color-anil: var(--anil);
   --color-linea: var(--linea);
   --color-linea-tenue: var(--linea-tenue);
   --font-display: var(--font-fraunces), Georgia, "Times New Roman", serif;
@@ -70,6 +72,16 @@ body {
   font-variation-settings: "SOFT" 0, "WONK" 0, "opsz" 40;
   letter-spacing: -0.015em;
   line-height: 1.04;
+}
+
+/* El wordmark: mismo Fraunces que el resto, pero llevado al extremo grueso y
+   "WONK" de su rango variable para acercarse al logotipo de bloque del
+   brandbook sin importar una segunda fuente sólo para seis letras. */
+.marca {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-variation-settings: "SOFT" 0, "WONK" 1, "opsz" 40;
+  letter-spacing: -0.01em;
 }
 
 /* ───────────────────────────────────────────────────────────────────────────

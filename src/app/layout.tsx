@@ -44,7 +44,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <header className="relative z-10">
           <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-6 sm:px-10">
             <Link href="/" className="group flex items-baseline gap-2.5">
-              <span className="display text-lg text-niebla">Perpetuo</span>
+              <span className="marca text-lg text-niebla">Perpetuo</span>
               <span className="text-tenue-mas">/</span>
               <span className="eyebrow text-tenue transition-colors group-hover:text-niebla">
                 La Bóveda

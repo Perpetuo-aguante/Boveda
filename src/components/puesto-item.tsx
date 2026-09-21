@@ -1,7 +1,7 @@
 import type { CSSProperties } from "react";
 import Link from "next/link";
 import { Cuadernillo } from "./cuadernillo";
-import { hash } from "@/lib/covers";
+import { hash, claseAcentoSeccion } from "@/lib/covers";
 import { fechaLarga, type Articulo } from "@/lib/articles";
 
 const MESES = [
@@ -67,8 +67,8 @@ export function PuestoItem({ articulo, indice }: { articulo: Articulo; indice: n
 
       {/* Se revela al pasar por encima: lo que ni la portada ni el pie dicen. */}
       <div className="revela" aria-hidden>
-        <p className="eyebrow text-brasa">
-          {articulo.seccion === "Sin clasificar" ? "Perpetuo" : articulo.seccion}
+        <p className={`eyebrow ${claseAcentoSeccion(articulo.seccion)}`}>
+          {articulo.seccion === "Sin clasificar" ? "Por clasificar" : articulo.seccion}
         </p>
         {articulo.resumen ? (
           <p className="display mt-2.5 text-[0.9375rem] leading-tight text-niebla">
