@@ -1,22 +1,23 @@
 import type { Metadata } from "next";
-import { Fraunces, Poppins } from "next/font/google";
+import { Barlow_Condensed, DM_Sans } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
 
-// Fraunces para todo lo que se lee como "editorial": títulos y portadas. Los
-// ejes SOFT/WONK/opsz se usan en globals.css y en las portadas.
-const fraunces = Fraunces({
+// Barlow Condensed: la tipografía del tianguis. Titulares, portadas y el
+// wordmark van en su peso más grueso, condensados, como un rótulo pintado
+// a mano en un puesto de mercado.
+const barlowCondensed = Barlow_Condensed({
   subsets: ["latin"],
-  axes: ["SOFT", "WONK", "opsz"],
-  variable: "--font-fraunces",
+  weight: ["500", "600", "700", "800", "900"],
+  variable: "--font-barlow",
   display: "swap",
 });
 
-// Poppins es la tipografía de Perpetuo; aquí sostiene la micro-tipografía.
-const poppins = Poppins({
+// DM Sans sostiene el cuerpo y la micro-tipografía.
+const dmSans = DM_Sans({
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  variable: "--font-poppins",
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-dm-sans",
   display: "swap",
 });
 
@@ -39,7 +40,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="es" className={`${fraunces.variable} ${poppins.variable}`}>
+    <html lang="es" className={`${barlowCondensed.variable} ${dmSans.variable}`}>
       <body className="grano min-h-screen">
         <header className="relative z-10">
           <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-6 sm:px-10">

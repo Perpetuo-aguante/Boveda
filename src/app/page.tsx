@@ -14,52 +14,61 @@ export default function Inicio() {
     <>
       <MotorEstante />
 
-      {/* ── Entrada ───────────────────────────────────────────────────────── */}
-      <section className="mx-auto max-w-6xl px-6 pt-20 pb-8 sm:px-10 sm:pt-28">
-        <p className="eyebrow text-tenue-mas">La Bóveda</p>
-
-        <h1 className="display mt-8 max-w-4xl text-[clamp(2.5rem,6.5vw,5rem)] text-balance">
-          Todo lo que hemos escrito, extendido sobre la mesa.
-        </h1>
-
-        <p className="mt-10 max-w-xl text-[1.0625rem] leading-relaxed text-niebla/70">
-          El archivo de Perpetuo, puesto como en un tianguis: los Estelares de
-          los lunes, los Anteojos de los miércoles y El Creativo de los viernes.
-          Levanta cualquiera y léelo completo.
-        </p>
-
-        <div className="mt-14 flex flex-wrap items-center gap-x-8 gap-y-4 border-t border-linea pt-6 text-[0.8125rem] text-tenue-mas">
-          <span className="tabular-nums">
-            {articulos.length} {articulos.length === 1 ? "texto" : "textos"}
+      {/* ── Entrada: el toldo del tianguis ───────────────────────────────── */}
+      <section className="toldo px-6 pb-16 pt-14 sm:px-10 sm:pb-20 sm:pt-16">
+        <div className="relative mx-auto max-w-6xl">
+          <span className="eyebrow" style={{ opacity: 0.85 }}>
+            La Bóveda · Tianguis digital
           </span>
-          {rango ? <span className="tabular-nums">{rango}</span> : null}
-          <ul className="flex flex-wrap items-center gap-x-5 gap-y-2">
-            {secciones.map((s) => (
-              <li key={s}>{s}</li>
-            ))}
-          </ul>
+
+          <h1 className="display mt-4 max-w-4xl text-[clamp(2.6rem,7.5vw,6.4rem)] uppercase text-balance">
+            Todo lo que hemos escrito, extendido sobre la mesa.
+          </h1>
+
+          <p className="mt-6 max-w-xl text-[1.0625rem] leading-relaxed" style={{ opacity: 0.92 }}>
+            El archivo de Perpetuo, puesto como en un tianguis: los Estelares de
+            los lunes, los Anteojos de los miércoles y El Creativo de los viernes.
+            Levanta cualquiera y léelo completo.
+          </p>
+
+          <div className="sticker absolute right-0 top-0 hidden h-[132px] w-[132px] flex-col items-center justify-center text-center sm:flex">
+            <b className="text-[26px]">{articulos.length}</b>
+            <span className="text-[13px]">TEXTOS</span>
+            {rango ? <small className="mt-1.5 text-[10px] font-medium normal-case">{rango}</small> : null}
+          </div>
+
+          <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-2 text-[0.8125rem]" style={{ opacity: 0.85 }}>
+            <ul className="flex flex-wrap items-center gap-x-5 gap-y-2 eyebrow">
+              {secciones.map((s) => (
+                <li key={s}>{s}</li>
+              ))}
+            </ul>
+          </div>
+
+          <a
+            href="#puesto"
+            className="eyebrow mt-10 inline-flex items-center gap-3 transition-opacity hover:opacity-70"
+          >
+            Acercarse al puesto
+            <span aria-hidden>↓</span>
+          </a>
         </div>
-
-        <a
-          href="#puesto"
-          className="eyebrow mt-14 inline-flex items-center gap-3 text-tenue-mas transition-colors hover:text-niebla"
-        >
-          Acercarse al puesto
-          <span aria-hidden>↓</span>
-        </a>
       </section>
+      <div className="valance" aria-hidden />
 
-      {/* ── El puesto ─────────────────────────────────────────────────────── */}
+      {/* ── El puesto: el anaquel ─────────────────────────────────────────── */}
       <section
         id="puesto"
-        className="relative mx-auto max-w-6xl scroll-mt-16 px-6 pt-20 pb-10 sm:px-10"
+        className="scroll-mt-16 px-4 pb-16 pt-16 sm:px-6"
         aria-label="El puesto"
       >
-        <div className="luz-puesto" aria-hidden />
-        <div className="puesto relative">
-          {articulos.map((a, i) => (
-            <PuestoItem key={a.slug} articulo={a} indice={i} />
-          ))}
+        <div className="anaquel relative mx-auto max-w-6xl px-4 pb-2 pt-7 sm:px-7">
+          <div className="luz-puesto" aria-hidden />
+          <div className="puesto relative">
+            {articulos.map((a, i) => (
+              <PuestoItem key={a.slug} articulo={a} indice={i} />
+            ))}
+          </div>
         </div>
       </section>
 
