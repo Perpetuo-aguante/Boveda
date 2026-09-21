@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { articulos, buscarArticulo, fechaLarga, anioDe } from "@/lib/articles";
-import { paletaDe } from "@/lib/covers";
+import type { CSSProperties } from "react";
+import { paletaDe, claseAcentoSeccion, papelLecturaDe } from "@/lib/covers";
 import { leerTexto, tramos, minutosDe } from "@/lib/texto";
 import { Cuadernillo } from "@/components/cuadernillo";
 import { MotorEstante } from "@/components/motor-estante";
@@ -46,6 +47,21 @@ export default async function Ficha({ params }: { params: Promise<{ slug: string
   const anterior = i > 0 ? articulos[i - 1] : undefined;
   const siguiente = i < articulos.length - 1 ? articulos[i + 1] : undefined;
 
+  // El papel de lectura: fondo claro, tinta oscura. La vitrina de la portada
+  // es de noche; la ficha larga no lo es —4.000 palabras sobre casi negro
+  // cansa la vista. Se cicla por índice, igual que la paleta de portada, así
+  // que anterior/siguiente casi nunca repiten papel.
+  const papel = papelLecturaDe(i);
+  const vars = {
+    "--noche": papel.fondo,
+    "--noche-alta": papel.fondo,
+    "--niebla": papel.tinta,
+    "--tenue": papel.tenue,
+    "--tenue-mas": papel.tenueMas,
+    "--linea": papel.linea,
+    "--linea-tenue": papel.lineaTenue,
+  } as CSSProperties;
+
   const datos: Array<[string, string]> = [
     ...(articulo.autor ? ([["Autor", articulo.autor]] as Array<[string, string]>) : []),
     ["Sección", articulo.seccion === "Sin clasificar" ? "Por clasificar" : articulo.seccion],
@@ -58,7 +74,10 @@ export default async function Ficha({ params }: { params: Promise<{ slug: string
   ];
 
   return (
-    <>
+    <div
+      className="tema-lectura min-h-screen"
+      style={{ ...vars, background: "var(--noche)", color: "var(--niebla)", colorScheme: "light" }}
+    >
       <MotorEstante />
 
       <div className="mx-auto max-w-6xl px-6 pt-10 sm:px-10">
@@ -94,8 +113,8 @@ export default async function Ficha({ params }: { params: Promise<{ slug: string
           </div>
 
           <div className="lg:col-span-6 lg:col-start-7">
-            <p className="eyebrow text-brasa">
-              {articulo.seccion === "Sin clasificar" ? "Perpetuo" : articulo.seccion}
+            <p className={`eyebrow ${claseAcentoSeccion(articulo.seccion)}`}>
+              {articulo.seccion === "Sin clasificar" ? "Por clasificar" : articulo.seccion}
             </p>
 
             <h1 className="display mt-6 text-[clamp(2.1rem,5vw,3.5rem)] text-balance">
@@ -103,9 +122,13 @@ export default async function Ficha({ params }: { params: Promise<{ slug: string
             </h1>
 
             <p className="mt-6 text-lg text-tenue">
-              {articulo.autor ? `${articulo.autor} · ` : ""}
-              Perpetuo
-              {articulo.fecha ? ` · ${fechaLarga(articulo.fecha)}` : ""}
+              {[
+                articulo.autor,
+                articulo.seccion === "Sin clasificar" ? null : articulo.seccion,
+                articulo.fecha ? fechaLarga(articulo.fecha) : null,
+              ]
+                .filter(Boolean)
+                .join(" · ")}
             </p>
 
             {articulo.resumen ? (
@@ -234,6 +257,6 @@ export default async function Ficha({ params }: { params: Promise<{ slug: string
           </Link>
         ) : null}
       </nav>
-    </>
+    </div>
   );
 }

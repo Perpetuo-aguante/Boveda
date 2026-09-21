@@ -88,7 +88,7 @@ export function Cuadernillo({ articulo, ancho = "260px", giro = 24, indice, prio
 
           {conFoto ? null : (
             <div style={{ height: "4.4em", margin: "0 auto", width: "4.4em" }}>
-              <Motivo n={motivoDe(articulo.slug)} color={p.acento} />
+              <Motivo n={motivoDe(articulo.slug, indice)} color={p.acento} />
             </div>
           )}
 
@@ -130,7 +130,7 @@ export function Cuadernillo({ articulo, ancho = "260px", giro = 24, indice, prio
             {articulo.resumen}
           </p>
           <div className="eyebrow" style={{ fontSize: "0.72em", opacity: 0.6 }}>
-            {articulo.seccion === "Sin clasificar" ? "Perpetuo" : articulo.seccion}
+            {articulo.seccion === "Sin clasificar" ? "Por clasificar" : articulo.seccion}
           </div>
         </div>
       </div>
