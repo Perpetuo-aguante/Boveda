@@ -82,6 +82,9 @@ export function PuestoItem({ articulo, indice }: { articulo: Articulo; indice: n
           {fechaLarga(articulo.fecha) || "Fecha por confirmar"}
           {articulo.acceso === "suscriptores" ? " · Suscriptores" : ""}
         </p>
+        <p className="eyebrow mt-2.5" style={{ color: "var(--lima)" }}>
+          Leer ↗
+        </p>
       </div>
     </div>
   );

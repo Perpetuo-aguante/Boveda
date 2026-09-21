@@ -5,6 +5,10 @@
 
    La página es una sala a oscuras con objetos iluminados. Todo el color vive
    en las portadas de los cuadernillos; el resto es casi monocromo a propósito.
+
+   La entrada y el puesto citan el tianguis: lona roja a rayas, sticker de
+   feria, rejilla de anaquel de video-club. Cream/ink son la base; rojo y
+   lima son los dos colores que gritan, y por eso se usan poco.
    ═══════════════════════════════════════════════════════════════════════════ */
 
 :root {
@@ -13,10 +17,12 @@
   --niebla: #f7f1e6;
   --tenue: #938a7d;
   --tenue-mas: #6a635a;
-  --brasa: #e0552f;
+  --brasa: #cf322b;
   --anil: #2a55ac;
+  --lima: #d6f34a;
   --linea: rgba(247, 241, 230, 0.12);
   --linea-tenue: rgba(247, 241, 230, 0.06);
+  --anaquel: #53564c;
 }
 
 @theme inline {
@@ -27,10 +33,11 @@
   --color-tenue-mas: var(--tenue-mas);
   --color-brasa: var(--brasa);
   --color-anil: var(--anil);
+  --color-lima: var(--lima);
   --color-linea: var(--linea);
   --color-linea-tenue: var(--linea-tenue);
-  --font-display: var(--font-fraunces), Georgia, "Times New Roman", serif;
-  --font-sans: var(--font-poppins), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-display: var(--font-barlow), "Arial Narrow", Impact, sans-serif;
+  --font-sans: var(--font-dm-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 html {
@@ -69,19 +76,17 @@ body {
 
 .display {
   font-family: var(--font-display);
-  font-variation-settings: "SOFT" 0, "WONK" 0, "opsz" 40;
-  letter-spacing: -0.015em;
-  line-height: 1.04;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  line-height: 0.96;
 }
 
-/* El wordmark: mismo Fraunces que el resto, pero llevado al extremo grueso y
-   "WONK" de su rango variable para acercarse al logotipo de bloque del
-   brandbook sin importar una segunda fuente sólo para seis letras. */
+/* El wordmark: Barlow Condensed al peso más alto, como el logotipo pintado
+   del tianguis — condensado, casi sin espaciado entre letras. */
 .marca {
   font-family: var(--font-display);
   font-weight: 900;
-  font-variation-settings: "SOFT" 0, "WONK" 1, "opsz" 40;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
 }
 
 /* ───────────────────────────────────────────────────────────────────────────
@@ -295,6 +300,68 @@ body {
   .estante-item:focus-within .libro {
     --giro-mult: 1;
   }
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   EL TOLDO Y EL ANAQUEL
+
+   Citas directas del tianguis fotográfico: la lona roja a rayas sobre la
+   entrada, el sticker de feria, el filo festoneado de la lona, y la rejilla
+   de anaquel de video-club detrás del puesto.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+.toldo {
+  position: relative;
+  background: var(--brasa);
+  color: #fff1d4;
+  border-top: 5px solid #ab2722;
+  background-image: repeating-linear-gradient(
+    100deg,
+    transparent 0 190px,
+    rgba(115, 24, 9, 0.07) 191px 192px,
+    transparent 193px 380px
+  );
+}
+
+.sticker {
+  background: var(--lima);
+  color: var(--noche);
+  border: 2px dashed #343622;
+  outline: 6px solid var(--lima);
+  border-radius: 999px;
+  transform: rotate(9deg);
+  font-family: var(--font-display);
+  font-weight: 900;
+  line-height: 0.92;
+}
+
+/* El filo de la lona: un festón repetido con clip-path, no una imagen. */
+.valance {
+  height: 20px;
+  background: repeating-linear-gradient(90deg, #b72823 0 30px, #c32d26 30px 60px);
+  clip-path: polygon(
+    0 0, 100% 0, 100% 70%,
+    97.5% 100%, 95% 70%, 92.5% 100%, 90% 70%, 87.5% 100%, 85% 70%,
+    82.5% 100%, 80% 70%, 77.5% 100%, 75% 70%, 72.5% 100%, 70% 70%,
+    67.5% 100%, 65% 70%, 62.5% 100%, 60% 70%, 57.5% 100%, 55% 70%,
+    52.5% 100%, 50% 70%, 47.5% 100%, 45% 70%, 42.5% 100%, 40% 70%,
+    37.5% 100%, 35% 70%, 32.5% 100%, 30% 70%, 27.5% 100%, 25% 70%,
+    22.5% 100%, 20% 70%, 17.5% 100%, 15% 70%, 12.5% 100%, 10% 70%,
+    7.5% 100%, 5% 70%, 2.5% 100%, 0 70%
+  );
+}
+
+/* El anaquel: la rejilla de video-club detrás de los cuadernillos. */
+.anaquel {
+  background-color: var(--anaquel);
+  background-image:
+    linear-gradient(rgba(187, 192, 175, 0.15) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(187, 192, 175, 0.15) 1px, transparent 1px);
+  background-size: 26px 26px;
+  border: 6px ridge #94988b;
+  box-shadow:
+    0 10px 16px rgba(37, 40, 32, 0.15),
+    inset 0 0 40px rgba(0, 0, 0, 0.3);
 }
 
 /* El halo detrás de cada cuadernillo: el foco de la vitrina. */
