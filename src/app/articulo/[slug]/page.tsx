@@ -41,7 +41,7 @@ export default async function Ficha({ params }: { params: Promise<{ slug: string
   const articulo = buscarArticulo(slug);
   if (!articulo) notFound();
 
-  const bloques = leerTexto(articulo.slug);
+  const bloques = leerTexto(articulo.slug, articulo.forma === "verso");
   const i = articulos.findIndex((a) => a.slug === slug);
   const p = paletaDe(i);
   const anterior = i > 0 ? articulos[i - 1] : undefined;
@@ -183,6 +183,19 @@ export default async function Ficha({ params }: { params: Promise<{ slug: string
                   >
                     ❊
                   </div>
+                );
+              }
+              if (b.tipo === "estrofa") {
+                return (
+                  <p key={n} className="estrofa mb-9 text-[1.125rem] text-niebla/85">
+                    {b.lineas.map((linea, k) => (
+                      <span key={k}>
+                        {tramos(linea).map((t, j) =>
+                          t.cursiva ? <em key={j}>{t.texto}</em> : <span key={j}>{t.texto}</span>,
+                        )}
+                      </span>
+                    ))}
+                  </p>
                 );
               }
               if (b.tipo === "subtitulo") {

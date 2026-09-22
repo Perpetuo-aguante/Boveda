@@ -520,6 +520,18 @@ body {
   }
 }
 
+/* La estrofa. Cada verso es una línea propia y va más junto que la prosa:
+   en un poema la unidad es el verso, no el párrafo. Cuando un verso largo no
+   cabe en la columna, su continuación entra sangrada —así se distingue de un
+   verso nuevo, que es la confusión clásica al maquetar poesía en pantallas
+   angostas. */
+.estrofa > span {
+  display: block;
+  line-height: 1.55;
+  padding-left: 1.5em;
+  text-indent: -1.5em;
+}
+
 /* ───────────────────────────────────────────────────────────────────────────
    EL GRANO
 
