@@ -7,7 +7,7 @@
  * ────────────────────────────────────────────────────────────────────────────
  * QUÉ FALTA (estado actual)
  *
- * Los 12 textos de aquí son los que Tomás subió directamente —un PDF por
+ * Los 18 textos de aquí son los que Tomás subió directamente —un PDF por
  * texto, en Bóveda/ y Bóveda/Covers/ del disco externo—, no la semilla
  * original de 26 que traía el repo. Cada uno tiene su `contenido/<slug>.md`
  * completo. Lo que sigue en blanco sigue en blanco a propósito, porque no se
@@ -16,18 +16,27 @@
  *   resumen  — se llenó donde el PDF traía subtítulo propio de Substack.
  *   porQue   — por qué ese texto está en la bóveda; pendiente de criterio
  *              editorial, no de dato.
- *   imagen   — sólo tres tienen foto de portada real (ver Covers/); el resto
+ *   imagen   — sólo cinco tienen foto de portada real (ver Covers/); el resto
  *              usa la portada geométrica generada.
- *   url      — sólo se conocen dos; el resto no se puede adivinar sin abrir
+ *   url      — sólo se conoce uno; el resto no se puede adivinar sin abrir
  *              cada post en perpetuo.global.
+ *
+ * Siete de los dieciocho son poesía y llevan `forma: "verso"`, que le dice al
+ * lector que conserve los versos en vez de rejuntarlos en párrafos. Se detectan
+ * por la forma del .md: un texto con 34 bloques de 7 palabras cada uno es un
+ * poema, no una crónica —así apareció «Fondo de Anáhuac», que estaba pasando
+ * por prosa.
  *
  * El cuerpo completo NO vive aquí: cada texto va en `contenido/<slug>.md`.
  * Ver `contenido/README.md`.
  *
  * La sección sale del calendario editorial (lunes = Estelar, miércoles =
  * Anteojos, viernes = El Creativo), leído de la fecha real del PDF. Cuando la
- * fecha no cae en ninguno de los tres días —los tres poemas fechados 1 de
- * enero, un jueves— la sección queda «Sin clasificar» en vez de adivinar.
+ * fecha no cae en ninguno de los tres días —los tres poemas del 1 de enero y
+ * el de Rosa Berbel, todos en jueves— la sección queda «Sin clasificar» en vez
+ * de adivinar. La regla se validó sola: los dos textos cuyo cuerpo declara su
+ * sección («volumen VI de El creativo», «el texto estelar de esta semana»)
+ * caen exactamente en el día que les toca.
  * ────────────────────────────────────────────────────────────────────────────
  */
 import { SECCIONES, type Seccion, type Acceso } from "./articulos-tipos";
@@ -53,6 +62,9 @@ export type Articulo = {
   resumen: string;
   /** Uno o dos párrafos: por qué está en la bóveda. Se lee en la ficha. */
   porQue: string;
+  /** "verso" para poesía: conserva los versos en vez de rejuntarlos en
+   *  párrafos. La prosa no necesita declarar nada. */
+  forma?: "verso";
   /** Cita textual opcional, sólo si está verificada palabra por palabra. */
   cita?: string;
   /** Quién lo trajo a la bóveda. */
@@ -60,6 +72,18 @@ export type Articulo = {
 };
 
 export const articulos: Articulo[] = [
+  {
+    slug: "denuncia-vecinal",
+    titulo: "Denuncia vecinal",
+    autor: "David Blanc",
+    fecha: "2026-08-21",
+    seccion: "El Creativo",
+    acceso: "abierto",
+    url: "",
+    imagen: "/portadas/denuncia-vecinal.jpg",
+    resumen: "",
+    porQue: "",
+  },
   {
     slug: "anuncio-ganadores-del-concurso-de-ensayos",
     titulo: "ANUNCIO: Ganadores del concurso de ensayos",
@@ -120,6 +144,45 @@ export const articulos: Articulo[] = [
     imagen: "/portadas/fondo-de-anahuac.jpg",
     resumen: "",
     porQue: "",
+    forma: "verso",
+  },
+  {
+    slug: "kairos",
+    titulo: "Kairos",
+    autor: "David Rubiano",
+    fecha: "2026-04-03",
+    seccion: "El Creativo",
+    acceso: "abierto",
+    url: "",
+    imagen: "/portadas/kairos.jpg",
+    resumen: "",
+    porQue: "",
+    forma: "verso",
+  },
+  {
+    slug: "seleccion-de-poemas",
+    titulo: "Selección de poemas",
+    autor: "Samuel Lundy",
+    fecha: "2026-03-20",
+    seccion: "El Creativo",
+    acceso: "abierto",
+    url: "",
+    imagen: "",
+    resumen: "",
+    porQue: "",
+    forma: "verso",
+  },
+  {
+    slug: "la-trampa",
+    titulo: "La trampa",
+    autor: "Aldo Yahuaca",
+    fecha: "2026-02-20",
+    seccion: "El Creativo",
+    acceso: "abierto",
+    url: "",
+    imagen: "",
+    resumen: "",
+    porQue: "",
   },
   {
     slug: "el-pais-de-los-secretos",
@@ -131,6 +194,18 @@ export const articulos: Articulo[] = [
     url: "",
     imagen: "",
     resumen: "Recuerdos del Paraguay.",
+    porQue: "",
+  },
+  {
+    slug: "ganadores-del-concurso-de-cuentos",
+    titulo: "Ganadores del concurso de cuentos",
+    autor: "",
+    fecha: "2026-02-02",
+    seccion: "Estelar",
+    acceso: "abierto",
+    url: "",
+    imagen: "",
+    resumen: "Edición 2025-26.",
     porQue: "",
   },
   {
@@ -168,6 +243,7 @@ export const articulos: Articulo[] = [
     imagen: "/portadas/alegoria-en-suenos.jpg",
     resumen: "",
     porQue: "",
+    forma: "verso",
   },
   {
     slug: "machin",
@@ -180,6 +256,7 @@ export const articulos: Articulo[] = [
     imagen: "",
     resumen: "",
     porQue: "",
+    forma: "verso",
   },
   {
     slug: "mexico-toluca",
@@ -192,6 +269,20 @@ export const articulos: Articulo[] = [
     imagen: "",
     resumen: "",
     porQue: "",
+    forma: "verso",
+  },
+  {
+    slug: "un-pais-de-lineas-rectas",
+    titulo: "[Un país de líneas rectas]",
+    autor: "Rosa Berbel",
+    fecha: "2025-11-20",
+    seccion: "Sin clasificar",
+    acceso: "abierto",
+    url: "",
+    imagen: "",
+    resumen: "",
+    porQue: "",
+    forma: "verso",
   },
   {
     slug: "dialogos-por-la-modernidad",

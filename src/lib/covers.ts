@@ -24,24 +24,6 @@ export type Paleta = {
   canto: string;
 };
 
-/**
- * Las ocho salen del brandbook: sólo tinta (#15161a), papel (#f7f1e6), añil
- * (#2a55ac) y brasa (#e0552f), viradas a claro/oscuro. Antes había verdes,
- * morados y un ocre que no salían de ahí; el puesto sigue surtido —ninguna
- * paleta se repite entre vecinos— pero ahora cada cuadernillo es
- * reconocibles como Perpetuo incluso tapando el logo.
- */
-export const PALETAS: Paleta[] = [
-  { papel: "#e0552f", tinta: "#fbeee0", acento: "#f3a67e", lomo: "#b43e20", canto: "#f4ead8" },
-  { papel: "#2a55ac", tinta: "#f0f3fa", acento: "#90b3e0", lomo: "#1c3d80", canto: "#f1ecdf" },
-  { papel: "#15161a", tinta: "#f7f1e6", acento: "#e0552f", lomo: "#0b0b0d", canto: "#ede4d3" },
-  { papel: "#efe4cd", tinta: "#221d12", acento: "#2a55ac", lomo: "#cbbd9a", canto: "#f6f0e2" },
-  { papel: "#16305e", tinta: "#eef2f8", acento: "#7c9fd6", lomo: "#0e2145", canto: "#f1ecdf" },
-  { papel: "#8a3320", tinta: "#f7e7e0", acento: "#d89572", lomo: "#672414", canto: "#f2e8d9" },
-  { papel: "#1c1d21", tinta: "#f2ece0", acento: "#6f97d6", lomo: "#101114", canto: "#ece3d2" },
-  { papel: "#e3d0a8", tinta: "#2b2011", acento: "#c9502b", lomo: "#c1af80", canto: "#f6f0e2" },
-];
-
 /** Hash estable de una cadena. */
 export function hash(texto: string): number {
   let h = 0;
@@ -52,17 +34,34 @@ export function hash(texto: string): number {
 }
 
 /**
- * La paleta se reparte por posición en el archivo, no por hash del slug.
- * Con hash salía a suerte y en la práctica se agrupaba: tres rojos seguidos y
- * ni un ocre en toda la primera fila. Ciclando por índice queda garantizado que
- * ningún vecino repite color y que las ocho paletas aparecen por igual, que es
- * justo lo que hace que un puesto parezca surtido.
+ * LA PORTADA SALE DE LA LONA, Y ESO NO ES UN DETALLE.
  *
- * El precio es que insertar un texto a media lista recolorea los de abajo. Para
- * un puesto de tianguis eso da igual; nadie memoriza de qué color era cada uno.
+ * Antes había dos tablas de color independientes: una para las lonas del
+ * puesto y otra para las portadas de la ficha. Con la transición de cámara eso
+ * se volvió un error visible —caminabas hacia una lona azul y llegabas a un
+ * cuadernillo rosa—, porque el mismo texto tenía dos colores según dónde lo
+ * mirabas. Ahora la lona es la única fuente: el objeto que se ve de cerca es
+ * el mismo que estaba en la mesa, y el acercamiento se lee como continuo.
+ *
+ * El canto es lo único que no viene de la lona: son las hojas, y las hojas son
+ * de papel en todos los casos. Se alterna un poco para que dos cuadernillos
+ * vecinos no tengan el corte idéntico.
+ *
+ * Se reparte por posición y no por hash del slug: con hash salía a suerte y en
+ * la práctica se agrupaba —tres rojos seguidos y ni un amarillo en toda la
+ * primera fila—. Ciclando queda garantizado que ningún vecino repite.
  */
+const CANTOS = ["#f5ead2", "#f2ecdb", "#f7f1e6", "#f5e9dd", "#ede4d3", "#fffbf2"];
+
 export function paletaDe(indice: number): Paleta {
-  return PALETAS[indice % PALETAS.length];
+  const l = lonaDe(indice);
+  return {
+    papel: l.tela,
+    tinta: l.tinta,
+    acento: l.acento,
+    lomo: l.costura,
+    canto: CANTOS[indice % CANTOS.length],
+  };
 }
 
 /**
@@ -77,10 +76,10 @@ export function claseAcentoSeccion(seccion: string): string {
 /**
  * El papel de lectura. La vitrina del puesto es de noche a propósito —ahí el
  * color vive en las portadas— pero un texto de 4.000 palabras sobre fondo
- * casi negro es agotador. La ficha cambia a papel claro: crema y las dos
- * tintas de marca en versión pálida, para que dé variedad sin pelear con el
- * cuerpo del texto. Nunca colores puros de portada —esos son para mirarse un
- * segundo, no para leer un rato largo encima.
+ * casi negro es agotador. La ficha cambia a papel claro: crema y los colores
+ * de la lona rebajados hasta que son papel, para que dé variedad sin pelear
+ * con el cuerpo del texto. Nunca los colores saturados de la portada —esos
+ * son para mirarse un segundo, no para leer un rato largo encima.
  */
 export type PapelLectura = {
   fondo: string;
@@ -95,24 +94,23 @@ export type PapelLectura = {
 export const PAPELES_LECTURA: PapelLectura[] = [
   // Crema — el papel base, el más neutro de los cuatro.
   {
-    fondo: "#f7f1e6", tinta: "#221d12", tenue: "#57503f", tenueMas: "#948c79",
-    linea: "rgba(34, 29, 18, 0.13)", lineaTenue: "rgba(34, 29, 18, 0.07)", acento: "#c9502b",
+    fondo: "#f7f1e6", tinta: "#1b1710", tenue: "#544d3d", tenueMas: "#8a8270",
+    linea: "rgba(27, 23, 16, 0.14)", lineaTenue: "rgba(27, 23, 16, 0.07)", acento: "#e01b13",
   },
-  // Coral pálido.
+  // Rosa mexicano, rebajado hasta que sea papel. El acento sí va a tope.
   {
-    fondo: "#f8e9e0", tinta: "#2b1712", tenue: "#6b4b3e", tenueMas: "#a3826f",
-    linea: "rgba(43, 23, 18, 0.13)", lineaTenue: "rgba(43, 23, 18, 0.07)", acento: "#c9502b",
+    fondo: "#fdeaf1", tinta: "#2a0a19", tenue: "#6b3149", tenueMas: "#a8798c",
+    linea: "rgba(42, 10, 25, 0.14)", lineaTenue: "rgba(42, 10, 25, 0.07)", acento: "#ef0d7c",
   },
-  // Verde salvia pálido — el tercer color pide algo que no sea ni papel ni
-  // marca directa; un verde apagado, cercano al musgo, hace de puente.
+  // Azul lona pálido.
   {
-    fondo: "#e9efe1", tinta: "#182417", tenue: "#48573f", tenueMas: "#889478",
-    linea: "rgba(24, 36, 23, 0.13)", lineaTenue: "rgba(24, 36, 23, 0.07)", acento: "#3c6b45",
+    fondo: "#e8edfb", tinta: "#0d1330", tenue: "#3c4570", tenueMas: "#7f88ab",
+    linea: "rgba(13, 19, 48, 0.14)", lineaTenue: "rgba(13, 19, 48, 0.07)", acento: "#1536c4",
   },
-  // Añil pálido.
+  // Amarillo pálido — el más cercano al papel de estraza de los cartelitos.
   {
-    fondo: "#e7ecf6", tinta: "#171b2b", tenue: "#454f6e", tenueMas: "#8891ac",
-    linea: "rgba(23, 27, 43, 0.13)", lineaTenue: "rgba(23, 27, 43, 0.07)", acento: "#2a55ac",
+    fondo: "#fdf4d9", tinta: "#241d02", tenue: "#5c5017", tenueMas: "#948a52",
+    linea: "rgba(36, 29, 2, 0.14)", lineaTenue: "rgba(36, 29, 2, 0.07)", acento: "#009046",
   },
 ];
 
@@ -122,17 +120,56 @@ export function papelLecturaDe(indice: number): PapelLectura {
   return PAPELES_LECTURA[indice % PAPELES_LECTURA.length];
 }
 
+/**
+ * LAS LONAS DEL PUESTO
+ *
+ * La portada del cuadernillo y la lona del puesto son dos cosas distintas y
+ * por eso tienen tablas distintas: la portada es un objeto de papel que se
+ * mira de cerca en la ficha, y la lona es tela de plástico tensada que se ve
+ * de lejos y en fila.
+ *
+ * Cada lona lleva su propia `sombra`, que no es negra: es un tono más hondo de
+ * su propio color. Una sombra dura negra sobre azul lona no se lee como
+ * sombra, se lee como un agujero.
+ */
+export type Lona = {
+  /** El color de la tela. */
+  tela: string;
+  /** La costura y el dobladillo: un paso más oscuro que la tela. */
+  costura: string;
+  /** La tinta del rótulo. */
+  tinta: string;
+  /** El acento: ojales, filetes, la sección. */
+  acento: string;
+  /** El color de la sombra dura a 45°. */
+  sombra: string;
+};
+
+export const LONAS: Lona[] = [
+  { tela: "#1536c4", costura: "#0c2189", tinta: "#fff6dc", acento: "#ffd100", sombra: "#08165c" },
+  { tela: "#e01b13", costura: "#a20f08", tinta: "#fff2d2", acento: "#ffd100", sombra: "#6d0a04" },
+  { tela: "#ffd100", costura: "#d4a800", tinta: "#15161a", acento: "#ef0d7c", sombra: "#8a6c00" },
+  { tela: "#009046", costura: "#00642f", tinta: "#fff4d8", acento: "#ffd100", sombra: "#004a23" },
+  { tela: "#ef0d7c", costura: "#b00a5b", tinta: "#fff0cf", acento: "#ffd100", sombra: "#75063c" },
+  { tela: "#15161a", costura: "#000000", tinta: "#f7f1e6", acento: "#ffd100", sombra: "#000000" },
+];
+
+/** Cicla por posición, igual que las portadas: ningún vecino repite lona. */
+export function lonaDe(indice: number): Lona {
+  return LONAS[indice % LONAS.length];
+}
+
 /** Número de motivos disponibles en <Motivo />. */
 export const MOTIVOS = 6;
 
 /**
  * Se desplaza el hash para que color y motivo no queden correlacionados, y se
- * suma la "vuelta" de paleta (índice / 8) para que dos cuadernillos que caen
- * en la misma paleta —sólo se repite cada 8 puestos— nunca compartan además
- * el mismo motivo. Sin el `indice`, dos paletas iguales podían salir con el
- * mismo ícono encima: parecían el mismo cuadernillo dos veces.
+ * suma la "vuelta" de lona para que dos cuadernillos que caen en el mismo
+ * color —se repite cada seis— nunca compartan además el mismo motivo. Sin el
+ * `indice`, dos lonas iguales podían salir con el mismo ícono encima:
+ * parecían el mismo cuadernillo dos veces.
  */
 export function motivoDe(slug: string, indice = 0): number {
-  const vuelta = Math.floor(indice / PALETAS.length);
+  const vuelta = Math.floor(indice / LONAS.length);
   return ((hash(slug) >>> 3) + vuelta) % MOTIVOS;
 }

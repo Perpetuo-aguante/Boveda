@@ -23,6 +23,22 @@ pinta arriba.
 Mientras no exista el archivo, la ficha del texto funciona igual — muestra lo
 que haya y no enseña cuerpo. Se pueden ir subiendo de uno en uno.
 
+## Poesía
+
+Un poema se teclea **como se escribe**: un verso por línea, y una línea en
+blanco entre estrofa y estrofa. No hay que marcar nada dentro del archivo.
+
+Lo único que hace falta es avisar en `articles.ts`, en la entrada de ese texto:
+
+    forma: "verso",
+
+Con eso los versos se conservan tal cual. Sin eso, el texto se trata como
+prosa y cada estrofa se rejunta en un párrafo —que es lo correcto para una
+crónica y lo que destruye un poema.
+
+Si un verso es tan largo que no cabe en la columna, su continuación sale
+sangrada, para que no se confunda con un verso nuevo.
+
 ## Las fotos
 
 Van en `public/portadas/<slug>.jpg` (o `.webp`), y luego se apunta a ellas desde

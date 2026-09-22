@@ -1,9 +1,21 @@
+import Image from "next/image";
 import Link from "next/link";
 import { articulos, anioDe, fechaLarga, seccionesEnUso } from "@/lib/articles";
-import { PuestoItem } from "@/components/puesto-item";
+import { leerTexto, minutosDe } from "@/lib/texto";
+import { Tianguis } from "@/components/tianguis";
 import { MotorEstante } from "@/components/motor-estante";
 
 export default function Inicio() {
+  // Los minutos se cuentan aquí, en el servidor, porque leer `contenido/` es
+  // acceso a disco: el puesto es un componente de cliente y no puede. Es el
+  // «precio» que el cartelito enseña cuando el texto no trae copete.
+  const minutosPorSlug = new Map(
+    articulos.map((a) => {
+      const bloques = leerTexto(a.slug, a.forma === "verso");
+      return [a.slug, bloques ? minutosDe(bloques) : undefined];
+    }),
+  );
+
   const secciones = seccionesEnUso().filter((s) => s !== "Sin clasificar");
   const fechas = articulos.map((a) => a.fecha).filter(Boolean).sort();
   const desde = fechas[0]?.slice(0, 4);
@@ -14,40 +26,57 @@ export default function Inicio() {
     <>
       <MotorEstante />
 
-      {/* ── Entrada: el toldo del tianguis ───────────────────────────────── */}
-      <section className="toldo px-6 pb-16 pt-14 sm:px-10 sm:pb-20 sm:pt-16">
+      {/* ── El toldo: el rótulo del puesto ───────────────────────────────────
+          No es un hero de landing page, es la lona rotulada de la entrada. El
+          logotipo va sobre su tabla, el título se grita, y el sticker de
+          «LO MEJOR DEL PRIMER AÑO» va pegado de lado, como una calcomanía que
+          alguien clavó encima del toldo. */}
+      <section className="toldo px-6 pb-14 pt-12 sm:px-10 sm:pb-16 sm:pt-14">
         <div className="relative mx-auto max-w-6xl">
-          <span className="eyebrow" style={{ opacity: 0.85 }}>
-            La Bóveda · Tianguis digital
-          </span>
+          <div className="flex flex-wrap items-end justify-between gap-y-8">
+            <div className="max-w-3xl">
+              <span className="placa-marca placa-marca--toldo">
+                <Image
+                  src="/marca/perpetuo-wordmark.png"
+                  alt="Perpetuo"
+                  width={2048}
+                  height={348}
+                  priority
+                  className="block h-[26px] w-auto sm:h-[34px]"
+                />
+              </span>
 
-          <h1 className="display mt-4 max-w-4xl text-[clamp(2.6rem,7.5vw,6.4rem)] uppercase text-balance">
-            Todo lo que hemos escrito, extendido sobre la mesa.
-          </h1>
+              <h1 className="display mt-7 text-[clamp(2.7rem,8vw,6.6rem)] uppercase text-balance">
+                La bóveda de Perpetuo
+              </h1>
 
-          <p className="mt-6 max-w-xl text-[1.0625rem] leading-relaxed" style={{ opacity: 0.92 }}>
-            El archivo de Perpetuo, puesto como en un tianguis: los Estelares de
-            los lunes, los Anteojos de los miércoles y El Creativo de los viernes.
-            Levanta cualquiera y léelo completo.
-          </p>
+              <p className="pregon mt-6 max-w-2xl">
+                Llévele, llévele, lo mejor de la bóveda de Perpetuo, de nuevo
+                para usted. Crónica, ensayo, poesía, reseñas y más.
+              </p>
+            </div>
 
-          <div className="sticker absolute right-0 top-0 hidden h-[132px] w-[132px] flex-col items-center justify-center text-center sm:flex">
-            <b className="text-[26px]">{articulos.length}</b>
-            <span className="text-[13px]">TEXTOS</span>
-            {rango ? <small className="mt-1.5 text-[10px] font-medium normal-case">{rango}</small> : null}
+            <div className="sticker sticker--anio">
+              <b>Lo mejor</b>
+              <span>del primer</span>
+              <span>año</span>
+            </div>
           </div>
 
-          <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-2 text-[0.8125rem]" style={{ opacity: 0.85 }}>
-            <ul className="flex flex-wrap items-center gap-x-5 gap-y-2 eyebrow">
+          <div className="mt-11 flex flex-wrap items-center gap-x-7 gap-y-3">
+            <ul className="eyebrow flex flex-wrap items-center gap-x-6 gap-y-2" style={{ opacity: 0.9 }}>
               {secciones.map((s) => (
                 <li key={s}>{s}</li>
               ))}
             </ul>
+            <span className="eyebrow tabular-nums" style={{ opacity: 0.65 }}>
+              {articulos.length} textos{rango ? ` · ${rango}` : ""}
+            </span>
           </div>
 
           <a
             href="#puesto"
-            className="eyebrow mt-10 inline-flex items-center gap-3 transition-opacity hover:opacity-70"
+            className="eyebrow mt-9 inline-flex items-center gap-3 transition-opacity hover:opacity-70"
           >
             Acercarse al puesto
             <span aria-hidden>↓</span>
@@ -56,19 +85,16 @@ export default function Inicio() {
       </section>
       <div className="valance" aria-hidden />
 
-      {/* ── El puesto: el anaquel ─────────────────────────────────────────── */}
+      {/* ── El puesto: la mesa con las lonas encima ───────────────────────── */}
       <section
         id="puesto"
-        className="scroll-mt-16 px-4 pb-16 pt-16 sm:px-6"
+        className="scroll-mt-16 px-4 pb-24 pt-14 sm:px-6"
         aria-label="El puesto"
       >
-        <div className="anaquel relative mx-auto max-w-6xl px-4 pb-2 pt-7 sm:px-7">
-          <div className="luz-puesto" aria-hidden />
-          <div className="puesto relative">
-            {articulos.map((a, i) => (
-              <PuestoItem key={a.slug} articulo={a} indice={i} />
-            ))}
-          </div>
+        <div className="mesa relative mx-auto max-w-6xl px-4 pb-16 pt-12 sm:px-8">
+          <Tianguis
+            puestos={articulos.map((a) => ({ articulo: a, minutos: minutosPorSlug.get(a.slug) }))}
+          />
         </div>
       </section>
 
