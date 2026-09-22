@@ -25,21 +25,26 @@ export type Paleta = {
 };
 
 /**
- * Las ocho salen del brandbook: sólo tinta (#15161a), papel (#f7f1e6), añil
- * (#2a55ac) y brasa (#e0552f), viradas a claro/oscuro. Antes había verdes,
- * morados y un ocre que no salían de ahí; el puesto sigue surtido —ninguna
- * paleta se repite entre vecinos— pero ahora cada cuadernillo es
- * reconocibles como Perpetuo incluso tapando el logo.
+ * Las ocho del tianguis. Antes salían del brandbook viradas a claro/oscuro, y
+ * el puesto entero quedaba en la misma familia tonal: elegante, pero era un
+ * portafolio. Ahora son los cinco colores saturados de la lona —azul, rojo,
+ * amarillo, verde y rosa mexicano— más los dos neutros, y los acentos se
+ * eligen para CHOCAR con su fondo, no para armonizar: amarillo sobre rosa,
+ * rosa sobre azul, verde sobre rosa. Un puesto de verdad no combina.
+ *
+ * La tinta de cada paleta se mantiene con contraste suficiente para el título
+ * de la portada, que es lo único que se lee encima. El cuerpo de los ensayos
+ * nunca usa estos colores: para eso están PAPELES_LECTURA, más abajo.
  */
 export const PALETAS: Paleta[] = [
-  { papel: "#e0552f", tinta: "#fbeee0", acento: "#f3a67e", lomo: "#b43e20", canto: "#f4ead8" },
-  { papel: "#2a55ac", tinta: "#f0f3fa", acento: "#90b3e0", lomo: "#1c3d80", canto: "#f1ecdf" },
-  { papel: "#15161a", tinta: "#f7f1e6", acento: "#e0552f", lomo: "#0b0b0d", canto: "#ede4d3" },
-  { papel: "#efe4cd", tinta: "#221d12", acento: "#2a55ac", lomo: "#cbbd9a", canto: "#f6f0e2" },
-  { papel: "#16305e", tinta: "#eef2f8", acento: "#7c9fd6", lomo: "#0e2145", canto: "#f1ecdf" },
-  { papel: "#8a3320", tinta: "#f7e7e0", acento: "#d89572", lomo: "#672414", canto: "#f2e8d9" },
-  { papel: "#1c1d21", tinta: "#f2ece0", acento: "#6f97d6", lomo: "#101114", canto: "#ece3d2" },
-  { papel: "#e3d0a8", tinta: "#2b2011", acento: "#c9502b", lomo: "#c1af80", canto: "#f6f0e2" },
+  { papel: "#e01b13", tinta: "#ffe9c4", acento: "#ffd100", lomo: "#a20f08", canto: "#f5ead2" },
+  { papel: "#1536c4", tinta: "#f4f0dd", acento: "#ef0d7c", lomo: "#0c2189", canto: "#f2ecdb" },
+  { papel: "#ffd100", tinta: "#15161a", acento: "#ef0d7c", lomo: "#d4a800", canto: "#f7f1e6" },
+  { papel: "#ef0d7c", tinta: "#fff0cf", acento: "#009046", lomo: "#b00a5b", canto: "#f5e9dd" },
+  { papel: "#009046", tinta: "#fff0cf", acento: "#ffd100", lomo: "#00642f", canto: "#f2ecdb" },
+  { papel: "#15161a", tinta: "#f7f1e6", acento: "#ffd100", lomo: "#000000", canto: "#ede4d3" },
+  { papel: "#f7f1e6", tinta: "#15161a", acento: "#e01b13", lomo: "#d5c9b0", canto: "#fffbf2" },
+  { papel: "#0b2a9e", tinta: "#ffd100", acento: "#ef0d7c", lomo: "#061a6c", canto: "#f2ecdb" },
 ];
 
 /** Hash estable de una cadena. */
@@ -77,10 +82,10 @@ export function claseAcentoSeccion(seccion: string): string {
 /**
  * El papel de lectura. La vitrina del puesto es de noche a propósito —ahí el
  * color vive en las portadas— pero un texto de 4.000 palabras sobre fondo
- * casi negro es agotador. La ficha cambia a papel claro: crema y las dos
- * tintas de marca en versión pálida, para que dé variedad sin pelear con el
- * cuerpo del texto. Nunca colores puros de portada —esos son para mirarse un
- * segundo, no para leer un rato largo encima.
+ * casi negro es agotador. La ficha cambia a papel claro: crema y los colores
+ * de la lona rebajados hasta que son papel, para que dé variedad sin pelear
+ * con el cuerpo del texto. Nunca los colores saturados de la portada —esos
+ * son para mirarse un segundo, no para leer un rato largo encima.
  */
 export type PapelLectura = {
   fondo: string;
@@ -95,24 +100,23 @@ export type PapelLectura = {
 export const PAPELES_LECTURA: PapelLectura[] = [
   // Crema — el papel base, el más neutro de los cuatro.
   {
-    fondo: "#f7f1e6", tinta: "#221d12", tenue: "#57503f", tenueMas: "#948c79",
-    linea: "rgba(34, 29, 18, 0.13)", lineaTenue: "rgba(34, 29, 18, 0.07)", acento: "#c9502b",
+    fondo: "#f7f1e6", tinta: "#1b1710", tenue: "#544d3d", tenueMas: "#8a8270",
+    linea: "rgba(27, 23, 16, 0.14)", lineaTenue: "rgba(27, 23, 16, 0.07)", acento: "#e01b13",
   },
-  // Coral pálido.
+  // Rosa mexicano, rebajado hasta que sea papel. El acento sí va a tope.
   {
-    fondo: "#f8e9e0", tinta: "#2b1712", tenue: "#6b4b3e", tenueMas: "#a3826f",
-    linea: "rgba(43, 23, 18, 0.13)", lineaTenue: "rgba(43, 23, 18, 0.07)", acento: "#c9502b",
+    fondo: "#fdeaf1", tinta: "#2a0a19", tenue: "#6b3149", tenueMas: "#a8798c",
+    linea: "rgba(42, 10, 25, 0.14)", lineaTenue: "rgba(42, 10, 25, 0.07)", acento: "#ef0d7c",
   },
-  // Verde salvia pálido — el tercer color pide algo que no sea ni papel ni
-  // marca directa; un verde apagado, cercano al musgo, hace de puente.
+  // Azul lona pálido.
   {
-    fondo: "#e9efe1", tinta: "#182417", tenue: "#48573f", tenueMas: "#889478",
-    linea: "rgba(24, 36, 23, 0.13)", lineaTenue: "rgba(24, 36, 23, 0.07)", acento: "#3c6b45",
+    fondo: "#e8edfb", tinta: "#0d1330", tenue: "#3c4570", tenueMas: "#7f88ab",
+    linea: "rgba(13, 19, 48, 0.14)", lineaTenue: "rgba(13, 19, 48, 0.07)", acento: "#1536c4",
   },
-  // Añil pálido.
+  // Amarillo pálido — el más cercano al papel de estraza de los cartelitos.
   {
-    fondo: "#e7ecf6", tinta: "#171b2b", tenue: "#454f6e", tenueMas: "#8891ac",
-    linea: "rgba(23, 27, 43, 0.13)", lineaTenue: "rgba(23, 27, 43, 0.07)", acento: "#2a55ac",
+    fondo: "#fdf4d9", tinta: "#241d02", tenue: "#5c5017", tenueMas: "#948a52",
+    linea: "rgba(36, 29, 2, 0.14)", lineaTenue: "rgba(36, 29, 2, 0.07)", acento: "#009046",
   },
 ];
 

@@ -132,7 +132,10 @@ export default async function Ficha({ params }: { params: Promise<{ slug: string
             </p>
 
             {articulo.resumen ? (
-              <p className="display mt-10 text-[1.45rem] leading-snug text-niebla/90 text-balance">
+              /* El copete es prosa, no rótulo: va en la serif. En la
+                 condensada se leía como un titular a gritos y las tres líneas
+                 se le venían encima unas a otras. */
+              <p className="mt-9 text-[1.5rem] leading-[1.38] text-niebla/90 text-balance">
                 {articulo.resumen}
               </p>
             ) : null}
@@ -185,7 +188,9 @@ export default async function Ficha({ params }: { params: Promise<{ slug: string
               if (b.tipo === "subtitulo") {
                 return (
                   <h2 key={n} className="display mt-14 mb-6 text-2xl text-niebla">
-                    {b.texto}
+                    {tramos(b.texto).map((t, k) =>
+                      t.cursiva ? <em key={k}>{t.texto}</em> : <span key={k}>{t.texto}</span>,
+                    )}
                   </h2>
                 );
               }
@@ -193,11 +198,26 @@ export default async function Ficha({ params }: { params: Promise<{ slug: string
                 return (
                   <blockquote
                     key={n}
-                    className="my-12 border-l-2 pl-7"
+                    className="my-12 border-l-[3px] pl-7"
                     style={{ borderColor: p.acento }}
                   >
-                    <p className="display text-[1.3rem] leading-snug text-niebla/90">
-                      {b.texto}
+                    {/* La cita destacada se queda en la serif, no en la
+                        condensada: es la voz del autor subida de cuerpo, no
+                        un rótulo del puesto. */}
+                    <p className="text-[1.375rem] italic leading-[1.45] text-niebla/90">
+                      {/* La cita entera ya va en cursiva, así que un *así* de
+                          dentro se marca al revés: en redonda. Es la
+                          convención de imprenta, y además evita que los
+                          asteriscos salgan impresos. */}
+                      {tramos(b.texto).map((t, k) =>
+                        t.cursiva ? (
+                          <span key={k} className="not-italic">
+                            {t.texto}
+                          </span>
+                        ) : (
+                          <span key={k}>{t.texto}</span>
+                        ),
+                      )}
                     </p>
                   </blockquote>
                 );
@@ -205,7 +225,7 @@ export default async function Ficha({ params }: { params: Promise<{ slug: string
               return (
                 <p
                   key={n}
-                  className="mb-6 text-[1.125rem] leading-[1.8] text-niebla/85"
+                  className="mb-8 text-[1.125rem] leading-[1.75] text-niebla/85"
                 >
                   {tramos(b.texto).map((t, k) =>
                     t.cursiva ? <em key={k}>{t.texto}</em> : <span key={k}>{t.texto}</span>,

@@ -3,29 +3,63 @@
 /* ═══════════════════════════════════════════════════════════════════════════
    La Bóveda de Perpetuo — sistema visual
 
-   La página es una sala a oscuras con objetos iluminados. Todo el color vive
-   en las portadas de los cuadernillos; el resto es casi monocromo a propósito.
+   Un tianguis, no un portafolio. Tres reglas que gobiernan todo lo de abajo:
 
-   La entrada y el puesto citan el tianguis: lona roja a rayas, sticker de
-   feria, rejilla de anaquel de video-club. Cream/ink son la base; rojo y
-   lima son los dos colores que gritan, y por eso se usan poco.
+   1. SOMBRAS DURAS A 45°. `Npx Npx 0` —x e y iguales, difuminado cero—. Nunca
+      un blur. Una sombra difusa dice «tarjeta de software»; una dura dice
+      «cartón recortado y pegado encima».
+   2. NADA PERFECTAMENTE ALINEADO. Las piezas se apoyan giradas 2-3°, y el
+      giro sale del índice, jamás de Math.random: al rehidratar brincaría.
+   3. COLOR A TOPE. Azul lona, rojo, amarillo, verde y rosa mexicano, chocando
+      entre ellos. Los neutros son sólo dos: tinta y papel.
+
+   Encima de todo va el grano en `multiply` (ver .grano al final), que es lo
+   que amarra la paleta y le quita el acabado de render.
    ═══════════════════════════════════════════════════════════════════════════ */
 
 :root {
+  /* Los cinco que gritan, todos a saturación plena. */
+  --lona: #1536c4;
+  --lona-honda: #0b2a9e;
+  --rojo: #e01b13;
+  --amarillo: #ffd100;
+  --verde: #009046;
+  --rosa: #ef0d7c;
+
+  /* Los dos neutros. */
+  --tinta: #15161a;
+  --papel: #f7f1e6;
+
+  /* Sombra dura: 45° siempre, porque x e y van iguales. Cada contexto
+     reescribe color y distancia; la forma no se negocia. */
+  --dura-color: #15161a;
+  --dura-dist: 6px;
+
+  /* Nombres heredados. El código ya los usa (text-brasa, var(--lima)…), así
+     que se repuntan a la paleta nueva en vez de renombrarlos por todas partes. */
   --noche: #15161a;
   --noche-alta: #1c1d21;
   --niebla: #f7f1e6;
-  --tenue: #938a7d;
-  --tenue-mas: #6a635a;
-  --brasa: #cf322b;
-  --anil: #2a55ac;
-  --lima: #d6f34a;
-  --linea: rgba(247, 241, 230, 0.12);
-  --linea-tenue: rgba(247, 241, 230, 0.06);
+  --tenue: #9d9384;
+  --tenue-mas: #756c5f;
+  --brasa: #e01b13;
+  --anil: #1536c4;
+  --lima: #ffd100;
+  --linea: rgba(247, 241, 230, 0.14);
+  --linea-tenue: rgba(247, 241, 230, 0.07);
   --anaquel: #53564c;
 }
 
 @theme inline {
+  --color-lona: var(--lona);
+  --color-lona-honda: var(--lona-honda);
+  --color-rojo: var(--rojo);
+  --color-amarillo: var(--amarillo);
+  --color-verde: var(--verde);
+  --color-rosa: var(--rosa);
+  --color-tinta: var(--tinta);
+  --color-papel: var(--papel);
+
   --color-noche: var(--noche);
   --color-noche-alta: var(--noche-alta);
   --color-niebla: var(--niebla);
@@ -36,8 +70,17 @@
   --color-lima: var(--lima);
   --color-linea: var(--linea);
   --color-linea-tenue: var(--linea-tenue);
-  --font-display: var(--font-barlow), "Arial Narrow", Impact, sans-serif;
-  --font-sans: var(--font-dm-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  /* Cada fuente tiene un oficio y no se sale de él:
+     rótulo → lo que se grita · manuscrita → lo que se apunta a mano
+     marcador → lo que se pega  · lectura  → lo que se lee de verdad */
+  --font-rotulo: var(--fuente-rotulo), "Arial Narrow", Impact, sans-serif;
+  --font-manuscrita: var(--fuente-manuscrita), "Bradley Hand", cursive;
+  --font-marcador: var(--fuente-marcador), "Bradley Hand", cursive;
+  --font-lectura: var(--fuente-lectura), Georgia, "Times New Roman", serif;
+  /* Alias heredados: .display y el lomo del cuadernillo piden --font-display. */
+  --font-display: var(--fuente-rotulo), "Arial Narrow", Impact, sans-serif;
+  --font-sans: var(--fuente-lectura), Georgia, "Times New Roman", serif;
 }
 
 html {
@@ -49,44 +92,115 @@ html {
 body {
   background: var(--noche);
   color: var(--niebla);
-  font-family: var(--font-sans);
+  /* Serif por defecto: fechas, navegación, pies y cuerpo. La grotesca sólo
+     aparece donde algo se rotula, nunca por descarte. */
+  font-family: var(--font-lectura);
+  font-optical-sizing: auto;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
 
 ::selection {
-  background: var(--brasa);
-  color: #fff;
+  background: var(--amarillo);
+  color: var(--tinta);
 }
 
 :focus-visible {
-  outline: 2px solid var(--brasa);
-  outline-offset: 4px;
-  border-radius: 2px;
+  outline: 3px solid var(--amarillo);
+  outline-offset: 3px;
+  border-radius: 0;
 }
 
-/* Micro-tipografía: las etiquetas en versalitas espaciadas que sostienen todo
-   el resto de la jerarquía. */
+/* Micro-tipografía: versalitas espaciadas en la condensada. Anton tiene una
+   altura de x enorme, así que a este cuerpo pide menos tamaño y más aire
+   entre letras del que pediría una grotesca normal. */
 .eyebrow {
+  font-family: var(--font-rotulo);
+  font-weight: 400;
   font-size: 0.6875rem;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  font-weight: 500;
+  line-height: 1.1;
 }
 
+/* Los rótulos. Anton viene en un solo peso: pedirle 800 lo engordaría
+   sintéticamente y se ensuciaría el trazo, así que aquí siempre es 400. */
 .display {
-  font-family: var(--font-display);
-  font-weight: 800;
-  letter-spacing: -0.01em;
-  line-height: 0.96;
+  font-family: var(--font-rotulo);
+  font-weight: 400;
+  letter-spacing: -0.005em;
+  /* 0.94 y no menos: Anton casi no trae interlínea propia, así que por debajo
+     de esto las colas de la g y la y de un renglón chocan con las
+     mayúsculas del siguiente. Se ve sobre todo en los rótulos de tres líneas. */
+  line-height: 0.94;
 }
 
-/* El wordmark: Barlow Condensed al peso más alto, como el logotipo pintado
-   del tianguis — condensado, casi sin espaciado entre letras. */
-.marca {
-  font-family: var(--font-display);
-  font-weight: 900;
-  letter-spacing: -0.02em;
+/* El cartelito: lo escrito a mano sobre el cartón. Caveat pide más cuerpo que
+   una serif para leerse igual —su altura de x es chica. */
+.cartelito {
+  font-family: var(--font-manuscrita);
+  font-weight: 600;
+  line-height: 1.22;
+  letter-spacing: 0.005em;
+}
+
+/* El plumón: calcomanías, precios, tres palabras a gritos. En párrafo no. */
+.plumon {
+  font-family: var(--font-marcador);
+  font-weight: 400;
+  line-height: 1.05;
+}
+
+/* La placa donde se monta el wordmark: tinta negra sobre papel, girada y
+   clavada con sombra dura. */
+.placa-marca {
+  display: inline-block;
+  background: var(--papel);
+  padding: 0.42rem 0.6rem 0.36rem;
+  transform: rotate(-1.5deg);
+  box-shadow: var(--dura-dist) var(--dura-dist) 0 var(--tinta);
+  --dura-dist: 3px;
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.group:hover .placa-marca {
+  transform: rotate(0deg);
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   SOMBRAS DURAS Y PIEZAS GIRADAS
+
+   Las dos herramientas que se usan en todo el sitio. La sombra va siempre a
+   45° —x e y iguales, blur 0— y el color lo pone el contexto: negro sobre
+   superficie clara, y un tono más hondo del propio color sobre superficie
+   saturada, porque un negro sobre azul lona se abre un hoyo.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+.dura {
+  box-shadow: var(--dura-dist) var(--dura-dist) 0 var(--dura-color);
+}
+
+.dura-fina {
+  --dura-dist: 3px;
+  box-shadow: var(--dura-dist) var(--dura-dist) 0 var(--dura-color);
+}
+
+.dura-gruesa {
+  --dura-dist: 10px;
+  box-shadow: var(--dura-dist) var(--dura-dist) 0 var(--dura-color);
+}
+
+/* Un borde recortado a tijera: el contorno que llevan las calcomanías y los
+   cartelitos. Va con la sombra dura, no en lugar de ella. */
+.recortado {
+  border: 2.5px solid var(--dura-color);
+}
+
+/* Cualquier pieza que se apoya en el puesto. El giro entra por variable para
+   que quien la use lo derive del índice —nunca de Math.random, que cambiaría
+   entre el HTML del servidor y la hidratación y haría brincar la página. */
+.pieza {
+  transform: rotate(var(--giro-pieza, -2deg));
 }
 
 /* ───────────────────────────────────────────────────────────────────────────
@@ -312,27 +426,33 @@ body {
 
 .toldo {
   position: relative;
-  background: var(--brasa);
+  background: var(--rojo);
   color: #fff1d4;
-  border-top: 5px solid #ab2722;
+  border-top: 5px solid #9c110b;
   background-image: repeating-linear-gradient(
     100deg,
     transparent 0 190px,
-    rgba(115, 24, 9, 0.07) 191px 192px,
+    rgba(120, 12, 5, 0.09) 191px 192px,
     transparent 193px 380px
   );
 }
 
+/* La calcomanía: amarillo, plumón encima, contorno recortado y clavada con
+   sombra dura. El outline del mismo amarillo hace de reborde blanco de
+   calcomanía, por fuera del borde negro. */
 .sticker {
-  background: var(--lima);
-  color: var(--noche);
-  border: 2px dashed #343622;
-  outline: 6px solid var(--lima);
+  background: var(--amarillo);
+  color: var(--tinta);
+  --dura-color: var(--tinta);
+  --dura-dist: 4px;
+  border: 2.5px solid var(--tinta);
+  outline: 5px solid var(--amarillo);
   border-radius: 999px;
   transform: rotate(9deg);
-  font-family: var(--font-display);
-  font-weight: 900;
-  line-height: 0.92;
+  box-shadow: var(--dura-dist) var(--dura-dist) 0 var(--dura-color);
+  font-family: var(--font-marcador);
+  font-weight: 400;
+  line-height: 1.02;
 }
 
 /* El filo de la lona: un festón repetido con clip-path, no una imagen. */
@@ -399,15 +519,39 @@ body {
   }
 }
 
-/* El grano de papel del fondo, para que el negro no sea plano. */
-.grano::before {
+/* ───────────────────────────────────────────────────────────────────────────
+   EL GRANO
+
+   Una sola capa de ruido fija sobre TODO, en `multiply`. Es lo que más
+   trabajo hace de todo este archivo: al multiplicar, cada color del sitio
+   pasa por la misma trama, así que el rojo, el azul lona y el amarillo dejan
+   de parecer capas planas de CSS y parecen tinta sobre un material. Es
+   también lo que le quita el acabado liso de render.
+
+   Va a z-60, encima del contenido (que corre a z-10), y con pointer-events
+   en none para no comerse ningún clic.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+.grano::after {
   content: "";
   position: fixed;
   inset: 0;
-  z-index: 0;
+  z-index: 60;
   pointer-events: none;
-  opacity: 0.035;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: var(--grano-mezcla, multiply);
+  opacity: var(--grano-fuerza, 0.09);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+}
+
+/* La excepción, y es deliberada: la página de un texto es papel claro con
+   tinta oscura, y `multiply` al 9% encima de 4.000 palabras ensucia el fondo
+   y le baja el contraste al cuerpo. Ahí el grano sigue existiendo —el papel
+   no queda liso— pero pasa a `soft-light` al 4%, que textura sin oscurecer.
+   `:has()` permite decidirlo desde el propio contenido, sin JS ni prop. */
+body:has(.tema-lectura)::after {
+  --grano-mezcla: soft-light;
+  --grano-fuerza: 0.045;
 }
 
 /* ───────────────────────────────────────────────────────────────────────────

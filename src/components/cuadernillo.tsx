@@ -97,7 +97,6 @@ export function Cuadernillo({ articulo, ancho = "260px", giro = 24, indice, prio
               className="display"
               style={{
                 fontSize: cuerpoTitulo(articulo.titulo),
-                fontVariationSettings: '"SOFT" 0, "WONK" 1, "opsz" 24',
                 textWrap: "balance",
                 marginBottom: "0.7em",
               }}

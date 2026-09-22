@@ -1,24 +1,56 @@
 import type { Metadata } from "next";
-import { Barlow_Condensed, DM_Sans } from "next/font/google";
+import localFont from "next/font/local";
+import Image from "next/image";
 import Link from "next/link";
 import "./globals.css";
 
-// Barlow Condensed: la tipografía del tianguis. Titulares, portadas y el
-// wordmark van en su peso más grueso, condensados, como un rótulo pintado
-// a mano en un puesto de mercado.
-const barlowCondensed = Barlow_Condensed({
-  subsets: ["latin"],
-  weight: ["500", "600", "700", "800", "900"],
-  variable: "--font-barlow",
+// Cuatro voces, cuatro oficios. Los .woff2 viven en el repo (subconjunto
+// latino, que ya cubre todo el español) para no depender de un tercero en
+// tiempo de carga.
+
+// Anton — el rótulo pintado. Un solo peso: cualquier `font-weight` distinto
+// de 400 lo engordaría sintéticamente, así que el sistema no lo pide nunca.
+const rotulo = localFont({
+  src: "../fuentes/anton-latin.woff2",
+  weight: "400",
+  style: "normal",
+  variable: "--fuente-rotulo",
   display: "swap",
+  fallback: ["Arial Narrow", "Impact", "sans-serif"],
 });
 
-// DM Sans sostiene el cuerpo y la micro-tipografía.
-const dmSans = DM_Sans({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-dm-sans",
+// Caveat — la letra del cartelito de cartón. Variable, 400 a 700.
+const manuscrita = localFont({
+  src: "../fuentes/caveat-latin.woff2",
+  weight: "400 700",
+  style: "normal",
+  variable: "--fuente-manuscrita",
   display: "swap",
+  fallback: ["Bradley Hand", "cursive"],
+});
+
+// Permanent Marker — el plumón sobre la calcomanía y los precios. Ilegible en
+// párrafo, perfecto en tres palabras a gritos.
+const marcador = localFont({
+  src: "../fuentes/permanent-marker-latin.woff2",
+  weight: "400",
+  style: "normal",
+  variable: "--fuente-marcador",
+  display: "swap",
+  fallback: ["Bradley Hand", "cursive"],
+});
+
+// Newsreader — el cuerpo de los ensayos. Serif de pantalla con carácter, con
+// cursiva de verdad (el parser de `contenido/` traduce *así* a <em>) y eje
+// óptico: el mismo archivo afina el trazo a 18px y lo abre en un destacado.
+const lectura = localFont({
+  src: [
+    { path: "../fuentes/newsreader-latin.woff2", weight: "200 800", style: "normal" },
+    { path: "../fuentes/newsreader-italica-latin.woff2", weight: "200 800", style: "italic" },
+  ],
+  variable: "--fuente-lectura",
+  display: "swap",
+  fallback: ["Georgia", "Times New Roman", "serif"],
 });
 
 export const metadata: Metadata = {
@@ -40,14 +72,29 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="es" className={`${barlowCondensed.variable} ${dmSans.variable}`}>
+    <html
+      lang="es"
+      className={`${rotulo.variable} ${manuscrita.variable} ${marcador.variable} ${lectura.variable}`}
+    >
       <body className="grano min-h-screen">
         <header className="relative z-10">
           <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-6 sm:px-10">
-            <Link href="/" className="group flex items-baseline gap-2.5">
-              <span className="marca text-lg text-niebla">Perpetuo</span>
-              <span className="text-tenue-mas">/</span>
-              <span className="eyebrow text-tenue transition-colors group-hover:text-niebla">
+            <Link href="/" className="group flex items-center gap-3">
+              {/* El wordmark real va sobre una placa clara: la tinta del
+                  logotipo es negra y el tianguis es oscuro, así que la placa
+                  es lo que lo hace visible —y además es como se rotula un
+                  puesto de verdad, pintado sobre una tabla. */}
+              <span className="placa-marca">
+                <Image
+                  src="/marca/perpetuo-wordmark.png"
+                  alt="Perpetuo"
+                  width={2048}
+                  height={348}
+                  priority
+                  className="block h-[15px] w-auto sm:h-[18px]"
+                />
+              </span>
+              <span className="eyebrow whitespace-nowrap text-tenue transition-colors group-hover:text-niebla">
                 La Bóveda
               </span>
             </Link>
@@ -55,9 +102,12 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
               <Link href="/#indice" className="transition-colors hover:text-niebla">
                 Índice
               </Link>
+              {/* En móvil no cabe junto al wordmark y partía «La Bóveda» en
+                  dos líneas. El pie lleva el mismo enlace, así que no se
+                  pierde nada al esconderlo aquí. */}
               <a
                 href="https://www.perpetuo.global"
-                className="transition-colors hover:text-niebla"
+                className="hidden transition-colors hover:text-niebla sm:inline"
               >
                 perpetuo.global&nbsp;↗
               </a>
