@@ -126,6 +126,45 @@ export function papelLecturaDe(indice: number): PapelLectura {
   return PAPELES_LECTURA[indice % PAPELES_LECTURA.length];
 }
 
+/**
+ * LAS LONAS DEL PUESTO
+ *
+ * La portada del cuadernillo y la lona del puesto son dos cosas distintas y
+ * por eso tienen tablas distintas: la portada es un objeto de papel que se
+ * mira de cerca en la ficha, y la lona es tela de plástico tensada que se ve
+ * de lejos y en fila.
+ *
+ * Cada lona lleva su propia `sombra`, que no es negra: es un tono más hondo de
+ * su propio color. Una sombra dura negra sobre azul lona no se lee como
+ * sombra, se lee como un agujero.
+ */
+export type Lona = {
+  /** El color de la tela. */
+  tela: string;
+  /** La costura y el dobladillo: un paso más oscuro que la tela. */
+  costura: string;
+  /** La tinta del rótulo. */
+  tinta: string;
+  /** El acento: ojales, filetes, la sección. */
+  acento: string;
+  /** El color de la sombra dura a 45°. */
+  sombra: string;
+};
+
+export const LONAS: Lona[] = [
+  { tela: "#1536c4", costura: "#0c2189", tinta: "#fff6dc", acento: "#ffd100", sombra: "#08165c" },
+  { tela: "#e01b13", costura: "#a20f08", tinta: "#fff2d2", acento: "#ffd100", sombra: "#6d0a04" },
+  { tela: "#ffd100", costura: "#d4a800", tinta: "#15161a", acento: "#ef0d7c", sombra: "#8a6c00" },
+  { tela: "#009046", costura: "#00642f", tinta: "#fff4d8", acento: "#ffd100", sombra: "#004a23" },
+  { tela: "#ef0d7c", costura: "#b00a5b", tinta: "#fff0cf", acento: "#ffd100", sombra: "#75063c" },
+  { tela: "#15161a", costura: "#000000", tinta: "#f7f1e6", acento: "#ffd100", sombra: "#000000" },
+];
+
+/** Cicla por posición, igual que las portadas: ningún vecino repite lona. */
+export function lonaDe(indice: number): Lona {
+  return LONAS[indice % LONAS.length];
+}
+
 /** Número de motivos disponibles en <Motivo />. */
 export const MOTIVOS = 6;
 

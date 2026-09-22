@@ -62,13 +62,15 @@ export default async function Ficha({ params }: { params: Promise<{ slug: string
     "--linea-tenue": papel.lineaTenue,
   } as CSSProperties;
 
+  // Cada dato aparece UNA vez. Antes el autor, la sección y la fecha salían
+  // además en un renglón sobre el copete, y encima se anunciaba el tipo de
+  // acceso —que al lector no le dice nada: si está leyendo el texto, ya entró.
   const datos: Array<[string, string]> = [
     ...(articulo.autor ? ([["Autor", articulo.autor]] as Array<[string, string]>) : []),
     ["Sección", articulo.seccion === "Sin clasificar" ? "Por clasificar" : articulo.seccion],
     ...(articulo.fecha
       ? ([["Publicado", fechaLarga(articulo.fecha)]] as Array<[string, string]>)
       : []),
-    ["Acceso", articulo.acceso === "abierto" ? "Abierto" : "Suscriptores"],
     ...(bloques ? ([["Lectura", `${minutosDe(bloques)} min`]] as Array<[string, string]>) : []),
     ...(articulo.curador ? ([["Lo trajo", articulo.curador]] as Array<[string, string]>) : []),
   ];
@@ -120,16 +122,6 @@ export default async function Ficha({ params }: { params: Promise<{ slug: string
             <h1 className="display mt-6 text-[clamp(2.1rem,5vw,3.5rem)] text-balance">
               {articulo.titulo}
             </h1>
-
-            <p className="mt-6 text-lg text-tenue">
-              {[
-                articulo.autor,
-                articulo.seccion === "Sin clasificar" ? null : articulo.seccion,
-                articulo.fecha ? fechaLarga(articulo.fecha) : null,
-              ]
-                .filter(Boolean)
-                .join(" · ")}
-            </p>
 
             {articulo.resumen ? (
               /* El copete es prosa, no rótulo: va en la serif. En la

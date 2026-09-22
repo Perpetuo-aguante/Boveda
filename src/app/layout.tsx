@@ -77,6 +77,12 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       className={`${rotulo.variable} ${manuscrita.variable} ${marcador.variable} ${lectura.variable}`}
     >
       <body className="grano min-h-screen">
+        {/* El respaldo del respaldo: `@media (scripting: none)` cubre a los
+            navegadores que lo entienden, y esto a los que no. Sin uno de los
+            dos, un visitante sin JS no ve ni un texto del archivo. */}
+        <noscript>
+          <style>{`.aparece{opacity:1!important;transform:none!important;transition:none!important}`}</style>
+        </noscript>
         <header className="relative z-10">
           <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-6 sm:px-10">
             <Link href="/" className="group flex items-center gap-3">

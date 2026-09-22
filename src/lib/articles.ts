@@ -21,8 +21,11 @@
  *   url      — sólo se conoce uno; el resto no se puede adivinar sin abrir
  *              cada post en perpetuo.global.
  *
- * Seis de los dieciocho son poesía y llevan `forma: "verso"`, que le dice al
- * lector que conserve los versos en vez de rejuntarlos en párrafos.
+ * Siete de los dieciocho son poesía y llevan `forma: "verso"`, que le dice al
+ * lector que conserve los versos en vez de rejuntarlos en párrafos. Se detectan
+ * por la forma del .md: un texto con 34 bloques de 7 palabras cada uno es un
+ * poema, no una crónica —así apareció «Fondo de Anáhuac», que estaba pasando
+ * por prosa.
  *
  * El cuerpo completo NO vive aquí: cada texto va en `contenido/<slug>.md`.
  * Ver `contenido/README.md`.
@@ -141,6 +144,7 @@ export const articulos: Articulo[] = [
     imagen: "/portadas/fondo-de-anahuac.jpg",
     resumen: "",
     porQue: "",
+    forma: "verso",
   },
   {
     slug: "kairos",

@@ -136,9 +136,10 @@ body {
   line-height: 1.06;
 }
 
-/* El cartelito: lo escrito a mano sobre el cartón. Caveat pide más cuerpo que
-   una serif para leerse igual —su altura de x es chica. */
-.cartelito {
+/* La letra del cartelito: lo escrito a mano sobre el cartón. Caveat pide más
+   cuerpo que una serif para leerse igual —su altura de x es chica—. Va en su
+   propia clase y no en `.cartelito`, que es el cartón en sí. */
+.cartelito-letra {
   font-family: var(--font-manuscrita);
   font-weight: 600;
   line-height: 1.22;
@@ -166,6 +167,45 @@ body {
 
 .group:hover .placa-marca {
   transform: rotate(0deg);
+}
+
+/* La misma tabla, más grande y girada al otro lado, clavada sobre el toldo. */
+.placa-marca--toldo {
+  --dura-dist: 6px;
+  padding: 0.6rem 0.95rem 0.5rem;
+  transform: rotate(-2deg);
+}
+
+/* EL PREGÓN. Lo que grita el marchante: manuscrito, grande, en dos renglones
+   cortos. En la serif del cuerpo se leería como una bajada de landing page,
+   que es justo lo que no es. */
+.pregon {
+  font-family: var(--font-manuscrita);
+  font-weight: 600;
+  font-size: clamp(1.25rem, 2.6vw, 1.85rem);
+  line-height: 1.24;
+}
+
+/* La calcomanía del primer año, pegada de lado sobre el toldo. */
+.sticker--anio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: clamp(126px, 15vw, 168px);
+  height: clamp(126px, 15vw, 168px);
+  padding: 0.5rem;
+  text-align: center;
+  text-transform: uppercase;
+  transform: rotate(-11deg);
+}
+
+.sticker--anio b {
+  font-size: clamp(1.1rem, 1.6vw, 1.4rem);
+}
+
+.sticker--anio span {
+  font-size: clamp(0.8rem, 1.15vw, 1rem);
 }
 
 /* ───────────────────────────────────────────────────────────────────────────
@@ -472,17 +512,43 @@ body {
   );
 }
 
-/* El anaquel: la rejilla de video-club detrás de los cuadernillos. */
-.anaquel {
-  background-color: var(--anaquel);
+/* ── LA MESA ───────────────────────────────────────────────────────────────
+   Antes esto era una rejilla de video-club en gris verdoso, y funcionaba con
+   la paleta apagada de antes. Contra los cinco saturados se veía lodosa —y no
+   es ninguno de los colores del tianguis—. Ahora es la mesa: tablón de
+   madera bajo una lona azul tensada, que es lo que hay debajo de la
+   mercancía en un puesto de verdad.
+
+   Las fechas de cada puesto se leían a 1.45:1 sobre aquel gris, muy por
+   debajo del mínimo de 4.5:1; aquí viven dentro de su propia lona, sobre su
+   propia tinta, y el problema desaparece de raíz. */
+.mesa {
+  background-color: #10307f;
   background-image:
-    linear-gradient(rgba(187, 192, 175, 0.15) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(187, 192, 175, 0.15) 1px, transparent 1px);
-  background-size: 26px 26px;
-  border: 6px ridge #94988b;
+    /* La trama tejida de la lona. */
+    repeating-linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.11) 0 1px,
+      rgba(255, 255, 255, 0.045) 1px 2px,
+      rgba(0, 0, 0, 0) 2px 5px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.11) 0 1px,
+      rgba(255, 255, 255, 0.035) 1px 2px,
+      rgba(0, 0, 0, 0) 2px 5px
+    ),
+    /* El hundimiento de la tela entre amarre y amarre. */
+    repeating-linear-gradient(
+      96deg,
+      rgba(0, 0, 0, 0.16) 0 2px,
+      rgba(0, 0, 0, 0) 2px 132px
+    ),
+    radial-gradient(ellipse 120% 70% at 50% -10%, rgba(255, 214, 130, 0.14) 0%, rgba(0, 0, 0, 0) 62%);
+  border: 4px solid #071c56;
   box-shadow:
-    0 10px 16px rgba(37, 40, 32, 0.15),
-    inset 0 0 40px rgba(0, 0, 0, 0.3);
+    10px 10px 0 rgba(4, 12, 38, 0.5),
+    inset 0 0 90px rgba(0, 0, 0, 0.38);
 }
 
 /* El halo detrás de cada cuadernillo: el foco de la vitrina. */
@@ -498,13 +564,15 @@ body {
   opacity: 0.85;
 }
 
-/* Aparición al entrar en pantalla. */
+/* Aparición al entrar en pantalla. El escalonado sale de un transition-delay
+   por puesto, escrito desde el índice: entran como si alguien los fuera
+   acomodando de izquierda a derecha, no todos de golpe. */
 .aparece {
   opacity: 0;
-  transform: translateY(24px);
+  transform: translateY(26px);
   transition:
-    opacity 0.7s ease,
-    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    opacity 0.62s ease,
+    transform 0.62s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .aparece[data-visible="true"] {
@@ -512,11 +580,28 @@ body {
   transform: none;
 }
 
+/* SIN JAVASCRIPT EL CONTENIDO TIENE QUE ESTAR.
+   `data-visible` lo enciende un IntersectionObserver, así que sin JS los
+   dieciocho puestos se quedaban en opacity 0 y el tianguis era un cajón
+   vacío: el 100% del archivo invisible. Se cubre por los dos lados —
+   `scripting: none` para los navegadores que lo soportan, y un <noscript>
+   en el layout para los que no. El retardo también se anula: sin JS no hay
+   nada que escalonar. */
+@media (scripting: none) {
+  .aparece {
+    opacity: 1;
+    transform: none;
+    transition: none;
+    transition-delay: 0s !important;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .aparece {
     opacity: 1;
     transform: none;
     transition: none;
+    transition-delay: 0s !important;
   }
 }
 
@@ -584,91 +669,249 @@ body:has(.tema-lectura)::after {
 
 .puesto {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(clamp(132px, 19vw, 184px), 1fr));
-  column-gap: clamp(1.1rem, 2.4vw, 2.4rem);
-  row-gap: clamp(2.6rem, 4vw, 4.25rem);
-  align-items: end;
+  grid-template-columns: repeat(auto-fill, minmax(clamp(150px, 21vw, 232px), 1fr));
+  column-gap: clamp(1.1rem, 2.6vw, 2.6rem);
+  /* El renglón va holgado: los puestos se levantan, se giran y cuelgan su
+     cartelito, y todo eso necesita aire para no chocar con la fila de abajo. */
+  row-gap: clamp(4.5rem, 6vw, 7rem);
+  align-items: start;
 }
 
-.puesto-item {
+.puesto-celda {
   position: relative;
+}
+
+/* El que se mira pasa por encima de sus vecinos, cartelito incluido. */
+.puesto-celda:hover,
+.puesto-celda:focus-within {
+  z-index: 30;
+}
+
+.puesto-pila {
+  position: relative;
+  display: block;
+  /* El giro y el asiento los escribe Motion. Este origen hace que el puesto
+     pivote sobre su base, como algo apoyado en la mesa y no colgado del aire. */
+  transform-origin: 50% 90%;
+}
+
+/* ── La lona ───────────────────────────────────────────────────────────────
+   Tela de plástico tensada: color plano, trama tejida muy fina y un
+   dobladillo más oscuro. La trama es lo que la separa de un rectángulo de
+   CSS; sin ella se lee como una tarjeta. */
+.lona-puesto {
+  position: relative;
+  z-index: 2;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  gap: 0.55rem;
+  aspect-ratio: 4 / 5;
+  padding: 0.95rem 0.9rem 0.85rem;
+  background-color: var(--lona);
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.07) 0 1px,
+      rgba(255, 255, 255, 0.05) 1px 2px,
+      rgba(0, 0, 0, 0) 2px 4px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.07) 0 1px,
+      rgba(255, 255, 255, 0.04) 1px 2px,
+      rgba(0, 0, 0, 0) 2px 4px
+    );
+  border: 3px solid var(--lona-honda);
+  color: var(--lona-tinta);
+  overflow: hidden;
 }
 
-/* El que se mira pasa por encima de sus vecinos, y su ficha con él. */
-.puesto-item:hover,
-.puesto-item:focus-within {
-  z-index: 20;
-}
-
-.puesto-item .alza {
-  transform: rotate(var(--inclina, 0deg)) translateY(var(--asienta, 0px));
-}
-
-.puesto-item:hover .alza,
-.puesto-item:focus-within .alza {
-  transform: rotate(0deg) translateY(calc(var(--asienta, 0px) - 18px)) scale(1.07);
-}
-
-/* El pie: siempre visible, también sin ratón. */
-.pie-puesto {
-  margin-top: 1.15rem;
-  text-align: center;
-  transition: opacity 0.3s ease;
-}
-
-.puesto-item:hover .pie-puesto,
-.puesto-item:focus-within .pie-puesto {
-  opacity: 0;
-}
-
-/* La ficha que se revela. Vive encima del pie, así que uno sustituye al otro
-   sin que la fila se mueva. */
-.revela {
+/* La foto, cuando hay: fondo y nada más. El rótulo va en HTML encima. */
+.lona-foto {
   position: absolute;
-  top: calc(100% - 2.6rem);
-  left: 50%;
-  width: max(190px, 115%);
-  transform: translate(-50%, 6px);
-  opacity: 0;
-  pointer-events: none;
-  text-align: center;
-  transition:
-    opacity 0.3s ease,
-    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  inset: 0;
+  z-index: 0;
 }
 
-.puesto-item:hover .revela,
-.puesto-item:focus-within .revela {
-  opacity: 1;
-  transform: translate(-50%, 0);
-}
-
-/* La luz del puesto: un foco cálido colgado sobre la mesa. Sustituye a los
-   halos por cuadernillo, que a veintiséis objetos salían carísimos. */
-.luz-puesto {
+/* Velo para que el rótulo se lea sobre cualquier ilustración, y para que la
+   foto se integre al color de la lona en vez de flotar encima. */
+.lona-foto::after {
+  content: "";
   position: absolute;
-  inset: -8% -10% auto -10%;
-  height: 140%;
-  pointer-events: none;
-  background: radial-gradient(
-    ellipse 60% 45% at 50% 0%,
-    rgba(209, 89, 47, 0.13) 0%,
-    rgba(209, 89, 47, 0.05) 40%,
-    rgba(0, 0, 0, 0) 72%
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--lona) 92%, transparent) 0%,
+    color-mix(in srgb, var(--lona) 62%, transparent) 38%,
+    color-mix(in srgb, var(--lona) 10%, transparent) 72%,
+    color-mix(in srgb, var(--lona) 34%, transparent) 100%
   );
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .puesto-item .alza,
-  .pie-puesto,
-  .revela {
-    transition: none;
+/* El ojal: el remache metálico de la esquina por donde se amarra la lona. */
+.lona-ojal {
+  position: absolute;
+  top: 0.55rem;
+  right: 0.6rem;
+  z-index: 3;
+  width: 0.62rem;
+  height: 0.62rem;
+  border-radius: 999px;
+  border: 2px solid var(--lona-honda);
+  background: var(--lona-acento);
+}
+
+.lona-seccion {
+  position: relative;
+  z-index: 2;
+  /* En la tinta de su lona, no en el acento: el acento del amarillo es rosa
+     mexicano, y rosa sobre amarillo da 2.2:1 —a este cuerpo, ilegible. La
+     tinta en cambio está elegida para contrastar con su tela, siempre. */
+  color: color-mix(in srgb, var(--lona-tinta) 78%, transparent);
+  font-size: 0.5625rem;
+  letter-spacing: 0.16em;
+  padding-right: 1.1rem;
+}
+
+/* EL RÓTULO. Texto real, encima de la lona, al tamaño de un letrero pintado.
+   `auto` en el bloque de abajo lo empuja al pie: un rotulista escribe grande
+   y abajo, donde se lee de frente al pasar. */
+.lona-titulo {
+  position: relative;
+  z-index: 2;
+  margin-top: auto;
+  font-size: clamp(1.3rem, 2.7vw, 1.95rem);
+  text-wrap: balance;
+  hyphens: auto;
+}
+
+.lona-pie {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid color-mix(in srgb, var(--lona-tinta) 38%, transparent);
+  font-size: 0.75rem;
+}
+
+.lona-autor {
+  font-weight: 500;
+}
+
+.lona-fecha {
+  font-variant-numeric: tabular-nums;
+  opacity: 0.72;
+}
+
+/* ── La sombra dura ────────────────────────────────────────────────────────
+   Capa propia, exactamente detrás de la lona, del color hondo de su tela. Al
+   levantar el puesto crece y se DESPLAZA —Motion le anima la x y la y—, que
+   es lo que vende la altura. En box-shadow no se podría: pelearía con el
+   transform del giro. */
+.sombra-dura {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: block;
+  background: var(--dura-color);
+  pointer-events: none;
+}
+
+/* ── El foco ──────────────────────────────────────────────────────────────
+   El sol que entra cuando alzas la lona: cálido, desde arriba, y se sale del
+   marco por los lados. */
+.foco-puesto {
+  position: absolute;
+  inset: -34% -22% 12%;
+  z-index: 0;
+  display: block;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 62% 52% at 50% 6%,
+    rgba(255, 216, 122, 0.5) 0%,
+    rgba(255, 196, 92, 0.2) 34%,
+    rgba(255, 180, 80, 0) 70%
+  );
+}
+
+/* ── El cartelito de cartón ───────────────────────────────────────────────
+   Cuelga del borde inferior de la lona, girado al revés que ella, escrito a
+   mano. Siempre visible: en pantalla táctil no hay hover, y el copete no
+   puede depender de un ratón. */
+.cartelito {
+  position: relative;
+  z-index: 4;
+  display: block;
+  width: 88%;
+  margin: -0.55rem auto 0;
+  padding: 0.5rem 0.6rem 0.55rem;
+  background: #e8dcc0;
+  background-image: linear-gradient(
+    150deg,
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(0, 0, 0, 0) 42%,
+    rgba(120, 90, 40, 0.14) 100%
+  );
+  border: 2px solid #3a2d17;
+  box-shadow: 4px 4px 0 rgba(28, 20, 8, 0.5);
+  color: #2b2113;
+  transform-origin: 50% 0;
+}
+
+/* El alambre del que cuelga. */
+.cartelito-alambre {
+  position: absolute;
+  top: -0.5rem;
+  left: 50%;
+  width: 1px;
+  height: 0.55rem;
+  background: #3a2d17;
+  transform: translateX(-50%);
+}
+
+.cartelito-texto {
+  /* Tres líneas y corta: es un cartelito, no una ficha. */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  font-size: 0.9375rem;
+  text-align: center;
+}
+
+@media (max-width: 480px) {
+  .puesto {
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 4rem;
   }
-  .puesto-item:hover .alza,
-  .puesto-item:focus-within .alza {
-    transform: rotate(var(--inclina, 0deg)) translateY(var(--asienta, 0px));
-  }
+}
+
+/* ── ACERCARSE AL PUESTO ───────────────────────────────────────────────────
+   El puesto al que caminamos tiene que pasar por encima de todo lo demás —de
+   sus vecinos, de la mesa y del velo—, así que sube de capa mientras dura el
+   gesto. `will-change` avisa al compositor antes de que empiece: sin eso, el
+   primer fotograma de un escalado a 2.35 se ve a tirones. */
+.puesto-celda--acercando {
+  z-index: 55;
+  will-change: transform;
+}
+
+/* El velo de la cámara: lo que queda del tianguis cuando ya sólo miramos un
+   puesto. Fijo a la ventana, y por eso vive fuera de cualquier ancestro con
+   transform (ver el comentario de tianguis.tsx). */
+.velo-camara {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: block;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 70% 60% at 50% 42%,
+    rgba(8, 10, 24, 0.35) 0%,
+    rgba(6, 8, 20, 0.86) 72%,
+    rgba(4, 6, 16, 0.96) 100%
+  );
 }
