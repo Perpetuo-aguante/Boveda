@@ -24,29 +24,6 @@ export type Paleta = {
   canto: string;
 };
 
-/**
- * Las ocho del tianguis. Antes salían del brandbook viradas a claro/oscuro, y
- * el puesto entero quedaba en la misma familia tonal: elegante, pero era un
- * portafolio. Ahora son los cinco colores saturados de la lona —azul, rojo,
- * amarillo, verde y rosa mexicano— más los dos neutros, y los acentos se
- * eligen para CHOCAR con su fondo, no para armonizar: amarillo sobre rosa,
- * rosa sobre azul, verde sobre rosa. Un puesto de verdad no combina.
- *
- * La tinta de cada paleta se mantiene con contraste suficiente para el título
- * de la portada, que es lo único que se lee encima. El cuerpo de los ensayos
- * nunca usa estos colores: para eso están PAPELES_LECTURA, más abajo.
- */
-export const PALETAS: Paleta[] = [
-  { papel: "#e01b13", tinta: "#ffe9c4", acento: "#ffd100", lomo: "#a20f08", canto: "#f5ead2" },
-  { papel: "#1536c4", tinta: "#f4f0dd", acento: "#ef0d7c", lomo: "#0c2189", canto: "#f2ecdb" },
-  { papel: "#ffd100", tinta: "#15161a", acento: "#ef0d7c", lomo: "#d4a800", canto: "#f7f1e6" },
-  { papel: "#ef0d7c", tinta: "#fff0cf", acento: "#009046", lomo: "#b00a5b", canto: "#f5e9dd" },
-  { papel: "#009046", tinta: "#fff0cf", acento: "#ffd100", lomo: "#00642f", canto: "#f2ecdb" },
-  { papel: "#15161a", tinta: "#f7f1e6", acento: "#ffd100", lomo: "#000000", canto: "#ede4d3" },
-  { papel: "#f7f1e6", tinta: "#15161a", acento: "#e01b13", lomo: "#d5c9b0", canto: "#fffbf2" },
-  { papel: "#0b2a9e", tinta: "#ffd100", acento: "#ef0d7c", lomo: "#061a6c", canto: "#f2ecdb" },
-];
-
 /** Hash estable de una cadena. */
 export function hash(texto: string): number {
   let h = 0;
@@ -57,17 +34,34 @@ export function hash(texto: string): number {
 }
 
 /**
- * La paleta se reparte por posición en el archivo, no por hash del slug.
- * Con hash salía a suerte y en la práctica se agrupaba: tres rojos seguidos y
- * ni un ocre en toda la primera fila. Ciclando por índice queda garantizado que
- * ningún vecino repite color y que las ocho paletas aparecen por igual, que es
- * justo lo que hace que un puesto parezca surtido.
+ * LA PORTADA SALE DE LA LONA, Y ESO NO ES UN DETALLE.
  *
- * El precio es que insertar un texto a media lista recolorea los de abajo. Para
- * un puesto de tianguis eso da igual; nadie memoriza de qué color era cada uno.
+ * Antes había dos tablas de color independientes: una para las lonas del
+ * puesto y otra para las portadas de la ficha. Con la transición de cámara eso
+ * se volvió un error visible —caminabas hacia una lona azul y llegabas a un
+ * cuadernillo rosa—, porque el mismo texto tenía dos colores según dónde lo
+ * mirabas. Ahora la lona es la única fuente: el objeto que se ve de cerca es
+ * el mismo que estaba en la mesa, y el acercamiento se lee como continuo.
+ *
+ * El canto es lo único que no viene de la lona: son las hojas, y las hojas son
+ * de papel en todos los casos. Se alterna un poco para que dos cuadernillos
+ * vecinos no tengan el corte idéntico.
+ *
+ * Se reparte por posición y no por hash del slug: con hash salía a suerte y en
+ * la práctica se agrupaba —tres rojos seguidos y ni un amarillo en toda la
+ * primera fila—. Ciclando queda garantizado que ningún vecino repite.
  */
+const CANTOS = ["#f5ead2", "#f2ecdb", "#f7f1e6", "#f5e9dd", "#ede4d3", "#fffbf2"];
+
 export function paletaDe(indice: number): Paleta {
-  return PALETAS[indice % PALETAS.length];
+  const l = lonaDe(indice);
+  return {
+    papel: l.tela,
+    tinta: l.tinta,
+    acento: l.acento,
+    lomo: l.costura,
+    canto: CANTOS[indice % CANTOS.length],
+  };
 }
 
 /**
@@ -170,12 +164,12 @@ export const MOTIVOS = 6;
 
 /**
  * Se desplaza el hash para que color y motivo no queden correlacionados, y se
- * suma la "vuelta" de paleta (índice / 8) para que dos cuadernillos que caen
- * en la misma paleta —sólo se repite cada 8 puestos— nunca compartan además
- * el mismo motivo. Sin el `indice`, dos paletas iguales podían salir con el
- * mismo ícono encima: parecían el mismo cuadernillo dos veces.
+ * suma la "vuelta" de lona para que dos cuadernillos que caen en el mismo
+ * color —se repite cada seis— nunca compartan además el mismo motivo. Sin el
+ * `indice`, dos lonas iguales podían salir con el mismo ícono encima:
+ * parecían el mismo cuadernillo dos veces.
  */
 export function motivoDe(slug: string, indice = 0): number {
-  const vuelta = Math.floor(indice / PALETAS.length);
+  const vuelta = Math.floor(indice / LONAS.length);
   return ((hash(slug) >>> 3) + vuelta) % MOTIVOS;
 }

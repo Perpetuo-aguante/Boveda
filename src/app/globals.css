@@ -889,6 +889,292 @@ body:has(.tema-lectura)::after {
   }
 }
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   LA NAVEGACIÓN DEL TEXTO
+
+   Pegajosa y arriba. Todo su color sale de las variables del papel de lectura,
+   así que la barra se tiñe con el texto que uno está leyendo en vez de traer
+   una paleta propia que pelee con él.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.nav-texto {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: var(--noche);
+  border-bottom: 2px solid var(--linea);
+  /* El texto que pasa por debajo no debe verse a través de la barra. */
+  box-shadow: 0 6px 18px -12px rgba(0, 0, 0, 0.4);
+}
+
+.nav-texto-caja {
+  margin: 0 auto;
+  max-width: 72rem;
+  padding: 0.7rem 1.5rem 0.55rem;
+}
+
+@media (min-width: 640px) {
+  .nav-texto-caja {
+    padding: 0.8rem 2.5rem 0.6rem;
+  }
+}
+
+/* ── 1. Anterior / Siguiente ─────────────────────────────────────────────── */
+.nav-pasos {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 1rem;
+}
+
+.nav-paso {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+  transition: opacity 0.2s ease;
+}
+
+.nav-paso--adelante {
+  text-align: right;
+  align-items: flex-end;
+}
+
+.nav-paso:hover {
+  opacity: 0.65;
+}
+
+.nav-paso--vacio {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.nav-paso-etiqueta {
+  color: var(--tenue-mas);
+  font-size: 0.5625rem;
+}
+
+.nav-paso-titulo {
+  font-family: var(--font-rotulo);
+  font-size: 0.9375rem;
+  line-height: 1.06;
+  /* Un título largo no debe empujar la barra a dos alturas. */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.nav-volver {
+  color: var(--tenue-mas);
+  border: 2px solid var(--linea);
+  padding: 0.4rem 0.7rem 0.32rem;
+  font-size: 0.5625rem;
+  white-space: nowrap;
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.nav-volver:hover {
+  color: var(--niebla);
+  border-color: var(--niebla);
+}
+
+/* ── 2. La barra de palos ────────────────────────────────────────────────── */
+.nav-barra-fila {
+  display: flex;
+  align-items: flex-end;
+  gap: 1rem;
+  margin-top: 0.7rem;
+}
+
+.nav-barra {
+  display: flex;
+  align-items: flex-end;
+  flex: 1 1 auto;
+  min-width: 0;
+  list-style: none;
+  /* La vertical se la queda el navegador para hacer scroll de la página; la
+     horizontal la usamos nosotros para escanear la colección con el dedo. */
+  touch-action: pan-y;
+}
+
+.nav-palo-celda {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+/* El palo que se ve es una línea fina. El palo que se TOCA es toda esta caja:
+   una línea de 2px no es un blanco que un dedo pueda acertar. */
+.nav-palo {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 30px;
+  padding: 7px 0 4px;
+}
+
+.nav-palo-linea {
+  display: block;
+  width: 2px;
+  height: 12px;
+  background: color-mix(in srgb, var(--niebla) 34%, transparent);
+  transition:
+    height 0.18s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.18s ease;
+}
+
+.nav-palo:hover .nav-palo-linea,
+.nav-palo:focus-visible .nav-palo-linea {
+  height: 19px;
+  background: var(--niebla);
+}
+
+/* El del texto que se está leyendo: más alto, más grueso y en el acento del
+   papel, para encontrarlo de un vistazo entre dieciocho. */
+.nav-palo--actual .nav-palo-linea {
+  width: 3px;
+  height: 23px;
+  background: var(--acento-lectura, var(--niebla));
+}
+
+.nav-abrir-indice {
+  flex: 0 0 auto;
+  color: var(--tenue-mas);
+  border: 2px solid var(--linea);
+  padding: 0.4rem 0.7rem 0.32rem;
+  font-size: 0.5625rem;
+  white-space: nowrap;
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.nav-abrir-indice:hover {
+  color: var(--niebla);
+  border-color: var(--niebla);
+}
+
+/* El renglón que narra la barra. Altura fija: al revelar un título la barra no
+   puede crecer, o el texto de abajo brincaría con cada movimiento del ratón. */
+.nav-revelado {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin-top: 0.3rem;
+  height: 1.45rem;
+  overflow: hidden;
+  font-size: 0.8125rem;
+}
+
+.nav-revelado-n {
+  font-variant-numeric: tabular-nums;
+  color: var(--tenue-mas);
+  font-size: 0.6875rem;
+}
+
+.nav-revelado-titulo {
+  font-family: var(--font-rotulo);
+  font-size: 0.9375rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nav-revelado-autor {
+  color: var(--tenue);
+  white-space: nowrap;
+}
+
+.nav-revelado-autor::before {
+  content: "· ";
+}
+
+/* ── 3. El índice completo, desplegado aquí mismo ────────────────────────── */
+.nav-indice {
+  overflow: hidden;
+}
+
+.nav-indice-lista {
+  list-style: none;
+  margin: 0.5rem 0 0.75rem;
+  border-top: 1px solid var(--linea);
+  max-height: 58vh;
+  overflow-y: auto;
+}
+
+.nav-indice-fila {
+  display: grid;
+  grid-template-columns: 2rem 1fr;
+  align-items: baseline;
+  gap: 0.2rem 0.9rem;
+  padding: 0.6rem 0.2rem;
+  border-bottom: 1px solid var(--linea-tenue);
+  transition: background-color 0.15s ease;
+}
+
+@media (min-width: 720px) {
+  .nav-indice-fila {
+    grid-template-columns: 2rem 1fr 12rem 8rem;
+  }
+}
+
+.nav-indice-fila:hover {
+  background: var(--linea-tenue);
+}
+
+.nav-indice-fila--actual {
+  background: color-mix(in srgb, var(--acento-lectura, var(--niebla)) 12%, transparent);
+}
+
+.nav-indice-n {
+  font-variant-numeric: tabular-nums;
+  font-size: 0.75rem;
+  color: var(--tenue-mas);
+}
+
+.nav-indice-titulo {
+  font-family: var(--font-rotulo);
+  font-size: 1.0625rem;
+}
+
+.nav-indice-autor,
+.nav-indice-seccion {
+  grid-column: 2;
+  font-size: 0.8125rem;
+  color: var(--tenue);
+}
+
+@media (min-width: 720px) {
+  .nav-indice-autor {
+    grid-column: 3;
+  }
+  .nav-indice-seccion {
+    grid-column: 4;
+    font-size: 0.5625rem;
+    color: var(--tenue-mas);
+  }
+}
+
+/* El anillo de foco global es amarillo, que sobre el papel crema de lectura
+   casi no se ve. En la ficha pasa al acento del papel, que sí contrasta. */
+.tema-lectura :focus-visible {
+  outline-color: var(--acento-lectura, var(--niebla));
+}
+
+@media (max-width: 560px) {
+  /* En un teléfono el paso de uno en uno se queda sólo con las flechas: los
+     títulos de anterior y siguiente no caben sin partir la barra en dos
+     alturas, y la barra de palos ya cubre el salto largo. */
+  .nav-paso-titulo {
+    display: none;
+  }
+  .nav-palo {
+    height: 34px;
+  }
+}
+
 /* ── ACERCARSE AL PUESTO ───────────────────────────────────────────────────
    El puesto al que caminamos tiene que pasar por encima de todo lo demás —de
    sus vecinos, de la mesa y del velo—, así que sube de capa mientras dura el

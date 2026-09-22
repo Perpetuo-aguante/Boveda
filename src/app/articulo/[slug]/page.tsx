@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { articulos, buscarArticulo, fechaLarga, anioDe } from "@/lib/articles";
+import { articulos, buscarArticulo, fechaLarga } from "@/lib/articles";
 import type { CSSProperties } from "react";
 import { paletaDe, claseAcentoSeccion, papelLecturaDe } from "@/lib/covers";
 import { leerTexto, tramos, minutosDe } from "@/lib/texto";
 import { Cuadernillo } from "@/components/cuadernillo";
+import { NavegacionTexto } from "@/components/navegacion-texto";
 import { MotorEstante } from "@/components/motor-estante";
 
 // Toda la bóveda es estática: se prerenderiza una ficha por texto.
@@ -44,8 +44,6 @@ export default async function Ficha({ params }: { params: Promise<{ slug: string
   const bloques = leerTexto(articulo.slug, articulo.forma === "verso");
   const i = articulos.findIndex((a) => a.slug === slug);
   const p = paletaDe(i);
-  const anterior = i > 0 ? articulos[i - 1] : undefined;
-  const siguiente = i < articulos.length - 1 ? articulos[i + 1] : undefined;
 
   // El papel de lectura: fondo claro, tinta oscura. La vitrina de la portada
   // es de noche; la ficha larga no lo es —4.000 palabras sobre casi negro
@@ -60,6 +58,9 @@ export default async function Ficha({ params }: { params: Promise<{ slug: string
     "--tenue-mas": papel.tenueMas,
     "--linea": papel.linea,
     "--linea-tenue": papel.lineaTenue,
+    // El acento del papel: lo usan el palo del texto actual en la barra y el
+    // anillo de foco, que en amarillo global no se veía sobre crema.
+    "--acento-lectura": papel.acento,
   } as CSSProperties;
 
   // Cada dato aparece UNA vez. Antes el autor, la sección y la fecha salían
@@ -82,16 +83,19 @@ export default async function Ficha({ params }: { params: Promise<{ slug: string
     >
       <MotorEstante />
 
-      <div className="mx-auto max-w-6xl px-6 pt-10 sm:px-10">
-        <Link
-          href="/"
-          className="eyebrow inline-flex items-center gap-2 text-tenue-mas transition-colors hover:text-niebla"
-        >
-          <span aria-hidden>←</span> El puesto
-        </Link>
-      </div>
+      <NavegacionTexto
+        coleccion={articulos.map((a) => ({
+          slug: a.slug,
+          titulo: a.titulo,
+          autor: a.autor,
+          seccion: a.seccion === "Sin clasificar" ? "Por clasificar" : a.seccion,
+        }))}
+        actual={i}
+      />
 
-      <article className="mx-auto max-w-6xl px-6 pt-12 sm:px-10 sm:pt-20">
+      {/* El pie de la página es oscuro y el papel de lectura es claro: sin
+          este aire, un texto corto termina pegado a un muro negro. */}
+      <article className="mx-auto max-w-6xl px-6 pb-32 pt-14 sm:px-10 sm:pb-40 sm:pt-20">
         <div className="estante-item grid gap-16 lg:grid-cols-12 lg:gap-20">
           <div className="lg:col-span-5">
             <div className="flex justify-center">
@@ -106,7 +110,7 @@ export default async function Ficha({ params }: { params: Promise<{ slug: string
                   <Cuadernillo
                     articulo={articulo}
                     indice={i}
-                    ancho="clamp(200px, 30vw, 310px)"
+                    ancho="clamp(230px, 33vw, 390px)"
                     prioridad
                   />
                 </div>
@@ -250,38 +254,8 @@ export default async function Ficha({ params }: { params: Promise<{ slug: string
         )}
       </article>
 
-      <nav
-        className="mx-auto mt-28 grid max-w-6xl gap-px border-t border-linea px-6 sm:grid-cols-2 sm:px-10"
-        aria-label="Otros textos de la bóveda"
-      >
-        {anterior ? (
-          <Link href={`/articulo/${anterior.slug}`} className="group py-10 sm:pr-10">
-            <span className="eyebrow text-tenue-mas">← Anterior</span>
-            <span className="display mt-3 block text-xl transition-colors group-hover:text-brasa">
-              {anterior.titulo}
-            </span>
-            <span className="mt-1.5 block text-[0.875rem] text-tenue">
-              {anterior.autor || anioDe(anterior)}
-            </span>
-          </Link>
-        ) : (
-          <span />
-        )}
-        {siguiente ? (
-          <Link
-            href={`/articulo/${siguiente.slug}`}
-            className="group py-10 sm:border-l sm:border-linea sm:pl-10 sm:text-right"
-          >
-            <span className="eyebrow text-tenue-mas">Siguiente →</span>
-            <span className="display mt-3 block text-xl transition-colors group-hover:text-brasa">
-              {siguiente.titulo}
-            </span>
-            <span className="mt-1.5 block text-[0.875rem] text-tenue">
-              {siguiente.autor || anioDe(siguiente)}
-            </span>
-          </Link>
-        ) : null}
-      </nav>
+      {/* La navegación NO se repite al final: vive arriba, pegajosa, a la vista
+          de quien está leyendo. Al terminar, la barra ya está donde estaba. */}
     </div>
   );
 }
