@@ -129,10 +129,11 @@ body {
   font-family: var(--font-rotulo);
   font-weight: 400;
   letter-spacing: -0.005em;
-  /* 0.94 y no menos: Anton casi no trae interlínea propia, así que por debajo
-     de esto las colas de la g y la y de un renglón chocan con las
-     mayúsculas del siguiente. Se ve sobre todo en los rótulos de tres líneas. */
-  line-height: 0.94;
+  /* 1.06, medido, y aquí no se baja: en español el renglón de abajo sube
+     tildes (ñ, á, í) por encima de su altura de x, y Anton casi no trae
+     interlínea propia. A 1.02 la tilde de «años» todavía se metía entre
+     «ser» y «CEO» y parecía un guión bajo; a 0.94 chocaba de lleno. */
+  line-height: 1.06;
 }
 
 /* El cartelito: lo escrito a mano sobre el cartón. Caveat pide más cuerpo que
