@@ -21,6 +21,24 @@ export type Bloque =
   | { tipo: "cita"; texto: string }
   | { tipo: "separador" };
 
+/** Dentro de un párrafo o una cita, una línea que termina en `\` es un salto
+ *  forzado —el autor lo quiso ahí a propósito, a diferencia del salto simple,
+ *  que es accidente del ancho de columna y se rejunta con un espacio. Se
+ *  marca con este separador invisible y se despliega como <br> al pintarlo. */
+const SALTO = " ";
+
+/** Une las líneas de un párrafo o una cita: espacio si el salto es simple,
+ *  `SALTO` si la línea terminaba en `\`. */
+function unirLineas(lineas: string[]): string {
+  let texto = "";
+  for (let i = 0; i < lineas.length; i++) {
+    const forzado = /\\\s*$/.test(lineas[i]);
+    texto += lineas[i].replace(/\\\s*$/, "").trim();
+    if (i < lineas.length - 1) texto += forzado ? SALTO : " ";
+  }
+  return texto;
+}
+
 /**
  * `enVerso` cambia una sola cosa: un bloque de varias líneas deja de
  * rejuntarse en un párrafo y se conserva verso por verso. Un tercio del
@@ -52,33 +70,54 @@ export function leerTexto(slug: string, enVerso = false): Bloque[] | null {
     } else if (t.startsWith("## ")) {
       bloques.push({ tipo: "subtitulo", texto: t.slice(3).trim() });
     } else if (t.startsWith("> ")) {
-      const texto = t
-        .split("\n")
-        .map((l) => l.replace(/^>\s?/, ""))
-        .join(" ")
-        .trim();
-      bloques.push({ tipo: "cita", texto });
+      const lineas = t.split("\n").map((l) => l.replace(/^>\s?/, ""));
+      bloques.push({ tipo: "cita", texto: unirLineas(lineas) });
     } else if (enVerso) {
       const lineas = t.split("\n").map((l) => l.trim()).filter(Boolean);
       if (lineas.length) bloques.push({ tipo: "estrofa", lineas });
     } else {
-      bloques.push({ tipo: "parrafo", texto: t.split("\n").join(" ") });
+      bloques.push({ tipo: "parrafo", texto: unirLineas(t.split("\n")) });
     }
   }
 
   return bloques.length ? bloques : null;
 }
 
-/** Parte un párrafo en tramos rectos y en cursiva, para pintarlos con <em>. */
-export function tramos(texto: string): Array<{ cursiva: boolean; texto: string }> {
+export type Tramo =
+  | { tipo: "texto"; texto: string }
+  | { tipo: "cursiva"; hijos: Tramo[] }
+  | { tipo: "fuerte"; hijos: Tramo[] }
+  | { tipo: "enlace"; texto: string; url: string };
+
+/** Parte un párrafo en tramos: recto, en cursiva (`*así*`), en negrita
+ *  (`**así**`) o enlace (`[así](url)`), para pintarlos con <em>, <strong> y
+ *  <a>. El orden de la alternancia importa: el enlace y la negrita se prueban
+ *  antes que la cursiva para que `**x**` no se lea como cursiva con un
+ *  asterisco suelto de sobra. La cursiva y la negrita se resuelven de nuevo
+ *  por dentro —recursivo—, porque un epígrafe entero puede ir en cursiva y
+ *  llevar, aun así, un enlace adentro. */
+export function tramos(texto: string): Tramo[] {
   return texto
-    .split(/(\*[^*]+\*)/g)
+    .split(/(\[[^\]]+\]\([^)]+\)|\*\*[^*]+\*\*|\*[^*]+\*)/g)
     .filter(Boolean)
-    .map((t) =>
-      t.startsWith("*") && t.endsWith("*") && t.length > 2
-        ? { cursiva: true, texto: t.slice(1, -1) }
-        : { cursiva: false, texto: t },
-    );
+    .map((t): Tramo => {
+      const enlace = t.match(/^\[([^\]]+)\]\(([^)]+)\)$/);
+      if (enlace) return { tipo: "enlace", texto: enlace[1], url: enlace[2] };
+      if (t.startsWith("**") && t.endsWith("**") && t.length > 4) {
+        return { tipo: "fuerte", hijos: tramos(t.slice(2, -2)) };
+      }
+      if (t.startsWith("*") && t.endsWith("*") && t.length > 2) {
+        return { tipo: "cursiva", hijos: tramos(t.slice(1, -1)) };
+      }
+      return { tipo: "texto", texto: t };
+    });
+}
+
+/** Las líneas de un párrafo o cita, ya separadas donde el autor forzó un
+ *  salto con `\`. Cada una se pasa por `tramos` para su cursiva/negrita/
+ *  enlaces; el llamador decide cómo unirlas (un <br> entre cada una). */
+export function lineasDe(texto: string): string[] {
+  return texto.split(SALTO);
 }
 
 /** Minutos de lectura, redondeados hacia arriba. 200 palabras por minuto. */
