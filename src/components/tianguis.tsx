@@ -36,7 +36,7 @@ const DURACION = 470;
 export function Tianguis({
   puestos,
 }: {
-  puestos: Array<{ articulo: Articulo; minutos?: number }>;
+  puestos: Array<{ articulo: Articulo }>;
 }) {
   const router = useRouter();
   const quieto = useReducedMotion();
@@ -56,12 +56,11 @@ export function Tianguis({
   return (
     <>
       <div className="puesto relative">
-        {puestos.map(({ articulo, minutos }, i) => (
+        {puestos.map(({ articulo }, i) => (
           <Puesto
             key={articulo.slug}
             articulo={articulo}
             indice={i}
-            minutos={minutos}
             acercando={saliendo === articulo.slug}
             alFondo={saliendo !== null && saliendo !== articulo.slug}
             onAcercarse={acercarse}

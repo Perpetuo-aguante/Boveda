@@ -70,16 +70,12 @@ function gestoDe(indice: number) {
 export function Puesto({
   articulo,
   indice,
-  minutos,
   acercando = false,
   alFondo = false,
   onAcercarse,
 }: {
   articulo: Articulo;
   indice: number;
-  /** Minutos de lectura, contados en el servidor. Es el «precio» del puesto:
-   *  lo que el cartelito dice cuando el texto no trae copete. */
-  minutos?: number;
   /** Este es el puesto al que nos estamos acercando. */
   acercando?: boolean;
   /** Otro puesto se llevó la cámara: este se apaga y se va atrás. */
@@ -211,29 +207,27 @@ export function Puesto({
           </span>
         </Link>
 
-        {/* El cartelito de cartón. Llega 50 ms después que la lona: peso. */}
-        <motion.span
-          className="cartelito"
-          variants={{
-            reposo: { rotate: -g.giro * 1.5 - 1.4, y: 0, opacity: 1 },
-            alzado: { rotate: -g.giro * 0.5, y: 5, opacity: 1 },
-            // Al acercarnos el cartelito se queda atrás y se va: es el letrero
-            // del puesto, no lo que venimos a leer.
-            acercando: { rotate: -g.giro * 1.5 - 1.4, y: 14, opacity: 0 },
-            alFondo: { rotate: -g.giro * 1.5 - 1.4, y: 0, opacity: 1 },
-          }}
-          transition={RESORTE_CARTEL}
-        >
-          <span className="cartelito-alambre" aria-hidden />
-          {/* El cartelito nunca repite lo que ya dice la lona. Si el texto
-              trae copete, va el copete; si no, va el tiempo de lectura, que
-              es el precio del puesto y el único dato que la lona no lleva.
-              Antes caía al nombre del autor y salía dos veces en el mismo
-              puesto, en nueve de los dieciocho. */}
-          <span className="cartelito-texto cartelito-letra">
-            {articulo.resumen || (minutos ? `${minutos} min de lectura` : seccion)}
-          </span>
-        </motion.span>
+        {/* El cartelito de cartón. Sólo cuelga cuando el texto trae copete
+            propio: si no, no hay nada que decir ahí que la lona no diga ya,
+            y el puesto se queda con sólo la portada. Antes, en su falta,
+            colgaba el tiempo de lectura —se quitó a pedido. */}
+        {articulo.resumen ? (
+          <motion.span
+            className="cartelito"
+            variants={{
+              reposo: { rotate: -g.giro * 1.5 - 1.4, y: 0, opacity: 1 },
+              alzado: { rotate: -g.giro * 0.5, y: 5, opacity: 1 },
+              // Al acercarnos el cartelito se queda atrás y se va: es el letrero
+              // del puesto, no lo que venimos a leer.
+              acercando: { rotate: -g.giro * 1.5 - 1.4, y: 14, opacity: 0 },
+              alFondo: { rotate: -g.giro * 1.5 - 1.4, y: 0, opacity: 1 },
+            }}
+            transition={RESORTE_CARTEL}
+          >
+            <span className="cartelito-alambre" aria-hidden />
+            <span className="cartelito-texto cartelito-letra">{articulo.resumen}</span>
+          </motion.span>
+        ) : null}
       </motion.div>
     </div>
   );

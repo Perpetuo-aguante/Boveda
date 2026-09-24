@@ -234,8 +234,8 @@ export default async function Ficha({ params }: { params: Promise<{ slug: string
                 return (
                   <p key={n} className="estrofa mb-9 text-[1.125rem] text-niebla/85">
                     {b.lineas.map((linea, k) => (
-                      <span key={k}>
-                        {tramos(linea).map((t, j) => pintarTramo(t, `${k}-${j}`))}
+                      <span key={k} className={linea.sangria ? "sangria" : undefined}>
+                        {tramos(linea.texto).map((t, j) => pintarTramo(t, `${k}-${j}`))}
                       </span>
                     ))}
                   </p>

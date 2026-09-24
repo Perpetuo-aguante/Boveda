@@ -547,6 +547,21 @@ body {
   text-indent: -1.5em;
 }
 
+/* El verso que el autor quiso aparte, desplazado a la derecha —no un verso
+   que se rompe por ancho de columna, sino uno que empieza más adentro a
+   propósito—. Anula la sangría francesa de arriba: aquí no hay continuación
+   que distinguir, todo el verso se corre. */
+.estrofa > span.sangria {
+  padding-left: 8em;
+  text-indent: 0;
+}
+
+@media (max-width: 640px) {
+  .estrofa > span.sangria {
+    padding-left: 3.5em;
+  }
+}
+
 /* ───────────────────────────────────────────────────────────────────────────
    EL GRANO
 
