@@ -13,10 +13,17 @@ import path from "node:path";
  */
 const DIR = path.join(process.cwd(), "contenido");
 
+/** Un verso de una estrofa. `sangria` marca el verso que el propio autor
+ *  quiso desplazado a la derecha —un aparte, no un verso más—: en la fuente
+ *  es la única línea de un poema que empieza con espacio o tabulador, ya que
+ *  el resto siempre va al margen. Se guarda aparte porque el verso normal se
+ *  recorta ese espacio (es indistinto del ancho de columna); éste no. */
+export type Verso = { texto: string; sangria: boolean };
+
 export type Bloque =
   | { tipo: "parrafo"; texto: string }
   /** Una estrofa: sus versos se conservan como líneas, no se rejuntan. */
-  | { tipo: "estrofa"; lineas: string[] }
+  | { tipo: "estrofa"; lineas: Verso[] }
   | { tipo: "subtitulo"; texto: string }
   | { tipo: "cita"; texto: string }
   | { tipo: "separador" };
@@ -73,7 +80,10 @@ export function leerTexto(slug: string, enVerso = false): Bloque[] | null {
       const lineas = t.split("\n").map((l) => l.replace(/^>\s?/, ""));
       bloques.push({ tipo: "cita", texto: unirLineas(lineas) });
     } else if (enVerso) {
-      const lineas = t.split("\n").map((l) => l.trim()).filter(Boolean);
+      const lineas = t
+        .split("\n")
+        .map((l) => ({ texto: l.trim(), sangria: /^[ \t]/.test(l) }))
+        .filter((l) => l.texto);
       if (lineas.length) bloques.push({ tipo: "estrofa", lineas });
     } else {
       bloques.push({ tipo: "parrafo", texto: unirLineas(t.split("\n")) });
@@ -124,7 +134,8 @@ export function lineasDe(texto: string): string[] {
 export function minutosDe(bloques: Bloque[]): number {
   const palabras = bloques.reduce((n, b) => {
     if ("texto" in b) return n + b.texto.split(/\s+/).length;
-    if (b.tipo === "estrofa") return n + b.lineas.join(" ").split(/\s+/).length;
+    if (b.tipo === "estrofa")
+      return n + b.lineas.map((l) => l.texto).join(" ").split(/\s+/).length;
     return n;
   }, 0);
   return Math.max(1, Math.round(palabras / 200));

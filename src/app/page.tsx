@@ -1,21 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { articulos, anioDe, fechaLarga, seccionesEnUso } from "@/lib/articles";
-import { leerTexto, minutosDe } from "@/lib/texto";
 import { Tianguis } from "@/components/tianguis";
 import { MotorEstante } from "@/components/motor-estante";
 
 export default function Inicio() {
-  // Los minutos se cuentan aquí, en el servidor, porque leer `contenido/` es
-  // acceso a disco: el puesto es un componente de cliente y no puede. Es el
-  // «precio» que el cartelito enseña cuando el texto no trae copete.
-  const minutosPorSlug = new Map(
-    articulos.map((a) => {
-      const bloques = leerTexto(a.slug, a.forma === "verso");
-      return [a.slug, bloques ? minutosDe(bloques) : undefined];
-    }),
-  );
-
   const secciones = seccionesEnUso().filter((s) => s !== "Sin clasificar");
   const fechas = articulos.map((a) => a.fecha).filter(Boolean).sort();
   const desde = fechas[0]?.slice(0, 4);
@@ -92,9 +81,7 @@ export default function Inicio() {
         aria-label="El puesto"
       >
         <div className="mesa relative mx-auto max-w-6xl px-4 pb-16 pt-12 sm:px-8">
-          <Tianguis
-            puestos={articulos.map((a) => ({ articulo: a, minutos: minutosPorSlug.get(a.slug) }))}
-          />
+          <Tianguis puestos={articulos.map((a) => ({ articulo: a }))} />
         </div>
       </section>
 
