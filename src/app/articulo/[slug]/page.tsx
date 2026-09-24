@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { articulos, buscarArticulo, fechaLarga } from "@/lib/articles";
 import type { CSSProperties } from "react";
 import { paletaDe, claseAcentoSeccion, papelLecturaDe } from "@/lib/covers";
-import { leerTexto, tramos, minutosDe } from "@/lib/texto";
+import { leerTexto, tramos, lineasDe, minutosDe, type Tramo } from "@/lib/texto";
 import { Cuadernillo } from "@/components/cuadernillo";
 import { NavegacionTexto } from "@/components/navegacion-texto";
 import { MotorEstante } from "@/components/motor-estante";
@@ -34,6 +34,52 @@ export async function generateMetadata({
       images: a.imagen ? [a.imagen] : undefined,
     },
   };
+}
+
+/** Pinta un tramo de `tramos()`. `invertirCursiva` es la convención de
+ *  imprenta de la cita destacada: como la cita entera ya va en cursiva, un
+ *  `*así*` de dentro se marca al revés, en redonda. */
+function pintarTramo(t: Tramo, key: string, invertirCursiva = false) {
+  switch (t.tipo) {
+    case "enlace":
+      return (
+        <a
+          key={key}
+          href={t.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline decoration-tenue-mas/50 underline-offset-2 transition-colors hover:decoration-current"
+        >
+          {t.texto}
+        </a>
+      );
+    case "fuerte":
+      return (
+        <strong key={key}>
+          {t.hijos.map((h, k) => pintarTramo(h, `${key}-${k}`, invertirCursiva))}
+        </strong>
+      );
+    case "cursiva":
+      return invertirCursiva ? (
+        <span key={key} className="not-italic">
+          {t.hijos.map((h, k) => pintarTramo(h, `${key}-${k}`, invertirCursiva))}
+        </span>
+      ) : (
+        <em key={key}>{t.hijos.map((h, k) => pintarTramo(h, `${key}-${k}`, false))}</em>
+      );
+    default:
+      return <span key={key}>{t.texto}</span>;
+  }
+}
+
+/** Pinta un párrafo o cita entero: primero separa los saltos forzados con
+ *  `\` (un <br> real por cada uno), y dentro de cada línea resuelve
+ *  cursiva/negrita/enlaces. */
+function pintarTexto(texto: string, invertirCursiva = false) {
+  return lineasDe(texto).flatMap((linea, i) => {
+    const nodos = tramos(linea).map((t, k) => pintarTramo(t, `${i}-${k}`, invertirCursiva));
+    return i === 0 ? nodos : [<br key={`br-${i}`} />, ...nodos];
+  });
 }
 
 export default async function Ficha({ params }: { params: Promise<{ slug: string }> }) {
@@ -73,6 +119,9 @@ export default async function Ficha({ params }: { params: Promise<{ slug: string
       ? ([["Publicado", fechaLarga(articulo.fecha)]] as Array<[string, string]>)
       : []),
     ...(bloques ? ([["Lectura", `${minutosDe(bloques)} min`]] as Array<[string, string]>) : []),
+    ...(articulo.ilustrador
+      ? ([["Ilustración", articulo.ilustrador]] as Array<[string, string]>)
+      : []),
     ...(articulo.curador ? ([["Lo trajo", articulo.curador]] as Array<[string, string]>) : []),
   ];
 
@@ -186,9 +235,7 @@ export default async function Ficha({ params }: { params: Promise<{ slug: string
                   <p key={n} className="estrofa mb-9 text-[1.125rem] text-niebla/85">
                     {b.lineas.map((linea, k) => (
                       <span key={k}>
-                        {tramos(linea).map((t, j) =>
-                          t.cursiva ? <em key={j}>{t.texto}</em> : <span key={j}>{t.texto}</span>,
-                        )}
+                        {tramos(linea).map((t, j) => pintarTramo(t, `${k}-${j}`))}
                       </span>
                     ))}
                   </p>
@@ -197,9 +244,7 @@ export default async function Ficha({ params }: { params: Promise<{ slug: string
               if (b.tipo === "subtitulo") {
                 return (
                   <h2 key={n} className="display mt-14 mb-6 text-2xl text-niebla">
-                    {tramos(b.texto).map((t, k) =>
-                      t.cursiva ? <em key={k}>{t.texto}</em> : <span key={k}>{t.texto}</span>,
-                    )}
+                    {tramos(b.texto).map((t, k) => pintarTramo(t, String(k)))}
                   </h2>
                 );
               }
@@ -214,19 +259,7 @@ export default async function Ficha({ params }: { params: Promise<{ slug: string
                         condensada: es la voz del autor subida de cuerpo, no
                         un rótulo del puesto. */}
                     <p className="text-[1.375rem] italic leading-[1.45] text-niebla/90">
-                      {/* La cita entera ya va en cursiva, así que un *así* de
-                          dentro se marca al revés: en redonda. Es la
-                          convención de imprenta, y además evita que los
-                          asteriscos salgan impresos. */}
-                      {tramos(b.texto).map((t, k) =>
-                        t.cursiva ? (
-                          <span key={k} className="not-italic">
-                            {t.texto}
-                          </span>
-                        ) : (
-                          <span key={k}>{t.texto}</span>
-                        ),
-                      )}
+                      {pintarTexto(b.texto, true)}
                     </p>
                   </blockquote>
                 );
@@ -236,9 +269,7 @@ export default async function Ficha({ params }: { params: Promise<{ slug: string
                   key={n}
                   className="mb-8 text-[1.125rem] leading-[1.75] text-niebla/85"
                 >
-                  {tramos(b.texto).map((t, k) =>
-                    t.cursiva ? <em key={k}>{t.texto}</em> : <span key={k}>{t.texto}</span>,
-                  )}
+                  {pintarTexto(b.texto)}
                 </p>
               );
             })}
@@ -252,6 +283,15 @@ export default async function Ficha({ params }: { params: Promise<{ slug: string
             </p>
           </div>
         )}
+
+        {articulo.bio ? (
+          <div className="mx-auto mt-16 max-w-[38rem]">
+            <h2 className="eyebrow text-tenue-mas">Sobre el autor</h2>
+            <p className="mt-5 text-[0.9375rem] leading-[1.75] text-niebla/80">
+              {pintarTexto(articulo.bio)}
+            </p>
+          </div>
+        ) : null}
       </article>
 
       {/* La navegación NO se repite al final: vive arriba, pegajosa, a la vista

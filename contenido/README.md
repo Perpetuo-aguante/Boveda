@@ -16,9 +16,13 @@ Si quieres algo más:
 | `> Una frase`      | Una cita destacada, en grande |
 | `---`              | Un separador entre secciones  |
 | `*así*`            | *Cursiva*, dentro de un párrafo |
+| `**así**`          | **Negrita**, dentro de un párrafo |
+| `[así](url)`       | Un enlace dentro de un párrafo |
+| `línea\` (con `\` al final) | Un salto de línea forzado dentro del mismo párrafo o cita —para cuando el corte importa, como una cita en verso dentro de una crónica |
 
 No pongas el título ni la firma: esos salen de `articles.ts` y la ficha ya los
-pinta arriba.
+pinta arriba. Tampoco pegues imágenes sueltas dentro del cuerpo: no hay forma
+de mostrarlas — sólo existe `imagen` (la portada) en `articles.ts`.
 
 Mientras no exista el archivo, la ficha del texto funciona igual — muestra lo
 que haya y no enseña cuerpo. Se pueden ir subiendo de uno en uno.
@@ -48,3 +52,15 @@ el campo `imagen` de `articles.ts`:
 
 Cuando hay foto, la portada del cuadernillo la usa. Cuando no, se dibuja la
 portada geométrica de siempre. Las dos conviven sin problema en el mismo puesto.
+
+También puede ser una URL completa (p. ej. de `substackcdn.com`) en vez de una
+ruta bajo `/public`; si el dominio es nuevo hay que sumarlo a
+`images.remotePatterns` en `next.config.ts`.
+
+## La bio del autor
+
+Va en `articles.ts`, no en el `.md`: el campo `bio` es una nota corta sobre el
+autor, admite `*cursiva*`, `**negrita**` y `[enlaces](url)`, y la ficha la
+pinta al final, bajo «Sobre el autor». Si además ilustró la portada alguien
+que no es el autor, ese nombre va en `ilustrador` y sale junto a la fecha y la
+sección.
