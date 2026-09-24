@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { articulos, anioDe, fechaLarga, seccionesEnUso } from "@/lib/articles";
+import { articulos, anioDe, fechaLarga } from "@/lib/articles";
 import { leerTexto, minutosDe } from "@/lib/texto";
 import { Tianguis } from "@/components/tianguis";
 import { MotorEstante } from "@/components/motor-estante";
@@ -16,74 +16,28 @@ export default function Inicio() {
     }),
   );
 
-  const secciones = seccionesEnUso().filter((s) => s !== "Sin clasificar");
-  const fechas = articulos.map((a) => a.fecha).filter(Boolean).sort();
-  const desde = fechas[0]?.slice(0, 4);
-  const hasta = fechas[fechas.length - 1]?.slice(0, 4);
-  const rango = desde && hasta ? (desde === hasta ? desde : `${desde}–${hasta}`) : "";
-
   return (
     <>
       <MotorEstante />
 
-      {/* ── El toldo: el rótulo del puesto ───────────────────────────────────
-          No es un hero de landing page, es la lona rotulada de la entrada. El
-          logotipo va sobre su tabla, el título se grita, y el sticker de
-          «LO MEJOR DEL PRIMER AÑO» va pegado de lado, como una calcomanía que
-          alguien clavó encima del toldo. */}
-      <section className="toldo px-6 pb-14 pt-12 sm:px-10 sm:pb-16 sm:pt-14">
-        <div className="relative mx-auto max-w-6xl">
-          <div className="flex flex-wrap items-end justify-between gap-y-8">
-            <div className="max-w-3xl">
-              <span className="placa-marca placa-marca--toldo">
-                <Image
-                  src="/marca/perpetuo-wordmark.png"
-                  alt="Perpetuo"
-                  width={2048}
-                  height={348}
-                  priority
-                  className="block h-[26px] w-auto sm:h-[34px]"
-                />
-              </span>
-
-              <h1 className="display mt-7 text-[clamp(2.7rem,8vw,6.6rem)] uppercase text-balance">
-                La bóveda de Perpetuo
-              </h1>
-
-              <p className="pregon mt-6 max-w-2xl">
-                Llévele, llévele, lo mejor de la bóveda de Perpetuo, de nuevo
-                para usted. Crónica, ensayo, poesía, reseñas y más.
-              </p>
-            </div>
-
-            <div className="sticker sticker--anio">
-              <b>Lo mejor</b>
-              <span>del primer</span>
-              <span>año</span>
-            </div>
-          </div>
-
-          <div className="mt-11 flex flex-wrap items-center gap-x-7 gap-y-3">
-            <ul className="eyebrow flex flex-wrap items-center gap-x-6 gap-y-2" style={{ opacity: 0.9 }}>
-              {secciones.map((s) => (
-                <li key={s}>{s}</li>
-              ))}
-            </ul>
-            <span className="eyebrow tabular-nums" style={{ opacity: 0.65 }}>
-              {articulos.length} textos{rango ? ` · ${rango}` : ""}
-            </span>
-          </div>
-
-          <a
-            href="#puesto"
-            className="eyebrow mt-9 inline-flex items-center gap-3 transition-opacity hover:opacity-70"
-          >
-            Acercarse al puesto
-            <span aria-hidden>↓</span>
-          </a>
-        </div>
+      {/* ── El mural: el rótulo pintado a mano sobre la pared del puesto ────
+          El logotipo y la navegación reales van en el header del layout; esto
+          es solo el mural de entrada, de pared a pared. */}
+      <section className="relative bg-[#fdf1e7]">
+        <Image
+          src="/marca/hero-boveda.webp"
+          alt="Lo mejor del primer año: la bóveda de Perpetuo. Crónica, ensayo, reseñas y más."
+          width={1672}
+          height={889}
+          priority
+          className="block h-auto w-full"
+        />
+        <a
+          href="#puesto"
+          className="absolute inset-x-0 bottom-0 h-[6%]"
+          aria-label="Acercarse al puesto"
+        />
       </section>
-      <div className="valance" aria-hidden />
 
       {/* ── El puesto: la mesa con las lonas encima ───────────────────────── */}
       <section

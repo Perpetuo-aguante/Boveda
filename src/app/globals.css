@@ -169,45 +169,6 @@ body {
   transform: rotate(0deg);
 }
 
-/* La misma tabla, más grande y girada al otro lado, clavada sobre el toldo. */
-.placa-marca--toldo {
-  --dura-dist: 6px;
-  padding: 0.6rem 0.95rem 0.5rem;
-  transform: rotate(-2deg);
-}
-
-/* EL PREGÓN. Lo que grita el marchante: manuscrito, grande, en dos renglones
-   cortos. En la serif del cuerpo se leería como una bajada de landing page,
-   que es justo lo que no es. */
-.pregon {
-  font-family: var(--font-manuscrita);
-  font-weight: 600;
-  font-size: clamp(1.25rem, 2.6vw, 1.85rem);
-  line-height: 1.24;
-}
-
-/* La calcomanía del primer año, pegada de lado sobre el toldo. */
-.sticker--anio {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: clamp(126px, 15vw, 168px);
-  height: clamp(126px, 15vw, 168px);
-  padding: 0.5rem;
-  text-align: center;
-  text-transform: uppercase;
-  transform: rotate(-11deg);
-}
-
-.sticker--anio b {
-  font-size: clamp(1.1rem, 1.6vw, 1.4rem);
-}
-
-.sticker--anio span {
-  font-size: clamp(0.8rem, 1.15vw, 1rem);
-}
-
 /* ───────────────────────────────────────────────────────────────────────────
    SOMBRAS DURAS Y PIEZAS GIRADAS
 
@@ -455,61 +416,6 @@ body {
   .estante-item:focus-within .libro {
     --giro-mult: 1;
   }
-}
-
-/* ───────────────────────────────────────────────────────────────────────────
-   EL TOLDO Y EL ANAQUEL
-
-   Citas directas del tianguis fotográfico: la lona roja a rayas sobre la
-   entrada, el sticker de feria, el filo festoneado de la lona, y la rejilla
-   de anaquel de video-club detrás del puesto.
-   ─────────────────────────────────────────────────────────────────────────── */
-
-.toldo {
-  position: relative;
-  background: var(--rojo);
-  color: #fff1d4;
-  border-top: 5px solid #9c110b;
-  background-image: repeating-linear-gradient(
-    100deg,
-    transparent 0 190px,
-    rgba(120, 12, 5, 0.09) 191px 192px,
-    transparent 193px 380px
-  );
-}
-
-/* La calcomanía: amarillo, plumón encima, contorno recortado y clavada con
-   sombra dura. El outline del mismo amarillo hace de reborde blanco de
-   calcomanía, por fuera del borde negro. */
-.sticker {
-  background: var(--amarillo);
-  color: var(--tinta);
-  --dura-color: var(--tinta);
-  --dura-dist: 4px;
-  border: 2.5px solid var(--tinta);
-  outline: 5px solid var(--amarillo);
-  border-radius: 999px;
-  transform: rotate(9deg);
-  box-shadow: var(--dura-dist) var(--dura-dist) 0 var(--dura-color);
-  font-family: var(--font-marcador);
-  font-weight: 400;
-  line-height: 1.02;
-}
-
-/* El filo de la lona: un festón repetido con clip-path, no una imagen. */
-.valance {
-  height: 20px;
-  background: repeating-linear-gradient(90deg, #b72823 0 30px, #c32d26 30px 60px);
-  clip-path: polygon(
-    0 0, 100% 0, 100% 70%,
-    97.5% 100%, 95% 70%, 92.5% 100%, 90% 70%, 87.5% 100%, 85% 70%,
-    82.5% 100%, 80% 70%, 77.5% 100%, 75% 70%, 72.5% 100%, 70% 70%,
-    67.5% 100%, 65% 70%, 62.5% 100%, 60% 70%, 57.5% 100%, 55% 70%,
-    52.5% 100%, 50% 70%, 47.5% 100%, 45% 70%, 42.5% 100%, 40% 70%,
-    37.5% 100%, 35% 70%, 32.5% 100%, 30% 70%, 27.5% 100%, 25% 70%,
-    22.5% 100%, 20% 70%, 17.5% 100%, 15% 70%, 12.5% 100%, 10% 70%,
-    7.5% 100%, 5% 70%, 2.5% 100%, 0 70%
-  );
 }
 
 /* ── LA MESA ───────────────────────────────────────────────────────────────
