@@ -26,57 +26,40 @@ export default function Inicio() {
     <>
       <MotorEstante />
 
-      {/* ── El toldo: el rótulo del puesto ───────────────────────────────────
-          No es un hero de landing page, es la lona rotulada de la entrada. El
-          logotipo va sobre su tabla, el título se grita, y el sticker de
-          «LO MEJOR DEL PRIMER AÑO» va pegado de lado, como una calcomanía que
-          alguien clavó encima del toldo. */}
-      <section className="toldo px-6 pb-14 pt-12 sm:px-10 sm:pb-16 sm:pt-14">
-        <div className="relative mx-auto max-w-6xl">
-          <div className="flex flex-wrap items-end justify-between gap-y-8">
-            <div className="max-w-3xl">
-              <span className="placa-marca placa-marca--toldo">
-                <Image
-                  src="/marca/perpetuo-wordmark.png"
-                  alt="Perpetuo"
-                  width={2048}
-                  height={348}
-                  priority
-                  className="block h-[26px] w-auto sm:h-[34px]"
-                />
-              </span>
+      {/* ── El rótulo: la pared de la entrada ────────────────────────────────
+          Ya no hay lona roja con el título montado encima: la pared rotulada
+          a mano ES el toldo, a sangre, de borde a borde. Título, calcomanía
+          del primer año y pregón ya vienen pintados en la propia foto. */}
+      <section className="relative">
+        <Image
+          src="/marca/rotulo-primer-anio.webp"
+          alt="Lo mejor del primer año. Bóveda de Perpetuo: crónica, poesía, ensayos y más."
+          width={1672}
+          height={843}
+          priority
+          sizes="100vw"
+          className="block h-auto w-full"
+        />
+      </section>
 
-              <h1 className="display mt-7 text-[clamp(2.7rem,8vw,6.6rem)] uppercase text-balance">
-                La bóveda de Perpetuo
-              </h1>
-
-              <p className="pregon mt-6 max-w-2xl">
-                Llévele, llévele, lo mejor de la bóveda de Perpetuo, de nuevo
-                para usted. Crónica, ensayo, poesía, reseñas y más.
-              </p>
-            </div>
-
-            <div className="sticker sticker--anio">
-              <b>Lo mejor</b>
-              <span>del primer</span>
-              <span>año</span>
-            </div>
-          </div>
-
-          <div className="mt-11 flex flex-wrap items-center gap-x-7 gap-y-3">
-            <ul className="eyebrow flex flex-wrap items-center gap-x-6 gap-y-2" style={{ opacity: 0.9 }}>
+      {/* Lo que el rótulo no puede decir —cuántos textos hay y de qué
+          secciones— vive debajo, en la barra de siempre. */}
+      <section className="px-6 py-8 sm:px-10 sm:py-10">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-6 gap-y-5">
+          <div className="flex flex-wrap items-center gap-x-7 gap-y-3">
+            <ul className="eyebrow flex flex-wrap items-center gap-x-6 gap-y-2 text-tenue">
               {secciones.map((s) => (
                 <li key={s}>{s}</li>
               ))}
             </ul>
-            <span className="eyebrow tabular-nums" style={{ opacity: 0.65 }}>
+            <span className="eyebrow tabular-nums text-tenue-mas">
               {articulos.length} textos{rango ? ` · ${rango}` : ""}
             </span>
           </div>
 
           <a
             href="#puesto"
-            className="eyebrow mt-9 inline-flex items-center gap-3 transition-opacity hover:opacity-70"
+            className="eyebrow inline-flex items-center gap-3 text-tenue transition-colors hover:text-niebla"
           >
             Acercarse al puesto
             <span aria-hidden>↓</span>
