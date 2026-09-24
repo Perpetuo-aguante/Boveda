@@ -169,45 +169,6 @@ body {
   transform: rotate(0deg);
 }
 
-/* La misma tabla, más grande y girada al otro lado, clavada sobre el toldo. */
-.placa-marca--toldo {
-  --dura-dist: 6px;
-  padding: 0.6rem 0.95rem 0.5rem;
-  transform: rotate(-2deg);
-}
-
-/* EL PREGÓN. Lo que grita el marchante: manuscrito, grande, en dos renglones
-   cortos. En la serif del cuerpo se leería como una bajada de landing page,
-   que es justo lo que no es. */
-.pregon {
-  font-family: var(--font-manuscrita);
-  font-weight: 600;
-  font-size: clamp(1.25rem, 2.6vw, 1.85rem);
-  line-height: 1.24;
-}
-
-/* La calcomanía del primer año, pegada de lado sobre el toldo. */
-.sticker--anio {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: clamp(126px, 15vw, 168px);
-  height: clamp(126px, 15vw, 168px);
-  padding: 0.5rem;
-  text-align: center;
-  text-transform: uppercase;
-  transform: rotate(-11deg);
-}
-
-.sticker--anio b {
-  font-size: clamp(1.1rem, 1.6vw, 1.4rem);
-}
-
-.sticker--anio span {
-  font-size: clamp(0.8rem, 1.15vw, 1rem);
-}
-
 /* ───────────────────────────────────────────────────────────────────────────
    SOMBRAS DURAS Y PIEZAS GIRADAS
 
@@ -458,43 +419,12 @@ body {
 }
 
 /* ───────────────────────────────────────────────────────────────────────────
-   EL TOLDO Y EL ANAQUEL
+   EL ANAQUEL
 
-   Citas directas del tianguis fotográfico: la lona roja a rayas sobre la
-   entrada, el sticker de feria, el filo festoneado de la lona, y la rejilla
-   de anaquel de video-club detrás del puesto.
+   El toldo rojo se fue: el rótulo ahora es la foto de la pared, a sangre.
+   Queda el filo festoneado de la lona como transición hacia la mesa, y la
+   rejilla de anaquel de video-club detrás del puesto.
    ─────────────────────────────────────────────────────────────────────────── */
-
-.toldo {
-  position: relative;
-  background: var(--rojo);
-  color: #fff1d4;
-  border-top: 5px solid #9c110b;
-  background-image: repeating-linear-gradient(
-    100deg,
-    transparent 0 190px,
-    rgba(120, 12, 5, 0.09) 191px 192px,
-    transparent 193px 380px
-  );
-}
-
-/* La calcomanía: amarillo, plumón encima, contorno recortado y clavada con
-   sombra dura. El outline del mismo amarillo hace de reborde blanco de
-   calcomanía, por fuera del borde negro. */
-.sticker {
-  background: var(--amarillo);
-  color: var(--tinta);
-  --dura-color: var(--tinta);
-  --dura-dist: 4px;
-  border: 2.5px solid var(--tinta);
-  outline: 5px solid var(--amarillo);
-  border-radius: 999px;
-  transform: rotate(9deg);
-  box-shadow: var(--dura-dist) var(--dura-dist) 0 var(--dura-color);
-  font-family: var(--font-marcador);
-  font-weight: 400;
-  line-height: 1.02;
-}
 
 /* El filo de la lona: un festón repetido con clip-path, no una imagen. */
 .valance {
@@ -982,9 +912,15 @@ body:has(.tema-lectura)::after {
 }
 
 /* ── 2. La barra de palos ────────────────────────────────────────────────── */
+/* Ya no se reparten a lo ancho de toda la barra: van pegados unos a otros,
+   como las varillas de un abanico o los rayos de una rueda —cada uno con su
+   propio ángulo fijo (--rot, del índice) y centrados como grupo. El ratón
+   entra por --mag, que JS escribe por palo según qué tan cerca pasa: es el
+   imán del dock, no un :hover plano. */
 .nav-barra-fila {
   display: flex;
   align-items: flex-end;
+  justify-content: center;
   gap: 1rem;
   margin-top: 0.7rem;
 }
@@ -992,7 +928,7 @@ body:has(.tema-lectura)::after {
 .nav-barra {
   display: flex;
   align-items: flex-end;
-  flex: 1 1 auto;
+  flex: 0 1 auto;
   min-width: 0;
   list-style: none;
   /* La vertical se la queda el navegador para hacer scroll de la página; la
@@ -1001,16 +937,19 @@ body:has(.tema-lectura)::after {
 }
 
 .nav-palo-celda {
-  flex: 1 1 0;
-  min-width: 0;
+  flex: 0 0 auto;
+  transform: rotate(var(--rot, 0deg));
+  transform-origin: 50% 100%;
 }
 
 /* El palo que se ve es una línea fina. El palo que se TOCA es toda esta caja:
-   una línea de 2px no es un blanco que un dedo pueda acertar. */
+   una línea de 2px no es un blanco que un dedo pueda acertar. Pegados: el
+   ancho es angosto y a propósito, para que la fila se lea como un manojo. */
 .nav-palo {
   display: flex;
   align-items: flex-end;
   justify-content: center;
+  width: clamp(8px, 1.4vw, 12px);
   height: 30px;
   padding: 7px 0 4px;
 }
@@ -1020,22 +959,28 @@ body:has(.tema-lectura)::after {
   width: 2px;
   height: 12px;
   background: color-mix(in srgb, var(--niebla) 34%, transparent);
+  transform: scale(var(--mag, 1));
+  transform-origin: 50% 100%;
   transition:
-    height 0.18s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.14s cubic-bezier(0.22, 1, 0.36, 1),
     background-color 0.18s ease;
 }
 
+/* Sin JS encima —teclado, o el instante antes del primer pointermove— el
+   imán no sabe nada de posiciones: se queda con un crecimiento fijo, vía la
+   misma variable que escribiría el ratón. */
 .nav-palo:hover .nav-palo-linea,
 .nav-palo:focus-visible .nav-palo-linea {
-  height: 19px;
+  --mag: 1.5;
   background: var(--niebla);
 }
 
 /* El del texto que se está leyendo: más alto, más grueso y en el acento del
-   papel, para encontrarlo de un vistazo entre dieciocho. */
+   papel, para encontrarlo de un vistazo entre dieciocho. El imán lo sigue
+   agrandando encima de esta base. */
 .nav-palo--actual .nav-palo-linea {
   width: 3px;
-  height: 23px;
+  height: 20px;
   background: var(--acento-lectura, var(--niebla));
 }
 

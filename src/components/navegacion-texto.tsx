@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, type CSSProperties } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
@@ -51,6 +51,32 @@ import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 
 export type Escala = { slug: string; titulo: string; autor: string; seccion: string };
 
+/** El abanico: los palos no cuelgan en fila recta, se apoyan unos en otros
+ *  como las varillas de un abanico o los rayos de una rueda. El ángulo total
+ *  se reparte entre todos —cuantos más textos, más cerrado el abanico— y no
+ *  por palo, para que dieciocho o cuarenta se vean igual de apretados. */
+const ABANICO_GRADOS = 34;
+
+function anguloDe(i: number, n: number): number {
+  if (n <= 1) return 0;
+  return (i / (n - 1) - 0.5) * ABANICO_GRADOS;
+}
+
+/** El imán del cursor: cuanto más cerca pasa el ratón de un palo, más crece
+ *  —como el dock que se abre al acercarse—. El radio va en píxeles porque los
+ *  palos, ahora pegados, son angostos y un radio en índices los haría crecer
+ *  todos a la vez. */
+const RADIO_IMAN = 46;
+const ESCALA_MAX = 1.9;
+
+function escalaIman(centroPx: number, cursorPx: number): number {
+  const distancia = Math.abs(cursorPx - centroPx);
+  const t = Math.max(0, 1 - distancia / RADIO_IMAN);
+  // Cuadrático: el crecimiento se siente en los palos cercanos, no en toda
+  // la fila por igual —un imán, no una ola.
+  return 1 + t * t * (ESCALA_MAX - 1);
+}
+
 export function NavegacionTexto({
   coleccion,
   actual,
@@ -67,6 +93,26 @@ export function NavegacionTexto({
   const barraRef = useRef<HTMLOListElement>(null);
   const arrastrando = useRef(false);
   const seMovio = useRef(false);
+
+  // Posición del cursor relativa a la barra, en píxeles, para el imán del
+  // abanico. `null` cuando el ratón no está encima: ahí el CSS se queda con
+  // su propio :hover/:focus-visible, que no necesita saber dónde cae cada
+  // palo.
+  const [cursorEnBarra, setCursorEnBarra] = useState<number | null>(null);
+  const anchoBarra = useRef(0);
+  const rafPendiente = useRef(false);
+
+  function rastrearCursor(clientX: number) {
+    const barra = barraRef.current;
+    if (!barra || rafPendiente.current) return;
+    rafPendiente.current = true;
+    requestAnimationFrame(() => {
+      rafPendiente.current = false;
+      const r = barra.getBoundingClientRect();
+      anchoBarra.current = r.width;
+      setCursorEnBarra(clientX - r.left);
+    });
+  }
 
   /** Qué palo cae bajo una x de pantalla. Se calcula de la geometría de la
    *  barra y no del elemento bajo el dedo, porque durante un arrastre con
@@ -130,11 +176,16 @@ export function NavegacionTexto({
               arrastrando.current = true;
               seMovio.current = false;
               setPrevisto(paloEn(e.clientX));
+              rastrearCursor(e.clientX);
               // Con captura, los movimientos siguen llegando aunque el dedo se
               // salga de la barra: si no, escanear se cortaría en los bordes.
               e.currentTarget.setPointerCapture(e.pointerId);
             }}
             onPointerMove={(e) => {
+              // El imán vive fuera del `if`: a diferencia del escaneo táctil,
+              // que sólo cuenta arrastrando, el abanico responde a CUALQUIER
+              // ratón que pase por encima, se presione o no.
+              rastrearCursor(e.clientX);
               if (!arrastrando.current) return;
               seMovio.current = true;
               setPrevisto(paloEn(e.clientX));
@@ -152,27 +203,47 @@ export function NavegacionTexto({
             onPointerCancel={() => {
               arrastrando.current = false;
               setPrevisto(null);
+              setCursorEnBarra(null);
             }}
             onPointerLeave={() => {
               if (!arrastrando.current) setPrevisto(null);
+              setCursorEnBarra(null);
             }}
           >
-            {coleccion.map((t, i) => (
-              <li key={t.slug} className="nav-palo-celda">
-                <Link
-                  href={`/articulo/${t.slug}`}
-                  className={`nav-palo${i === actual ? " nav-palo--actual" : ""}`}
-                  aria-current={i === actual ? "page" : undefined}
-                  aria-label={`${i + 1}. ${t.titulo}${t.autor ? `, de ${t.autor}` : ""}`}
-                  onPointerEnter={() => setPrevisto(i)}
-                  onFocus={() => setPrevisto(i)}
-                  onBlur={() => setPrevisto(null)}
+            {coleccion.map((t, i) => {
+              // El ángulo es fijo —el abanico en reposo—; la escala sólo
+              // existe mientras el ratón anda encima de la barra, y se
+              // calcula contra la posición de este palo en ese ancho.
+              const angulo = anguloDe(i, coleccion.length);
+              const escala =
+                cursorEnBarra !== null
+                  ? escalaIman(((i + 0.5) / coleccion.length) * anchoBarra.current, cursorEnBarra)
+                  : null;
+              return (
+                <li
+                  key={t.slug}
+                  className="nav-palo-celda"
+                  style={{ "--rot": `${angulo}deg` } as CSSProperties}
                 >
-                  {/* La línea es fina a propósito; el blanco de toque no. */}
-                  <span className="nav-palo-linea" aria-hidden />
-                </Link>
-              </li>
-            ))}
+                  <Link
+                    href={`/articulo/${t.slug}`}
+                    className={`nav-palo${i === actual ? " nav-palo--actual" : ""}`}
+                    aria-current={i === actual ? "page" : undefined}
+                    aria-label={`${i + 1}. ${t.titulo}${t.autor ? `, de ${t.autor}` : ""}`}
+                    onPointerEnter={() => setPrevisto(i)}
+                    onFocus={() => setPrevisto(i)}
+                    onBlur={() => setPrevisto(null)}
+                  >
+                    {/* La línea es fina a propósito; el blanco de toque no. */}
+                    <span
+                      className="nav-palo-linea"
+                      aria-hidden
+                      style={escala !== null ? ({ "--mag": escala } as CSSProperties) : undefined}
+                    />
+                  </Link>
+                </li>
+              );
+            })}
           </ol>
 
           <button
