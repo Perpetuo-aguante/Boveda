@@ -1,8 +1,29 @@
-import Image from "next/image";
+import { getImageProps } from "next/image";
 import Link from "next/link";
 import { articulos, anioDe, fechaLarga, seccionesEnUso } from "@/lib/articles";
 import { Tianguis } from "@/components/tianguis";
 import { MotorEstante } from "@/components/motor-estante";
+
+// El rótulo tiene dos pinturas: la apaisada para pantallas anchas y una
+// vertical para el teléfono, donde la apaisada quedaba reducida a una tira.
+// `<picture>` elige una u otra según el ancho, antes de descargar nada.
+const ALT_ROTULO =
+  "Lo mejor del primer año. Bóveda de Perpetuo: crónica, poesía, ensayos y más.";
+const comunes = { alt: ALT_ROTULO, sizes: "100vw", priority: true };
+const {
+  props: { srcSet: rotuloVertical },
+} = getImageProps({
+  ...comunes,
+  src: "/marca/rotulo-primer-anio-vertical.webp",
+  width: 941,
+  height: 1440,
+});
+const { props: rotuloApaisado } = getImageProps({
+  ...comunes,
+  src: "/marca/rotulo-primer-anio.webp",
+  width: 1672,
+  height: 843,
+});
 
 export default function Inicio() {
   const secciones = seccionesEnUso().filter((s) => s !== "Sin clasificar");
@@ -20,15 +41,15 @@ export default function Inicio() {
           a mano ES el toldo, a sangre, de borde a borde. Título, calcomanía
           del primer año y pregón ya vienen pintados en la propia foto. */}
       <section className="relative">
-        <Image
-          src="/marca/rotulo-primer-anio.webp"
-          alt="Lo mejor del primer año. Bóveda de Perpetuo: crónica, poesía, ensayos y más."
-          width={1672}
-          height={843}
-          priority
-          sizes="100vw"
-          className="block h-auto w-full"
-        />
+        <picture>
+          <source
+            media="(max-width: 767px)"
+            srcSet={rotuloVertical}
+            width={941}
+            height={1440}
+          />
+          <img {...rotuloApaisado} alt={ALT_ROTULO} className="block h-auto w-full" />
+        </picture>
       </section>
 
       {/* Lo que el rótulo no puede decir —cuántos textos hay y de qué
