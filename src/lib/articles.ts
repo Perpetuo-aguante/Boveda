@@ -93,6 +93,7 @@ export const articulos: Articulo[] = [
     imagen: "/portadas/el-palacio-negro.jpg",
     resumen: "Cultos y santería moderna en México.",
     porQue: "",
+    bio: "Mateo Garcia Elizondo (Ciudad de México, 1987) es escritor, guionista y periodista. Ha publicado en medios como *Revista Casa de las Américas*, *Cuadernos Hispanoamericanos*, *South West Review* y *The Guardian UK*. Ha sido becario del Estímulo de Creadores de IMCINE (2016) y del programa Jóvenes Creadores del FONCA (2021), y fue guionista del largometraje *Desierto* (Premio FIPRESCI en TIFF 2016), así como de múltiples cortometrajes. Su primera novela, *Una cita con la Lady*, recibió el premio Ciutat de Barcelona por literatura en castellano y ha sido traducida a ocho idiomas. Su trabajo fue seleccionado en la lista de Los mejores jóvenes novelistas en español 2 de la revista *Granta* (2021).",
   },
   {
     slug: "poemas-selectos-rosa-berbel",
@@ -149,6 +150,7 @@ export const articulos: Articulo[] = [
     imagen: "/portadas/la-ternura-no-ha-fracasado.jpg",
     resumen: "Lo que aprendí sobre la belleza viendo 1,155 capítulos de One Piece con mi hijo.",
     porQue: "",
+    bio: "Luna Miguel vive en Barcelona. Lee, escribe y edita.",
   },
   {
     slug: "dialogos-por-la-modernidad",
@@ -161,6 +163,8 @@ export const articulos: Articulo[] = [
     imagen: "/portadas/dialogos-por-la-modernidad.jpg",
     resumen: "Era martes por la tarde, casi las cuatro, cuando discutía con Ernesto.",
     porQue: "",
+    ilustrador: "Nathalie Medina",
+    bio: "Alonso Millet es escritor y editor en Perpetuo. Quiso ser pirata: terminó jorobado, con lentes y entre garabatos. Le gustan las biografías. Fantásticas y eróticas nomás.",
   },
   {
     slug: "notas-sobre-la-poesia-del-siglo-xxi",
@@ -226,6 +230,7 @@ export const articulos: Articulo[] = [
     imagen: "/portadas/mon-president.jpg",
     resumen: "El Burkina Faso de Ibrahim Traoré.",
     porQue: "",
+    bio: "Franca Levin es uruguaya, adicta al mate y nómade. Desde diciembre de 2024 recorre África Occidental en busca de historias para contar, ya sea mediante crónicas, fotografías o videos para YouTube.",
   },
   {
     slug: "mexico-a-dos-anos-de-sheinbaum-natalia-torres",
