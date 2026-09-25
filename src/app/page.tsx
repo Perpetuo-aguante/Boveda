@@ -90,6 +90,9 @@ export default function Inicio() {
         </div>
       </section>
 
+      {/* ── La gala: el cierre de los textos, antes del índice ────────────── */}
+      <Gala />
+
       {/* ── Índice ────────────────────────────────────────────────────────── */}
       <section
         id="indice"
@@ -141,9 +144,6 @@ export default function Inicio() {
           <code className="text-tenue">contenido/&lt;slug&gt;.md</code>.
         </p>
       </section>
-
-      {/* ── La gala: el cierre, para quien llegó hasta el fondo ───────────── */}
-      <Gala />
     </>
   );
 }

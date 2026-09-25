@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 
 /**
- * La gala: el cierre animado de Perpetuo, al final del recorrido.
+ * La gala: el cierre animado de Perpetuo, entre los textos y el índice.
  *
  * Hay dos cortes del mismo video —apaisado para pantallas anchas y vertical
  * para el teléfono— y los dos van en el DOM; el CSS esconde el que no toca.
@@ -91,7 +91,7 @@ export function Gala() {
   return (
     <section
       ref={seccion}
-      className="mx-auto mt-28 max-w-6xl px-6 sm:px-10"
+      className="mx-auto max-w-6xl px-6 sm:px-10"
       aria-label="Perpetuo, la gala"
     >
       {/* Sobre la noche del sitio una sombra tinta no se vería: va en azul
