@@ -3,6 +3,7 @@ import Link from "next/link";
 import { articulos, anioDe, fechaLarga, seccionesEnUso } from "@/lib/articles";
 import { Tianguis } from "@/components/tianguis";
 import { MotorEstante } from "@/components/motor-estante";
+import { Gala } from "@/components/gala";
 
 // El rótulo tiene dos pinturas: la apaisada para pantallas anchas y una
 // vertical para el teléfono, donde la apaisada quedaba reducida a una tira.
@@ -140,6 +141,9 @@ export default function Inicio() {
           <code className="text-tenue">contenido/&lt;slug&gt;.md</code>.
         </p>
       </section>
+
+      {/* ── La gala: el cierre, para quien llegó hasta el fondo ───────────── */}
+      <Gala />
     </>
   );
 }
