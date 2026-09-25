@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 /**
  * La gala: el cierre animado de Perpetuo, al final del recorrido.
@@ -15,9 +15,14 @@ import { useEffect, useRef } from "react";
  * los videos sin sonido). Se reproduce mientras está en pantalla y se pausa al
  * salir. Con `prefers-reduced-motion` no arranca: queda el cartel fijo con los
  * controles, y le da play quien quiera.
+ *
+ * No va en bucle: el logo completo, con el lema, sólo aparece en los últimos
+ * dos segundos, y un bucle lo cortaba para volver al lago. Corre una vez y se
+ * queda quieto en el logo; «Otra vez» lo vuelve a empezar.
  */
 export function Gala() {
   const seccion = useRef<HTMLElement>(null);
+  const [terminado, setTerminado] = useState(false);
 
   useEffect(() => {
     const raiz = seccion.current;
@@ -47,7 +52,9 @@ export function Gala() {
     const reproduccion = new IntersectionObserver(
       ([e]) => {
         for (const v of videos) {
-          if (e.isIntersecting && v === visible()) v.play().catch(() => {});
+          // `play()` sobre un video acabado lo rebobina: si ya llegó al logo,
+          // ahí se queda.
+          if (e.isIntersecting && v === visible() && !v.ended) v.play().catch(() => {});
           else v.pause();
         }
       },
@@ -64,12 +71,22 @@ export function Gala() {
 
   const comunes = {
     muted: true,
-    loop: true,
     playsInline: true,
     preload: "none",
     "aria-label": "Perpetuo: por un español que no se queda quieto. Animación sin sonido.",
     className: "block h-auto w-full",
+    onEnded: () => setTerminado(true),
   } as const;
+
+  const otraVez = () => {
+    const v = Array.from(seccion.current?.querySelectorAll("video") ?? []).find(
+      (v) => v.offsetWidth > 0,
+    );
+    if (!v) return;
+    setTerminado(false);
+    v.currentTime = 0;
+    v.play().catch(() => {});
+  };
 
   return (
     <section
@@ -98,6 +115,18 @@ export function Gala() {
         >
           <source src="/gala/perpetuo-gala.mp4" type="video/mp4" />
         </video>
+      </div>
+      <div className="mt-6 flex h-5 justify-end">
+        {terminado ? (
+          <button
+            type="button"
+            onClick={otraVez}
+            className="eyebrow inline-flex items-center gap-2 text-tenue transition-colors hover:text-niebla"
+          >
+            <span aria-hidden>↻</span>
+            Otra vez
+          </button>
+        ) : null}
       </div>
     </section>
   );
