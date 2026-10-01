@@ -137,12 +137,6 @@ export default function Inicio() {
             </li>
           ))}
         </ul>
-
-        <p className="mt-10 max-w-lg text-[0.9375rem] leading-relaxed text-tenue-mas">
-          Los textos se añaden en <code className="text-tenue">src/lib/articles.ts</code>;
-          el cuerpo completo de cada uno va en{" "}
-          <code className="text-tenue">contenido/&lt;slug&gt;.md</code>.
-        </p>
       </section>
     </>
   );
