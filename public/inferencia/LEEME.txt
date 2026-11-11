@@ -1,0 +1,10 @@
+Inferencia — prototipo del sitio (v1)
+
+Abre spec.html para leer la especificación (también está en SPEC.md).
+Abre index.html para ver el prototipo; las tres páginas están enlazadas entre sí:
+  index.html      Inicio
+  episodios.html  Episodios
+  noticias.html   Noticias y eventos
+
+No requiere instalación ni servidor. Solo necesita internet para cargar las tipografías.
+El texto entre [corchetes] es contenido pendiente.

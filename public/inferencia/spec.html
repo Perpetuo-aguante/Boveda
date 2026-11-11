@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inferencia — Especificación del sitio</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@500&family=Pixelify+Sans:wght@500;600&display=swap">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#FFFFFF;color:#292525;font-family:'Neue Montreal','Inter Tight',system-ui,sans-serif;font-size:17px;line-height:1.6}
+.bar{background:#0049B2;color:#FFFFFF;padding:14px 24px;display:flex;flex-wrap:wrap;gap:8px 24px;align-items:center;font-weight:600}
+.bar a{color:#ADFF00;text-decoration:none;min-height:44px;display:inline-flex;align-items:center}
+.bar a:hover{text-decoration:underline}
+main{max-width:760px;margin:0 auto;padding:56px 24px 96px}
+h1,h2,h3{font-family:'PP Neue Bit','Pixelify Sans',sans-serif;font-weight:600;line-height:1.1}
+h1{font-size:clamp(34px,6vw,54px);margin:0 0 24px;color:#0049B2}
+h2{font-size:30px;margin:56px 0 12px;padding-top:24px;border-top:1px solid #292525}
+h3{font-size:22px;margin:32px 0 8px}
+p{margin:0 0 14px}
+ul{margin:0 0 14px;padding-left:22px}
+li{margin-bottom:6px}
+code{font-family:'JetBrains Mono',monospace;font-size:.88em;background:#FFF7F5;border:1px solid #292525;padding:1px 6px;overflow-wrap:anywhere}
+</style>
+</head>
+<body>
+<div class="bar"><span>Prototipo:</span><a href="index.html">Inicio</a><a href="episodios.html">Episodios</a><a href="noticias.html">Noticias y eventos</a></div>
+<main>
+<h1>Inferencia — Especificación del sitio (v1)</h1>
+<p>Documento para el equipo de ingeniería. Acompaña al prototipo estático de esta carpeta (<code>index.html</code>, <code>episodios.html</code>, <code>noticias.html</code>). El prototipo es la referencia visual y de estructura; no es código de producción.</p>
+<h2>1. Qué es</h2>
+<p>Inferencia es un podcast semanal producido por Perpetuo para Primero AI. José Luis Sabau y José Antonio Murillo entrevistan a personas relevantes del mundo de la inteligencia artificial, los negocios y la política.</p>
+<p>El sitio es una landing para gente a la que le interesa el programa. Tiene tres objetivos, en este orden:</p>
+<ul>
+<li>Que la persona vea o escuche el episodio más reciente.</li>
+<li>Que se suscriba al newsletter.</li>
+<li>Que encuentre el archivo de episodios, los textos destacados y los eventos.</li>
+</ul>
+<p>Idioma del sitio: español.</p>
+<h2>2. Mapa del sitio</h2>
+<ul>
+<li><strong>Inicio</strong> (<code>/</code>, prototipo: <code>index.html</code>)</li>
+<li><strong>Episodios</strong> (<code>/episodios</code>, prototipo: <code>episodios.html</code>)</li>
+<li><strong>Noticias y eventos</strong> (<code>/noticias</code>, prototipo: <code>noticias.html</code>)</li>
+</ul>
+<p>Páginas de detalle que el prototipo no dibuja y que hay que definir (ver sección 10): episodio individual, texto destacado (ensayo o entrevista), noticia individual.</p>
+<h2>3. Elementos globales</h2>
+<h3>Encabezado</h3>
+<ul>
+<li>Logo (isotipo + logotipo) a la izquierda; lleva a Inicio.</li>
+<li>Navegación: Inicio, Episodios, Destacado (ancla a la sección de Inicio), Noticias y eventos.</li>
+<li>Botón "Suscribirse": lleva al bloque de suscripción de la página actual.</li>
+<li>La página activa se marca en azul con subrayado.</li>
+<li>En móvil los enlaces pasan a una segunda línea (en el prototipo simplemente se envuelven; se puede sustituir por un menú desplegable).</li>
+</ul>
+<h3>Pie</h3>
+<ul>
+<li>Logo en verde lima sobre fondo oscuro, la línea "Un podcast producido por Perpetuo para Primero AI." y el año.</li>
+<li>Enlaces: Episodios, Destacado, Noticias y eventos, RSS, Contacto.</li>
+</ul>
+<h2>4. Inicio</h2>
+<p>Secciones, de arriba abajo:</p>
+<h3>4.1 Hero</h3>
+<ul>
+<li>Etiqueta: "Podcast semanal · Perpetuo × Primero AI".</li>
+<li>Titular: "Conversaciones para entender la inteligencia artificial, innovación y políticas públicas."</li>
+<li>Párrafo descriptivo del programa.</li>
+<li>Botón primario "Ver el último episodio" (ancla a 4.2) y botón secundario "Todos los episodios" (a Episodios).</li>
+<li>Fila "Disponible en": YouTube, Spotify, Apple Podcasts, Substack, RSS. Cada uno enlaza a su plataforma.</li>
+<li>Panel azul a la derecha con una composición de arte ASCII en verde lima (elemento gráfico de la marca). En el prototipo se genera con código; puede sustituirse por arte entregado por diseño.</li>
+</ul>
+<h3>4.2 Lo más reciente</h3>
+<ul>
+<li>Reproductor del video del episodio más reciente (embed de YouTube), proporción 16:9.</li>
+<li>A un lado: número de episodio y fecha, título, invitado con cargo y organización, descripción de dos o tres líneas.</li>
+<li>Botones: "Escuchar el audio" y "Leer la entrevista".</li>
+<li>Enlace "Ver todos los episodios".</li>
+<li>Debe actualizarse solo cuando se publica un episodio nuevo.</li>
+</ul>
+<h3>4.3 Destacado</h3>
+<ul>
+<li>Tres tarjetas elegidas editorialmente. Cada una puede ser un ensayo, una entrevista en texto o un capítulo.</li>
+<li>Cada tarjeta: etiqueta de tipo, título, resumen de una o dos líneas, y autor o invitado, fecha y tiempo de lectura.</li>
+<li>La etiqueta cambia de color según el tipo (lima para ensayo, azul para entrevista).</li>
+</ul>
+<h3>4.4 Hosts</h3>
+<ul>
+<li>Dos tarjetas: José Luis Sabau (Perpetuo) y José Antonio Murillo (Primero AI).</li>
+<li>Cada tarjeta: foto cuadrada, nombre, rol y una semblanza breve.</li>
+</ul>
+<h3>4.5 Suscripción al newsletter</h3>
+<ul>
+<li>Es el bloque más grande de la página: fondo verde lima, titular "Suscríbete al newsletter." a todo el ancho.</li>
+<li>Formulario de un solo campo (correo) y botón "Suscribirme".</li>
+<li>Estados que faltan por diseñar: enviando, éxito, error, correo no válido.</li>
+</ul>
+<h2>5. Episodios</h2>
+<ul>
+<li>Encabezado: "Todos los episodios".</li>
+<li>Filtros por tema: Todos, Inteligencia artificial, Negocios, Política. Un solo filtro activo a la vez.</li>
+<li>Lista de episodios, del más reciente al más antiguo. Cada fila: miniatura 16:9, número, fecha, duración, título, invitado con cargo y organización, descripción breve, y tres acciones: "Ver video", "Escuchar", "Leer".</li>
+<li>Botón "Cargar más episodios" al final de la lista (paginación incremental).</li>
+<li>Franja final azul "Suscríbete por RSS": campo de solo lectura con la URL del feed, botón "Copiar" (copia al portapapeles y cambia a "Copiado"), y enlaces a YouTube, Spotify, Apple Podcasts y Substack.</li>
+</ul>
+<h2>6. Noticias y eventos</h2>
+<ul>
+<li>Encabezado: "Noticias y eventos".</li>
+<li><strong>Próximos eventos</strong>: lista ordenada por fecha. Cada fila: bloque de fecha (día y mes), tipo de evento (por ejemplo: grabación en vivo, presencial, en línea), nombre, lugar o enlace, hora, descripción de una línea y botón "Registrarme".</li>
+<li><strong>Noticias</strong>: una noticia destacada con imagen, fecha, titular, resumen y "Leer más"; debajo, una cuadrícula de tarjetas con tipo (por ejemplo: anuncio, prensa), fecha, titular y resumen.</li>
+<li>Bloque de suscripción por correo ("Entérate antes que nadie."), más pequeño que el de Inicio.</li>
+<li>Falta definir qué se muestra cuando no hay eventos próximos.</li>
+</ul>
+<h2>7. Modelo de contenido</h2>
+<p>Campos mínimos que el sitio necesita. Todo el texto entre corchetes del prototipo sale de estos campos.</p>
+<ul>
+<li><strong>Episodio</strong>: número, título, fecha de estreno, duración, invitado (nombre, cargo, organización), descripción, tema(s), miniatura, enlace de video (YouTube), enlace de audio, enlace a la entrevista en texto.</li>
+<li><strong>Texto destacado</strong>: tipo (ensayo, entrevista, capítulo), título, resumen, autor o invitado, fecha, tiempo de lectura, enlace, marca de "destacado" y orden.</li>
+<li><strong>Evento</strong>: fecha y hora, tipo, nombre, lugar o enlace, descripción, enlace de registro.</li>
+<li><strong>Noticia</strong>: tipo, fecha, titular, resumen, imagen, cuerpo o enlace externo, marca de "destacada".</li>
+<li><strong>Host</strong>: nombre, rol, organización, semblanza, foto.</li>
+<li><strong>Ajustes globales</strong>: URL del feed RSS, enlaces a plataformas, contacto.</li>
+</ul>
+<h2>8. Comportamientos</h2>
+<ul>
+<li>Navegación entre las tres páginas y anclas dentro de Inicio.</li>
+<li>Reproductor de video embebido en "Lo más reciente".</li>
+<li>Filtros de episodios por tema.</li>
+<li>"Cargar más episodios".</li>
+<li>Copiar la URL del feed RSS.</li>
+<li>Formularios de suscripción (Inicio y Noticias) conectados al proveedor de newsletter.</li>
+<li>Registro a eventos (enlace externo o formulario propio, por definir).</li>
+</ul>
+<p>En el prototipo solo funcionan la navegación, el cambio visual de los filtros y el botón de copiar.</p>
+<h2>9. Sistema visual</h2>
+<p>Basado en el brandbook de Inferencia (Materia Prima Estudio, 2026).</p>
+<h3>Colores</h3>
+<ul>
+<li>Blanco <code>#FFFFFF</code>: fondo general del sitio (decisión del cliente; no está en la paleta del brandbook).</li>
+<li>Blanco cálido <code>#FFF7F5</code> (A3): fondo de secciones alternas y texto sobre fondo oscuro.</li>
+<li>Oscuro <code>#292525</code> (A6): texto, bordes y pie.</li>
+<li>Azul <code>#0049B2</code> (A4): acento principal. Enlaces, botones primarios, etiquetas, franja de RSS.</li>
+<li>Verde lima <code>#ADFF00</code> (A1): bloques de suscripción, fechas de eventos, etiquetas, logo sobre oscuro.</li>
+<li>Rojo <code>#FF2305</code> (A2) y morado <code>#A173CF</code> (A5): solo como bloques de color (video, miniaturas, fotos), nunca como color de texto sobre blanco porque no alcanzan contraste suficiente.</li>
+<li>Gris de texto secundario <code>#5F5B5B</code>: tono aclarado del oscuro; no está en la paleta.</li>
+</ul>
+<p>El brandbook dice que no se permiten colores fuera de la paleta. Las dos excepciones de arriba (blanco puro y gris secundario) están por confirmar con la marca.</p>
+<h3>Tipografía</h3>
+<ul>
+<li><strong>Visual</strong>: títulos principales y textos cortos destacados (y el logotipo).</li>
+<li><strong>PP Neue Bit</strong>: títulos de sección, etiquetas y números.</li>
+<li><strong>Neue Montreal</strong>: texto corrido e interfaz.</li>
+</ul>
+<p>Las tres son tipografías comerciales. El prototipo las nombra primero en los estilos y, como no están instaladas, cae en sustitutos de Google Fonts: Pixelify Sans (para Visual y PP Neue Bit) e Inter Tight (para Neue Montreal). JetBrains Mono se usa solo para el arte ASCII y la URL del feed.</p>
+<h3>Formas</h3>
+<ul>
+<li>Esquinas rectas en todo (botones, tarjetas, campos).</li>
+<li>Bordes de 1 px en color oscuro.</li>
+<li>Ancho máximo de contenido: 1200 px, con 24 px de margen lateral.</li>
+</ul>
+<h3>Logo</h3>
+<ul>
+<li>Isotipo: anillo de cuadrados tipo píxel. En el prototipo está redibujado como SVG a partir del brandbook.</li>
+<li>Logotipo: "INFERENCIA" en la tipografía Visual. En el prototipo está escrito con la tipografía sustituta; hay que reemplazarlo por el archivo oficial.</li>
+<li>Reglas del brandbook: no deformar, no cambiar colores fuera de las combinaciones permitidas, altura mínima de 2 cm en impresos.</li>
+</ul>
+<h3>Elementos gráficos</h3>
+<p>La identidad usa arte ASCII y composiciones generadas con caracteres. Se propone para el hero, las miniaturas y las portadas de episodios.</p>
+<h2>10. Responsive y accesibilidad</h2>
+<ul>
+<li>Las tres páginas son fluidas: las columnas se apilan en pantallas angostas (el prototipo se puede revisar reduciendo el ancho de la ventana).</li>
+<li>Áreas táctiles de al menos 44 px.</li>
+<li>Texto con contraste mínimo de 4.5:1.</li>
+<li>Controles reales (<code>button</code>, <code>a</code>, <code>input</code> con <code>label</code>) y navegación por teclado.</li>
+</ul>
+<h2>11. Pendientes y preguntas abiertas</h2>
+<p>Contenido que falta (aparece entre corchetes en el prototipo):</p>
+<ul>
+<li>Episodios reales: títulos, invitados, fechas, duraciones, descripciones, miniaturas y enlaces.</li>
+<li>Textos destacados.</li>
+<li>Semblanzas y fotos de los hosts.</li>
+<li>Eventos y noticias.</li>
+<li>URL del feed RSS y enlaces a cada plataforma.</li>
+<li>Dato de contacto.</li>
+</ul>
+<p>Decisiones por tomar:</p>
+<ul>
+<li><strong>Verde lima</strong>: el brandbook rotula el color A1 como <code>#BABD92</code>, pero la muestra impresa es un lima vivo. El prototipo usa <code>#ADFF00</code>. Confirmar el valor correcto.</li>
+<li><strong>Tipografías</strong>: quién compra o aporta las licencias web de Visual, PP Neue Bit y Neue Montreal.</li>
+<li><strong>Logo</strong>: conseguir el archivo oficial (SVG).</li>
+<li><strong>Newsletter</strong>: qué proveedor recibe las suscripciones (el programa ya publica en Substack).</li>
+<li><strong>Origen de los datos</strong>: si los episodios se leen del feed RSS o de YouTube, o si se cargan a mano en un gestor de contenido.</li>
+<li><strong>Páginas de detalle</strong>: si episodios, textos y noticias viven en el sitio o enlazan a YouTube, Substack y Perpetuo.</li>
+<li><strong>Temas de los filtros</strong>: confirmar la lista (hoy: Inteligencia artificial, Negocios, Política).</li>
+<li><strong>Registro a eventos</strong>: enlace externo o formulario propio.</li>
+<li><strong>Dominio, analítica y avisos legales</strong> (privacidad, cookies).</li>
+</ul>
+</main>
+</body>
+</html>
