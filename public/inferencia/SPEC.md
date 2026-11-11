@@ -43,8 +43,8 @@ Secciones, de arriba abajo:
 
 ### 4.1 Hero
 
-- Etiqueta: "Podcast semanal · Perpetuo × Primero AI".
-- Titular: "Conversaciones para entender la inteligencia artificial, innovación y políticas públicas."
+- Etiqueta: "Un podcast de Primero".
+- Titular: "Conversaciones en serio para entender la inteligencia artificial, innovación y políticas públicas, con quienes están construyendo el cambio."
 - Párrafo descriptivo del programa.
 - Botón primario "Ver el último episodio" (ancla a 4.2) y botón secundario "Todos los episodios" (a Episodios).
 - Fila "Disponible en": YouTube, Spotify, Apple Podcasts, Substack, RSS. Cada uno enlaza a su plataforma.
