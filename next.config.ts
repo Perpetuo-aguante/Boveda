@@ -7,6 +7,22 @@ const nextConfig: NextConfig = {
     // optimizarlas.
     remotePatterns: [{ protocol: "https", hostname: "substackcdn.com" }],
   },
+  // Prototipo de Inferencia: HTML estático en public/inferencia/.
+  // Prototipo privado: que los buscadores no lo indexen aunque el enlace circule.
+  async headers() {
+    return [
+      {
+        source: "/inferencia/:path*",
+        headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
+      },
+    ];
+  },
+  async rewrites() {
+    return [
+      { source: "/inferencia", destination: "/inferencia/index.html" },
+      { source: "/inferencia/", destination: "/inferencia/index.html" },
+    ];
+  },
 };
 
 export default nextConfig;

@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inferencia — Episodios y RSS</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@500&family=Pixelify+Sans:wght@400;500;600;700&display=swap">
+<style>
+body{margin:0;background:#FFFFFF}
+*{box-sizing:border-box}
+a{color:#292525;text-decoration:none}a:hover{color:#0049B2}
+</style>
+</head>
+<body>
+<div style="background: #FFFFFF; color: #292525; font-family: 'Neue Montreal', 'PP Neue Montreal', 'Inter Tight', system-ui, sans-serif; font-size: 17px; line-height: 1.5; min-height: 100vh">
+
+<header style="border-bottom: 1px solid #292525">
+<nav aria-label="Principal" style="max-width: 1200px; margin: 0 auto; padding: 14px 24px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 32px">
+<a href="index.html" style="display: flex; align-items: center; gap: 12px; min-height: 44px; color: #0049B2; font-family: 'Visual', 'PP Neue Bit', 'Pixelify Sans', sans-serif; font-weight: 600; font-size: 26px; letter-spacing: 0.04em">
+<svg aria-hidden="true" width="34" height="34" viewBox="0 0 642 640"><path fill="#0049B2" d="M233 1h58v58h-58zM351 1h58v58h-58zM119 53h58v58h-58zM464 53h58v58h-58zM50 121h58v58h-58zM187 121h58v58h-58zM397 121h58v58h-58zM532 121h58v58h-58zM119 188h58v58h-58zM464 188h58v58h-58zM0 234h58v58h-58zM584 234h58v58h-58zM0 348h58v58h-58zM584 348h58v58h-58zM119 395h58v58h-58zM464 395h58v58h-58zM50 461h58v58h-58zM187 461h58v58h-58zM397 461h58v58h-58zM532 461h58v58h-58zM119 529h58v58h-58zM464 529h58v58h-58zM233 581h58v58h-58zM351 581h58v58h-58z"></path></svg>
+INFERENCIA
+</a>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 4px 28px; font-size: 16px; font-weight: 500">
+<a href="index.html" style="min-height: 44px; display: flex; align-items: center">Inicio</a>
+<a href="episodios.html" style="min-height: 44px; display: flex; align-items: center; color: #0049B2; border-bottom: 2px solid #0049B2">Episodios</a>
+<a href="index.html#destacado" style="min-height: 44px; display: flex; align-items: center">Destacado</a>
+<a href="noticias.html" style="min-height: 44px; display: flex; align-items: center">Noticias y eventos</a>
+<a href="#rss" style="min-height: 44px; display: flex; align-items: center; padding: 0 18px; background: #0049B2; color: #FFFFFF; font-weight: 600">Suscribirse</a>
+</div>
+</nav>
+</header>
+
+<main>
+
+<section style="max-width: 1200px; margin: 0 auto; padding: 72px 24px 48px; display: flex; flex-direction: column; gap: 20px">
+<p style="margin: 0; font-family: 'PP Neue Bit', 'Pixelify Sans', sans-serif; font-size: 16px; letter-spacing: 0.06em; text-transform: uppercase; color: #0049B2">Archivo completo</p>
+<h1 style="margin: 0; font-family: 'Visual', 'PP Neue Bit', 'Pixelify Sans', sans-serif; font-weight: 600; font-size: clamp(38px, 5vw, 66px); line-height: 1.02">Todos los episodios</h1>
+<p style="margin: 0; max-width: 640px; font-size: 20px; color: #5F5B5B">Cada conversación en video, en audio y en texto.</p>
+</section>
+
+<section style="border-top: 1px solid #292525">
+<div style="max-width: 1200px; margin: 0 auto; padding: 48px 24px 72px; display: flex; flex-direction: column; gap: 28px">
+<div role="group" aria-label="Filtrar por tema" style="display: flex; flex-wrap: wrap; gap: 10px">
+<button type="button" aria-pressed="true" data-filter style="height: 46px; padding: 0 18px; border-radius: 0; font: inherit; font-size: 16px; font-weight: 600; cursor: pointer; border: 1px solid #0049B2; background: #0049B2; color: #FFFFFF;">Todos</button>
+
+<button type="button" aria-pressed="false" data-filter style="height: 46px; padding: 0 18px; border-radius: 0; font: inherit; font-size: 16px; font-weight: 600; cursor: pointer; border: 1px solid #292525; background: #FFFFFF; color: #292525;">Inteligencia artificial</button>
+
+<button type="button" aria-pressed="false" data-filter style="height: 46px; padding: 0 18px; border-radius: 0; font: inherit; font-size: 16px; font-weight: 600; cursor: pointer; border: 1px solid #292525; background: #FFFFFF; color: #292525;">Negocios</button>
+
+<button type="button" aria-pressed="false" data-filter style="height: 46px; padding: 0 18px; border-radius: 0; font: inherit; font-size: 16px; font-weight: 600; cursor: pointer; border: 1px solid #292525; background: #FFFFFF; color: #292525;">Política</button>
+</div>
+<div style="display: flex; flex-direction: column; border-bottom: 1px solid #292525">
+<article style="display: flex; flex-wrap: wrap; align-items: center; gap: 20px 32px; padding: 28px 0; border-top: 1px solid #292525">
+<div style="flex: 0 1 240px; min-width: 200px; position: relative; aspect-ratio: 16 / 9; display: flex; align-items: center; justify-content: center; background: #FF2305">
+<svg aria-hidden="true" width="40" height="40" viewBox="0 0 40 40"><rect width="40" height="40" fill="#292525"></rect><path d="M15 11v18l15-9z" fill="#FFFFFF"></path></svg>
+<span style="position: absolute; left: 10px; bottom: 8px; font-family: 'PP Neue Bit', 'Pixelify Sans', sans-serif; font-size: 14px; color: #292525">[MINIATURA]</span>
+</div>
+<div style="flex: 999 1 360px; min-width: 0; display: flex; flex-direction: column; gap: 8px">
+<p style="margin: 0; font-family: 'PP Neue Bit', 'Pixelify Sans', sans-serif; font-size: 16px; letter-spacing: 0.05em; text-transform: uppercase; color: #0049B2">Episodio #06 · [Fecha] · [Duración]</p>
+<h3 style="margin: 0; font-family: 'PP Neue Bit', 'Pixelify Sans', sans-serif; font-weight: 600; font-size: 28px; line-height: 1.1">[Título del episodio]</h3>
+<p style="margin: 0; font-weight: 600">Con [nombre del invitado], [cargo y organización]</p>
+<p style="margin: 0; color: #5F5B5B">[Descripción breve del episodio.]</p>
+</div>
+<div style="flex: 0 1 auto; display: flex; flex-wrap: wrap; gap: 8px">
+<a href="index.html" style="display: inline-flex; align-items: center; min-height: 46px; padding: 0 16px; background: #0049B2; color: #FFFFFF; font-size: 16px; font-weight: 600">Ver video</a>
+<a href="#rss" style="display: inline-flex; align-items: center; min-height: 46px; padding: 0 16px; border: 1px solid #292525; font-size: 16px; font-weight: 600">Escuchar</a>
+<a href="index.html" style="display: inline-flex; align-items: center; min-height: 46px; padding: 0 16px; border: 1px solid #292525; font-size: 16px; font-weight: 600">Leer</a>
+</div>
+</article>
+
+<article style="display: flex; flex-wrap: wrap; align-items: center; gap: 20px 32px; padding: 28px 0; border-top: 1px solid #292525">
+<div style="flex: 0 1 240px; min-width: 200px; position: relative; aspect-ratio: 16 / 9; display: flex; align-items: center; justify-content: center; background: #ADFF00">
+<svg aria-hidden="true" width="40" height="40" viewBox="0 0 40 40"><rect width="40" height="40" fill="#292525"></rect><path d="M15 11v18l15-9z" fill="#FFFFFF"></path></svg>
+<span style="position: absolute; left: 10px; bottom: 8px; font-family: 'PP Neue Bit', 'Pixelify Sans', sans-serif; font-size: 14px; color: #292525">[MINIATURA]</span>
+</div>
+<div style="flex: 999 1 360px; min-width: 0; display: flex; flex-direction: column; gap: 8px">
+<p style="margin: 0; font-family: 'PP Neue Bit', 'Pixelify Sans', sans-serif; font-size: 16px; letter-spacing: 0.05em; text-transform: uppercase; color: #0049B2">Episodio #05 · [Fecha] · [Duración]</p>
+<h3 style="margin: 0; font-family: 'PP Neue Bit', 'Pixelify Sans', sans-serif; font-weight: 600; font-size: 28px; line-height: 1.1">[Título del episodio]</h3>
+<p style="margin: 0; font-weight: 600">Con [nombre del invitado], [cargo y organización]</p>
+<p style="margin: 0; color: #5F5B5B">[Descripción breve del episodio.]</p>
+</div>
+<div style="flex: 0 1 auto; display: flex; flex-wrap: wrap; gap: 8px">
+<a href="index.html" style="display: inline-flex; align-items: center; min-height: 46px; padding: 0 16px; background: #0049B2; color: #FFFFFF; font-size: 16px; font-weight: 600">Ver video</a>
+<a href="#rss" style="display: inline-flex; align-items: center; min-height: 46px; padding: 0 16px; border: 1px solid #292525; font-size: 16px; font-weight: 600">Escuchar</a>
+<a href="index.html" style="display: inline-flex; align-items: center; min-height: 46px; padding: 0 16px; border: 1px solid #292525; font-size: 16px; font-weight: 600">Leer</a>
+</div>
+</article>
+
+<article style="display: flex; flex-wrap: wrap; align-items: center; gap: 20px 32px; padding: 28px 0; border-top: 1px solid #292525">
+<div style="flex: 0 1 240px; min-width: 200px; position: relative; aspect-ratio: 16 / 9; display: flex; align-items: center; justify-content: center; background: #A173CF">
+<svg aria-hidden="true" width="40" height="40" viewBox="0 0 40 40"><rect width="40" height="40" fill="#292525"></rect><path d="M15 11v18l15-9z" fill="#FFFFFF"></path></svg>
+<span style="position: absolute; left: 10px; bottom: 8px; font-family: 'PP Neue Bit', 'Pixelify Sans', sans-serif; font-size: 14px; color: #292525">[MINIATURA]</span>
+</div>
+<div style="flex: 999 1 360px; min-width: 0; display: flex; flex-direction: column; gap: 8px">
+<p style="margin: 0; font-family: 'PP Neue Bit', 'Pixelify Sans', sans-serif; font-size: 16px; letter-spacing: 0.05em; text-transform: uppercase; color: #0049B2">Episodio #04 · [Fecha] · [Duración]</p>
+<h3 style="margin: 0; font-family: 'PP Neue Bit', 'Pixelify Sans', sans-serif; font-weight: 600; font-size: 28px; line-height: 1.1">[Título del episodio]</h3>
+<p style="margin: 0; font-weight: 600">Con [nombre del invitado], [cargo y organización]</p>
+<p style="margin: 0; color: #5F5B5B">[Descripción breve del episodio.]</p>
+</div>
+<div style="flex: 0 1 auto; display: flex; flex-wrap: wrap; gap: 8px">
+<a href="index.html" style="display: inline-flex; align-items: center; min-height: 46px; padding: 0 16px; background: #0049B2; color: #FFFFFF; font-size: 16px; font-weight: 600">Ver video</a>
+<a href="#rss" style="display: inline-flex; align-items: center; min-height: 46px; padding: 0 16px; border: 1px solid #292525; font-size: 16px; font-weight: 600">Escuchar</a>
+<a href="index.html" style="display: inline-flex; align-items: center; min-height: 46px; padding: 0 16px; border: 1px solid #292525; font-size: 16px; font-weight: 600">Leer</a>
+</div>
+</article>
+
+<article style="display: flex; flex-wrap: wrap; align-items: center; gap: 20px 32px; padding: 28px 0; border-top: 1px solid #292525">
+<div style="flex: 0 1 240px; min-width: 200px; position: relative; aspect-ratio: 16 / 9; display: flex; align-items: center; justify-content: center; background: #FF2305">
+<svg aria-hidden="true" width="40" height="40" viewBox="0 0 40 40"><rect width="40" height="40" fill="#292525"></rect><path d="M15 11v18l15-9z" fill="#FFFFFF"></path></svg>
+<span style="position: absolute; left: 10px; bottom: 8px; font-family: 'PP Neue Bit', 'Pixelify Sans', sans-serif; font-size: 14px; color: #292525">[MINIATURA]</span>
+</div>
+<div style="flex: 999 1 360px; min-width: 0; display: flex; flex-direction: column; gap: 8px">
+<p style="margin: 0; font-family: 'PP Neue Bit', 'Pixelify Sans', sans-serif; font-size: 16px; letter-spacing: 0.05em; text-transform: uppercase; color: #0049B2">Episodio #03 · [Fecha] · [Duración]</p>
+<h3 style="margin: 0; font-family: 'PP Neue Bit', 'Pixelify Sans', sans-serif; font-weight: 600; font-size: 28px; line-height: 1.1">[Título del episodio]</h3>
+<p style="margin: 0; font-weight: 600">Con [nombre del invitado], [cargo y organización]</p>
+<p style="margin: 0; color: #5F5B5B">[Descripción breve del episodio.]</p>
+</div>
+<div style="flex: 0 1 auto; display: flex; flex-wrap: wrap; gap: 8px">
+<a href="index.html" style="display: inline-flex; align-items: center; min-height: 46px; padding: 0 16px; background: #0049B2; color: #FFFFFF; font-size: 16px; font-weight: 600">Ver video</a>
+<a href="#rss" style="display: inline-flex; align-items: center; min-height: 46px; padding: 0 16px; border: 1px solid #292525; font-size: 16px; font-weight: 600">Escuchar</a>
+<a href="index.html" style="display: inline-flex; align-items: center; min-height: 46px; padding: 0 16px; border: 1px solid #292525; font-size: 16px; font-weight: 600">Leer</a>
+</div>
+</article>
+
+<article style="display: flex; flex-wrap: wrap; align-items: center; gap: 20px 32px; padding: 28px 0; border-top: 1px solid #292525">
+<div style="flex: 0 1 240px; min-width: 200px; position: relative; aspect-ratio: 16 / 9; display: flex; align-items: center; justify-content: center; background: #ADFF00">
+<svg aria-hidden="true" width="40" height="40" viewBox="0 0 40 40"><rect width="40" height="40" fill="#292525"></rect><path d="M15 11v18l15-9z" fill="#FFFFFF"></path></svg>
+<span style="position: absolute; left: 10px; bottom: 8px; font-family: 'PP Neue Bit', 'Pixelify Sans', sans-serif; font-size: 14px; color: #292525">[MINIATURA]</span>
+</div>
+<div style="flex: 999 1 360px; min-width: 0; display: flex; flex-direction: column; gap: 8px">
+<p style="margin: 0; font-family: 'PP Neue Bit', 'Pixelify Sans', sans-serif; font-size: 16px; letter-spacing: 0.05em; text-transform: uppercase; color: #0049B2">Episodio #02 · [Fecha] · [Duración]</p>
+<h3 style="margin: 0; font-family: 'PP Neue Bit', 'Pixelify Sans', sans-serif; font-weight: 600; font-size: 28px; line-height: 1.1">[Título del episodio]</h3>
+<p style="margin: 0; font-weight: 600">Con [nombre del invitado], [cargo y organización]</p>
+<p style="margin: 0; color: #5F5B5B">[Descripción breve del episodio.]</p>
+</div>
+<div style="flex: 0 1 auto; display: flex; flex-wrap: wrap; gap: 8px">
+<a href="index.html" style="display: inline-flex; align-items: center; min-height: 46px; padding: 0 16px; background: #0049B2; color: #FFFFFF; font-size: 16px; font-weight: 600">Ver video</a>
+<a href="#rss" style="display: inline-flex; align-items: center; min-height: 46px; padding: 0 16px; border: 1px solid #292525; font-size: 16px; font-weight: 600">Escuchar</a>
+<a href="index.html" style="display: inline-flex; align-items: center; min-height: 46px; padding: 0 16px; border: 1px solid #292525; font-size: 16px; font-weight: 600">Leer</a>
+</div>
+</article>
+
+<article style="display: flex; flex-wrap: wrap; align-items: center; gap: 20px 32px; padding: 28px 0; border-top: 1px solid #292525">
+<div style="flex: 0 1 240px; min-width: 200px; position: relative; aspect-ratio: 16 / 9; display: flex; align-items: center; justify-content: center; background: #A173CF">
+<svg aria-hidden="true" width="40" height="40" viewBox="0 0 40 40"><rect width="40" height="40" fill="#292525"></rect><path d="M15 11v18l15-9z" fill="#FFFFFF"></path></svg>
+<span style="position: absolute; left: 10px; bottom: 8px; font-family: 'PP Neue Bit', 'Pixelify Sans', sans-serif; font-size: 14px; color: #292525">[MINIATURA]</span>
+</div>
+<div style="flex: 999 1 360px; min-width: 0; display: flex; flex-direction: column; gap: 8px">
+<p style="margin: 0; font-family: 'PP Neue Bit', 'Pixelify Sans', sans-serif; font-size: 16px; letter-spacing: 0.05em; text-transform: uppercase; color: #0049B2">Episodio #01 · [Fecha] · [Duración]</p>
+<h3 style="margin: 0; font-family: 'PP Neue Bit', 'Pixelify Sans', sans-serif; font-weight: 600; font-size: 28px; line-height: 1.1">[Título del episodio]</h3>
+<p style="margin: 0; font-weight: 600">Con [nombre del invitado], [cargo y organización]</p>
+<p style="margin: 0; color: #5F5B5B">[Descripción breve del episodio.]</p>
+</div>
+<div style="flex: 0 1 auto; display: flex; flex-wrap: wrap; gap: 8px">
+<a href="index.html" style="display: inline-flex; align-items: center; min-height: 46px; padding: 0 16px; background: #0049B2; color: #FFFFFF; font-size: 16px; font-weight: 600">Ver video</a>
+<a href="#rss" style="display: inline-flex; align-items: center; min-height: 46px; padding: 0 16px; border: 1px solid #292525; font-size: 16px; font-weight: 600">Escuchar</a>
+<a href="index.html" style="display: inline-flex; align-items: center; min-height: 46px; padding: 0 16px; border: 1px solid #292525; font-size: 16px; font-weight: 600">Leer</a>
+</div>
+</article>
+</div>
+<div style="display: flex; justify-content: center; padding-top: 8px">
+<button type="button" style="height: 50px; padding: 0 26px; border: 1px solid #292525; background: #FFFFFF; color: #292525; font: inherit; font-weight: 600; cursor: pointer">Cargar más episodios</button>
+</div>
+</div>
+</section>
+
+<section id="rss" style="background: #0049B2; color: #FFFFFF">
+<div style="max-width: 1200px; margin: 0 auto; padding: 56px 24px; display: flex; flex-wrap: wrap; gap: 32px 48px">
+<div style="flex: 1 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 12px">
+<h2 style="margin: 0; display: flex; align-items: center; gap: 10px; font-family: 'PP Neue Bit', 'Pixelify Sans', sans-serif; font-weight: 600; font-size: 28px; color: #ADFF00">
+<svg aria-hidden="true" width="22" height="22" viewBox="0 0 20 20" fill="none" stroke="#ADFF00" stroke-width="2.4" stroke-linecap="square"><path d="M3 9a8 8 0 0 1 8 8"></path><path d="M3 3a14 14 0 0 1 14 14"></path><rect x="2.5" y="14.5" width="3" height="3" fill="#ADFF00" stroke="none"></rect></svg>
+Suscríbete por RSS
+</h2>
+<label for="feed" style="font-size: 16px">Copia esta dirección en cualquier aplicación de podcasts.</label>
+<div style="display: flex; flex-wrap: wrap; gap: 10px">
+<input id="feed" type="text" readonly value="[URL DEL FEED RSS]" style="flex: 1 1 240px; min-width: 0; height: 50px; padding: 0 16px; border: 1px solid #FFFFFF; border-radius: 0; background: #FFFFFF; color: #292525; font-family: 'JetBrains Mono', monospace; font-size: 15px">
+<button type="button" data-copy style="height: 50px; padding: 0 24px; border: none; background: #ADFF00; color: #292525; font: inherit; font-weight: 600; cursor: pointer">Copiar</button>
+</div>
+</div>
+<div style="flex: 1 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 12px">
+<h2 style="margin: 0; font-family: 'PP Neue Bit', 'Pixelify Sans', sans-serif; font-weight: 600; font-size: 28px; color: #ADFF00">O síguenos en</h2>
+<div style="display: flex; flex-wrap: wrap; gap: 10px">
+<a href="#rss" style="display: inline-flex; align-items: center; min-height: 50px; padding: 0 20px; border: 1px solid #FFFFFF; color: #FFFFFF; font-weight: 600">YouTube</a>
+<a href="#rss" style="display: inline-flex; align-items: center; min-height: 50px; padding: 0 20px; border: 1px solid #FFFFFF; color: #FFFFFF; font-weight: 600">Spotify</a>
+<a href="#rss" style="display: inline-flex; align-items: center; min-height: 50px; padding: 0 20px; border: 1px solid #FFFFFF; color: #FFFFFF; font-weight: 600">Apple Podcasts</a>
+<a href="#rss" style="display: inline-flex; align-items: center; min-height: 50px; padding: 0 20px; border: 1px solid #FFFFFF; color: #FFFFFF; font-weight: 600">Substack</a>
+</div>
+</div>
+</div>
+</section>
+
+</main>
+
+<footer style="background: #292525; color: #FFF7F5">
+<div style="max-width: 1200px; margin: 0 auto; padding: 48px 24px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 32px 64px">
+<div style="flex: 1 1 280px; min-width: 0; display: flex; flex-direction: column; gap: 10px">
+<p style="margin: 0; display: flex; align-items: center; gap: 10px; font-family: 'Visual', 'PP Neue Bit', 'Pixelify Sans', sans-serif; font-weight: 600; font-size: 24px; letter-spacing: 0.04em; color: #ADFF00">
+<svg aria-hidden="true" width="28" height="28" viewBox="0 0 642 640"><path fill="#ADFF00" d="M233 1h58v58h-58zM351 1h58v58h-58zM119 53h58v58h-58zM464 53h58v58h-58zM50 121h58v58h-58zM187 121h58v58h-58zM397 121h58v58h-58zM532 121h58v58h-58zM119 188h58v58h-58zM464 188h58v58h-58zM0 234h58v58h-58zM584 234h58v58h-58zM0 348h58v58h-58zM584 348h58v58h-58zM119 395h58v58h-58zM464 395h58v58h-58zM50 461h58v58h-58zM187 461h58v58h-58zM397 461h58v58h-58zM532 461h58v58h-58zM119 529h58v58h-58zM464 529h58v58h-58zM233 581h58v58h-58zM351 581h58v58h-58z"></path></svg>
+INFERENCIA
+</p>
+<p style="margin: 0; font-size: 15px">Un podcast producido por Perpetuo para Primero AI.</p>
+<p style="margin: 0; font-size: 15px">© 2026</p>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 4px 28px; font-size: 15px; font-weight: 500">
+<a href="episodios.html" style="min-height: 44px; display: flex; align-items: center; color: #FFF7F5">Episodios</a>
+<a href="index.html#destacado" style="min-height: 44px; display: flex; align-items: center; color: #FFF7F5">Destacado</a>
+<a href="noticias.html" style="min-height: 44px; display: flex; align-items: center; color: #FFF7F5">Noticias y eventos</a>
+<a href="#rss" style="min-height: 44px; display: flex; align-items: center; color: #FFF7F5">RSS</a>
+<a href="#rss" style="min-height: 44px; display: flex; align-items: center; color: #FFF7F5">[Contacto]</a>
+</div>
+</div>
+</footer>
+
+</div>
+<script>
+(function () {
+  var on = "height: 46px; padding: 0 18px; border-radius: 0; font: inherit; font-size: 16px; font-weight: 600; cursor: pointer; border: 1px solid #0049B2; background: #0049B2; color: #FFFFFF;", off = "height: 46px; padding: 0 18px; border-radius: 0; font: inherit; font-size: 16px; font-weight: 600; cursor: pointer; border: 1px solid #292525; background: #FFFFFF; color: #292525;";
+  var filters = document.querySelectorAll('[data-filter]');
+  filters.forEach(function (b) {
+    b.addEventListener('click', function () {
+      filters.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); x.setAttribute('style', x === b ? on : off); });
+    });
+  });
+  var copy = document.querySelector('[data-copy]');
+  copy.addEventListener('click', function () {
+    var v = document.getElementById('feed').value;
+    if (navigator.clipboard) navigator.clipboard.writeText(v).catch(function () {});
+    copy.textContent = 'Copiado';
+  });
+})();
+</script>
+</body>
+</html>
